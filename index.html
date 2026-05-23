@@ -813,47 +813,89 @@ DEIB - MINEDU | FED 2025-2026</div>
             options: { plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } } }
         });
     </script>
-<!-- ========================================== -->
-    <!-- CONEXIÓN EN TIEMPO REAL CON GOOGLE SHEETS  -->
-    <!-- ========================================== -->
-    <script>
-      // 1. Pega aquí el enlace largo que te dio Google Sheets (reemplaza el de abajo)
-      const URL_SHEETS_CSV = "AQUÍ_PEGA_EL_ENLACE_LARGO_QUE_COPIASTE_EN_EL_PASO_1";
+<!-- ======================================================== -->
+<!-- MOTOR DE AUTOMATIZACIÓN EN TIEMPO REAL - FED HUANCAVELICA -->
+<!-- ======================================================== -->
+<script>
+  // Enlace oficial de tu Sheets convertido a formato de datos puros (.CSV)
+  const URL_SHEETS_FED = "https://docs.google.com/spreadsheets/d/e/2PACX-1vS2is55ckDSwEh27aDFB_a9I45v3XHnMXp8DEEM-memVbex8GRvEzQHOfmyNCfjSA/pub?gid=447253744&single=true&output=csv";
 
-      async function jalarDatosDesdeSheets() {
-          try {
-              const respuesta = await fetch(URL_SHEETS_CSV);
-              const textoCSV = await respuesta.text();
-              
-              // Separamos el CSV por filas y celdas
-              const lineas = textoCSV.split("\n").map(linea => linea.split(","));
-              
-              // Extraemos los valores de los Totales según la posición de tus nuevas tarjetas:
-              // filas[5] representa la fila 6 de tu excel, el segundo corchete es la columna.
-              const matriculadosRegionales = lineas[5][1]; // Celda B6
-              const aprobadosRegionales = lineas[5][4];     // Celda E6
-              const tasaAprobacionRegional = lineas[5][7];  // Celda H6
-              
-              // 2. Conectamos estos datos dinámicos con las tarjetas de tu HTML de GitHub
-              // IMPORTANTE: Asegúrate de que los ID coincidan con las etiquetas de tu web
-              if(document.getElementById("tarjeta-matriculados")) {
-                  document.getElementById("tarjeta-matriculados").innerText = matriculadosRegionales;
+  let graficoUgel = null;
+
+  async function conectarDashboardReal() {
+      try {
+          const respuesta = await fetch(URL_SHEETS_FED);
+          const datosBrutos = await respuesta.text();
+          
+          // Separamos el contenido por filas y celdas
+          const lineas = datosBrutos.split("\n").map(l => l.split(","));
+          
+          // Extraemos la información de las 8 UGELs (Filas 14 a 21 de tu Sheets)
+          const ugelNombres = [];
+          const matriculadosData = [];
+          const aprobadosData = [];
+
+          // En JavaScript, la fila 14 del Excel es el índice 13
+          for (let i = 13; i <= 20; i++) {
+              if (lineas[i] && lineas[i][1]) {
+                  ugelNombres.push(lineas[i][1].replace("UGEL ", "")); // Quita el texto "UGEL " para que no se amontone
+                  matriculadosData.push(parseInt(lineas[i][2]) || 0);   // Columna C: Con Acceso
+                  aprobadosData.push(parseInt(lineas[i][3]) || 0);      // Columna D: Aprobados
               }
-              if(document.getElementById("tarjeta-aprobados")) {
-                  document.getElementById("tarjeta-aprobados").innerText = aprobadosRegionales;
-              }
-              if(document.getElementById("tarjeta-porcentaje")) {
-                  document.getElementById("tarjeta-porcentaje").innerText = tasaAprobacionRegional;
-              }
-              
-              console.log("¡Sincronización FED 2026 completada con éxito!");
-          } catch (error) {
-              console.error("Error al conectar las sábanas de datos:", error);
           }
-      }
 
-      // Ejecutar la actualización al cargar la página automáticamente
-      jalarDatosDesdeSheets();
-    </script>
-</body>
-</html>
+          // Extraemos los Totales Consolidados Regionales (Fila 22 del Excel -> índice 21)
+          const totalInscritos = lineas[21][2] || "0"; 
+          const totalAprobados = lineas[21][3] || "0";  
+
+          // Inyectamos los datos en los contenedores HTML de tus tarjetas actuales
+          if(document.getElementById("tarjeta-matriculados")) {
+              document.getElementById("tarjeta-matriculados").innerText = totalInscritos;
+          }
+          if(document.getElementById("tarjeta-aprobados")) {
+              document.getElementById("tarjeta-aprobados").innerText = totalAprobados;
+          }
+
+          // Redibujamos el gráfico de distribución por UGEL usando Chart.js
+          const ctxUgel = document.getElementById('id-grafico-ugel').getContext('2d');
+          
+          if (graficoUgel) { graficoUgel.destroy(); } // Limpia el gráfico previo para evitar errores
+          
+          graficoUgel = new Chart(ctxUgel, {
+              type: 'bar',
+              data: {
+                  labels: ugelNombres,
+                  datasets: [
+                      {
+                          label: 'Con acceso al curso',
+                          data: matriculadosData,
+                          backgroundColor: '#1e3a8a', // Azul institucional
+                          borderRadius: 4
+                      },
+                      {
+                          label: 'Aprobados',
+                          data: aprobadosData,
+                          backgroundColor: '#10b981', // Verde FED
+                          borderRadius: 4
+                      }
+                  ]
+              },
+              options: {
+                  indexAxis: 'y', // Hace las barras horizontales como tu prototipo
+                  responsive: true,
+                  plugins: {
+                      legend: { position: 'top' }
+                  }
+              }
+          });
+
+          console.log("¡Conexión FED exitosa! " + totalInscritos + " docentes sincronizados.");
+
+      } catch (error) {
+          console.error("Error crítico leyendo la base de datos de Sheets:", error);
+      }
+  }
+
+  // Carga automática del script al abrir el sitio web
+  window.addEventListener('DOMContentLoaded', conectarDashboardReal);
+</script>
