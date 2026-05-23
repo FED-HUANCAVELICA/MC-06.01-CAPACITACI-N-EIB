@@ -529,10 +529,11 @@ DEIB - MINEDU | FED 2025-2026</div>
 
             <div class="kpi-grid">
                 <div class="kpi-card">
-                    <div class="label">Semáforo Inscripción</div>
-                    <div class="value" style="color:#28a745;">🟢</div>
-                    <div class="detail">505/517 inscritos (97.7%)</div>
-                    <span class="trend up">Meta: 100%</span>
+                  <div class="label">Semáforo Inscripción</div>
+                  <div class="value" style="color:#28a745;">🟢</div>
+                  <!-- Separamos el número dinámico dentro de un span con ID -->
+                  <div class="detail"><span id="tarjeta-matriculados">505</span>/517 inscritos</div>
+                  <span class="trend up">Meta: 100%</span>
                 </div>
                 <div class="kpi-card">
                     <div class="label">Semáforo Avance</div>
@@ -540,12 +541,13 @@ DEIB - MINEDU | FED 2025-2026</div>
                     <div class="detail">Básico 1 en desarrollo (May-Jun)</div>
                     <span class="trend warn">En progreso</span>
                 </div>
-                <div class="kpi-card">
-                    <div class="label">Semáforo Culminación</div>
-                    <div class="value" style="color:#dc3545;">🔴</div>
-                    <div class="detail">Pendiente - DIC 2026</div>
-                    <span class="trend down">Meta: ≥12%</span>
-                </div>
+               <div class="kpi-card">
+                  <div class="label">Semáforo Culminación</div>
+                  <div class="value" style="color:#dc3545;">🔴</div>
+                  <!-- Envolvemos el número en un span con ID para conectarlo a los aprobados del Sheets -->
+                  <div class="detail"><span id="tarjeta-aprobados">0</span> docentes aprobados</div>
+                  <span class="trend down">Meta: ≥12%</span>
+              </div>
                 <div class="kpi-card">
                     <div class="label">Próxima Verificación</div>
                     <div class="value" style="color:#1a5276;">DIC</div>
