@@ -6,6 +6,7 @@
     <title>FED Huancavelica - Indicador MC-06.01</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
         body { font-family: 'Inter', sans-serif; }
@@ -74,8 +75,8 @@
         </div>
 
         <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
-            <h3 class="text-md font-bold text-gray-900 mb-6">Embudo de Permanencia y Avance Curricular por UGEL</h3>
-            <div class="relative w-full h-[380px]">
+            <h3 class="text-md font-bold text-gray-900 mb-6">Comparativa de Avance Territorial Separado por Columnas</h3>
+            <div class="relative w-full h-[420px]">
                 <canvas id="chartEIB"></canvas>
             </div>
         </div>
@@ -111,7 +112,9 @@
     </footer>
 
     <script>
-        // Endpoint Web App de Google Apps Script suministrado
+        // Registrar explícitamente el plugin de las etiquetas de datos
+        Chart.register(ChartDataLabels);
+
         const URL_API = "https://script.google.com/macros/s/AKfycbwX8luWbEJwOZvS4kRSHR7kq_xx3CcTh358PqN8yUxuho0QgtjdzR32MjnZV7NhzUzVAw/exec";
 
         async function cargarDashboard() {
@@ -119,7 +122,7 @@
                 const respuesta = await fetch(URL_API);
                 const datos = await respuesta.json();
                 
-                // 1. Extraer y procesar la fila del TOTAL REGIONAL para los KPIs principales
+                // 1. Procesar la fila del TOTAL REGIONAL
                 const filaTotal = datos.find(d => d.ugel.toUpperCase() === "TOTAL REGIONAL");
                 const datosUgel = datos.filter(d => d.ugel.toUpperCase() !== "TOTAL REGIONAL");
 
@@ -127,15 +130,12 @@
                     document.getElementById("kpi-denominador").innerText = filaTotal.denominador;
                     document.getElementById("kpi-aprobados").innerText = filaTotal.aprobados;
                     
-                    // Formatear el porcentaje a dos decimales
                     const porc = (filaTotal.porcentajeReal * 100).toFixed(2);
                     document.getElementById("kpi-porcentaje").innerText = `${porc}%`;
                     
-                    // Actualizar barra de progreso visual
                     const progresoBarra = Math.min(porc, 100);
                     document.getElementById("kpi-progress-bar").style.width = `${progresoBarra}%`;
                     
-                    // Renderizar la medalla de la alerta ejecutiva
                     const kpiAlerta = document.getElementById("kpi-alerta");
                     kpiAlerta.innerText = filaTotal.alerta;
                     if (filaTotal.alerta.includes("SALVO")) {
@@ -147,9 +147,8 @@
 
                 // 2. Renderizar la tabla de datos dinámica
                 const tablaCuerpo = document.getElementById("tabla-cuerpo");
-                tablaCuerpo.innerHTML = ""; // Limpiar spinner o cargas anteriores
+                tablaCuerpo.innerHTML = ""; 
 
-                // Primero inyectamos las filas de las UGEL individuales
                 datosUgel.forEach(item => {
                     const esAlertaRoja = item.alerta.includes("Roja");
                     const esEnTraccion = item.alerta.includes("Tracción");
@@ -176,7 +175,6 @@
                     tablaCuerpo.appendChild(tr);
                 });
 
-                // Al final inyectamos la fila resumen destacada visualmente
                 if (filaTotal) {
                     const trTotal = document.createElement("tr");
                     trTotal.className = "bg-indigo-50/80 font-bold border-t-2 border-indigo-200 text-indigo-950";
@@ -196,7 +194,7 @@
                     tablaCuerpo.appendChild(trTotal);
                 }
 
-                // 3. Configuración y Construcción del Gráfico Chart.js de Barras Apiladas
+                // 3. Configuración del Gráfico Con Barras Separadas y Etiquetas de Datos
                 const ugelLabels = datosUgel.map(item => item.ugel.replace("UGEL ", ""));
                 const datasetSinMatricula = datosUgel.map(item => item.sinMatricula);
                 const datasetAvance0 = datosUgel.map(item => item.avance0);
@@ -212,22 +210,22 @@
                             {
                                 label: 'Sin Matrícula (Crítico)',
                                 data: datasetSinMatricula,
-                                backgroundColor: '#9CA3AF', // Gris administrativo
+                                backgroundColor: '#9CA3AF', 
                             },
                             {
                                 label: 'Avance 0% (Inactivos)',
                                 data: datasetAvance0,
-                                backgroundColor: '#FCA5A5', // Rojo claro descriptivo
+                                backgroundColor: '#FCA5A5', 
                             },
                             {
                                 label: 'En Proceso (Tracción)',
                                 data: datasetEnProceso,
-                                backgroundColor: '#60A5FA', // Azul corporativo
+                                backgroundColor: '#60A5FA', 
                             },
                             {
                                 label: 'Aprobados (Meta Oficial)',
                                 data: datasetAprobados,
-                                backgroundColor: '#10B981', // Verde éxito FED
+                                backgroundColor: '#10B981', 
                             }
                         ]
                     },
@@ -235,13 +233,36 @@
                         responsive: true,
                         maintainAspectRatio: false,
                         scales: {
-                            x: { stacked: true },
-                            y: { stacked: true, beginAtZero: true }
+                            x: { 
+                                stacked: false, // Barras agrupadas una al lado de la otra
+                                grid: { display: false }
+                            },
+                            y: { 
+                                stacked: false, 
+                                beginAtZero: true,
+                                ticks: { stepSize: 20 }
+                            }
                         },
                         plugins: {
                             legend: {
                                 position: 'bottom',
                                 labels: { boxWidth: 12, font: { size: 11, weight: '600' }, padding: 15 }
+                            },
+                            // Configuración del Plugin de Etiquetas Numéricas sobre cada columna
+                            datalabels: {
+                                anchor: 'end',
+                                align: 'top',
+                                offset: 2,
+                                font: {
+                                    size: 10,
+                                    weight: 'bold',
+                                    family: "'Inter', sans-serif"
+                                },
+                                color: '#374151',
+                                formatter: function(value) {
+                                    // Ocultar etiquetas con valor 0 para no saturar visualmente el gráfico
+                                    return value > 0 ? value : '';
+                                }
                             }
                         }
                     }
@@ -259,7 +280,6 @@
             }
         }
 
-        // Ejecutar carga automática al montar el DOM
         window.onload = cargarDashboard;
     </script>
 </body>
