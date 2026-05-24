@@ -3,901 +3,264 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard MC-06.01 | Capacitación EIB | FED 2025-2026</title>
+    <title>FED Huancavelica - Indicador MC-06.01</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f0f2f5; color: #333; }
-
-        /* Header */
-        .header { background: linear-gradient(135deg, #1a5276 0%, #2874a6 100%); color: white; padding: 20px 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
-        .header h1 { font-size: 28px; font-weight: 700; }
-        .header .subtitle { font-size: 14px; opacity: 0.9; margin-top: 5px; }
-        .header .badge { display: inline-block; background: rgba(255,255,255,0.2); padding: 4px 12px; border-radius: 20px; font-size: 12px; margin-top: 8px; }
-
-        /* Navigation */
-        .nav { background: white; padding: 0; box-shadow: 0 2px 8px rgba(0,0,0,0.1); display: flex; }
-        .nav button { flex: 1; padding: 15px; border: none; background: white; cursor: pointer; font-size: 14px; font-weight: 600; color: #666; transition: all 0.3s; border-bottom: 3px solid transparent; }
-        .nav button:hover { background: #f8f9fa; color: #1a5276; }
-        .nav button.active { color: #1a5276; border-bottom: 3px solid #1a5276; background: #f0f7ff; }
-
-        /* Container */
-        .container { max-width: 1400px; margin: 0 auto; padding: 25px; }
-
-        /* KPI Cards */
-        .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-bottom: 25px; }
-        .kpi-card { background: white; border-radius: 12px; padding: 25px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); transition: transform 0.2s; }
-        .kpi-card:hover { transform: translateY(-3px); box-shadow: 0 5px 20px rgba(0,0,0,0.12); }
-        .kpi-card .label { font-size: 13px; color: #888; text-transform: uppercase; letter-spacing: 1px; font-weight: 600; }
-        .kpi-card .value { font-size: 42px; font-weight: 700; margin: 10px 0; color: #1a5276; }
-        .kpi-card .detail { font-size: 13px; color: #666; }
-        .kpi-card .trend { font-size: 12px; margin-top: 8px; padding: 4px 10px; border-radius: 15px; display: inline-block; }
-        .trend.up { background: #d4edda; color: #155724; }
-        .trend.down { background: #f8d7da; color: #721c24; }
-        .trend.warn { background: #fff3cd; color: #856404; }
-
-        /* Section */
-        .section { background: white; border-radius: 12px; padding: 25px; margin-bottom: 25px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); }
-        .section-title { font-size: 18px; font-weight: 700; color: #1a5276; margin-bottom: 20px; display: flex; align-items: center; gap: 10px; }
-
-        /* Charts Grid */
-        .charts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 20px; }
-        .chart-box { background: white; border-radius: 12px; padding: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); }
-        .chart-box h3 { font-size: 14px; color: #555; margin-bottom: 15px; font-weight: 600; }
-
-        /* Tables */
-        .data-table { width: 100%; border-collapse: collapse; font-size: 13px; }
-        .data-table th { background: #1a5276; color: white; padding: 12px 15px; text-align: left; font-weight: 600; }
-        .data-table td { padding: 10px 15px; border-bottom: 1px solid #eee; }
-        .data-table tr:hover { background: #f8f9fa; }
-        .data-table tr:nth-child(even) { background: #f8f9fa; }
-        .badge { padding: 3px 10px; border-radius: 12px; font-size: 11px; font-weight: 600; }
-        .badge-success { background: #d4edda; color: #155724; }
-        .badge-warning { background: #fff3cd; color: #856404; }
-        .badge-danger { background: #f8d7da; color: #721c24; }
-        .badge-info { background: #d1ecf1; color: #0c5460; }
-
-        /* Alerts */
-        .alert { padding: 15px 20px; border-radius: 8px; margin-bottom: 20px; display: flex; align-items: center; gap: 12px; }
-        .alert-danger { background: #f8d7da; border-left: 4px solid #dc3545; color: #721c24; }
-        .alert-warning { background: #fff3cd; border-left: 4px solid #ffc107; color: #856404; }
-        .alert-success { background: #d4edda; border-left: 4px solid #28a745; color: #155724; }
-
-        /* Message Templates */
-        .msg-card { border: 2px solid #e0e0e0; border-radius: 10px; padding: 20px; margin-bottom: 15px; background: #fafafa; }
-        .msg-card h4 { font-size: 14px; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
-        .msg-card .msg-body { background: white; padding: 15px; border-radius: 8px; font-family: monospace; font-size: 13px; line-height: 1.6; color: #444; white-space: pre-wrap; border: 1px solid #e0e0e0; }
-        .msg-tag { display: inline-block; padding: 3px 10px; border-radius: 15px; font-size: 11px; font-weight: 600; margin-left: 10px; }
-
-        /* Tabs content */
-        .tab-content { display: none; }
-        .tab-content.active { display: block; }
-
-        /* Filters */
-        .filters { display: flex; gap: 15px; margin-bottom: 20px; flex-wrap: wrap; }
-        .filter-group { display: flex; flex-direction: column; gap: 5px; }
-        .filter-group label { font-size: 12px; color: #666; font-weight: 600; }
-        .filter-group select, .filter-group input { padding: 8px 12px; border: 1px solid #ddd; border-radius: 6px; font-size: 13px; min-width: 180px; }
-
-        /* Progress bar */
-        .progress-bar { height: 8px; background: #e9ecef; border-radius: 4px; overflow: hidden; }
-        .progress-fill { height: 100%; border-radius: 4px; transition: width 0.3s; }
-
-        /* Timeline */
-        .timeline { position: relative; padding-left: 30px; }
-        .timeline::before { content: ''; position: absolute; left: 8px; top: 0; bottom: 0; width: 3px; background: #e0e0e0; }
-        .timeline-item { position: relative; margin-bottom: 25px; }
-        .timeline-item::before { content: ''; position: absolute; left: -26px; top: 3px; width: 14px; height: 14px; border-radius: 50%; background: #1a5276; border: 3px solid white; box-shadow: 0 0 0 3px #1a5276; }
-        .timeline-item.active::before { background: #28a745; box-shadow: 0 0 0 3px #28a745; }
-        .timeline-item.pending::before { background: #ffc107; box-shadow: 0 0 0 3px #ffc107; }
-        .timeline-item.future::before { background: #e0e0e0; box-shadow: 0 0 0 3px #e0e0e0; }
-        .timeline-content { background: white; padding: 15px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
-        .timeline-title { font-weight: 700; color: #1a5276; margin-bottom: 5px; }
-        .timeline-desc { font-size: 13px; color: #666; }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .charts-grid { grid-template-columns: 1fr; }
-            .kpi-grid { grid-template-columns: 1fr; }
-            .nav { flex-wrap: wrap; }
-            .nav button { flex: none; width: 50%; }
-        }
-
-        .hidden { display: none; }
-        .btn { padding: 10px 20px; border: none; border-radius: 6px; cursor: pointer; font-size: 13px; font-weight: 600; transition: all 0.2s; }
-        .btn-primary { background: #1a5276; color: white; }
-        .btn-primary:hover { background: #154a6b; }
-        .btn-success { background: #28a745; color: white; }
-        .btn-success:hover { background: #218838; }
-        .btn-warning { background: #ffc107; color: #333; }
-        .btn-danger { background: #dc3545; color: white; }
-
-        .copy-btn { float: right; padding: 5px 12px; font-size: 11px; }
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; }
     </style>
 </head>
-<body>
-    <div class="header">
-        <h1>📊 DASHBOARD MC-06.01 CAPACITACIÓN EIB</h1>
-        <div class="subtitle">FED 2025-2026 | Región Huancavelica | 517 Docentes | Fecha de corte: 04-05-2026</div>
-        <span class="badge">🏫 8 UGEL | 🌍 Quechua Sureño (Chanka) | 💻 Plataforma SIFODS</span>
-    </div>
+<body class="bg-gray-50 text-gray-800">
 
-    <div class="nav">
-        <button class="active" onclick="showTab('dashboard')">📈 Dashboard General</button>
-        <button onclick="showTab('ugel')">🏫 Seguimiento UGEL</button>
-        <button onclick="showTab('comunicacion')">📱 Comunicación Masiva</button>
-        <button onclick="showTab('operativo')">⚙️ Plan Operativo</button>
-    </div>
-
-    <div class="container">
-
-        <!-- TAB 1: DASHBOARD GENERAL -->
-        <div id="dashboard" class="tab-content active">
-
-            <div class="alert alert-warning">
-                <strong>⚠️ ALERTA:</strong> 12 docentes (2.3%) aún no se han inscrito al curso. UGEL Angaraes concentra 9 casos (75% del rezago). Acción inmediata requerida.
+    <header class="bg-indigo-900 text-white shadow-md sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 py-4 flex flex-col sm:flex-row justify-between items-center gap-4">
+            <div class="flex items-center gap-3">
+                <span class="bg-red-600 text-xs font-bold uppercase px-2 py-1 rounded">FED 2.0</span>
+                <h1 class="text-xl font-bold tracking-tight">Huancavelica: Tablero de Monitoreo Territorial</h1>
             </div>
-
-            <div class="kpi-grid">
-                <div class="kpi-card">
-                    <div class="label">Total Docentes</div>
-                    <div class="value">517</div>
-                    <div class="detail">Público objetivo MC-06.01</div>
-                    <span class="trend up">📈 Base completa</span>
-                </div>
-                <div class="kpi-card">
-                    <div class="label">Inscritos en Curso</div>
-                    <div class="value" style="color:#28a745;">505</div>
-                    <div class="detail">97.7% del total</div>
-                    <span class="trend up">✅ Meta: 100%</span>
-                </div>
-                <div class="kpi-card">
-                    <div class="label">Pendientes Inscripción</div>
-                    <div class="value" style="color:#dc3545;">12</div>
-                    <div class="detail">URGENTE: Contactar inmediatamente</div>
-                    <span class="trend down">🔴 Acción requerida</span>
-                </div>
-                <div class="kpi-card">
-                    <div class="label">Curso en Desarrollo</div>
-                    <div class="value" style="color:#f39c12;">B1</div>
-                    <div class="detail">Básico 1 | Mayo - Junio 2026</div>
-                    <span class="trend warn">📅 En progreso</span>
-                </div>
+            <div class="text-sm bg-indigo-800 px-4 py-2 rounded-lg text-indigo-200 font-medium">
+                Indicador MC-06.01: Competencias Lingüísticas EIB
             </div>
+        </div>
+    </header>
 
-            <div class="section">
-                <div class="section-title">📊 Distribución por Variables Clave</div>
-                <div class="charts-grid">
-                    <div class="chart-box">
-                        <h3>Distribución por UGEL</h3>
-                        <canvas id="chartUgel"></canvas>
-                    </div>
-                    <div class="chart-box">
-                        <h3>Nivel Educativo</h3>
-                        <canvas id="chartNivel"></canvas>
-                    </div>
-                    <div class="chart-box">
-                        <h3>Forma de Atención EIB</h3>
-                        <canvas id="chartForma"></canvas>
-                    </div>
-                    <div class="chart-box">
-                        <h3>Nivel de Dominio de Lengua</h3>
-                        <canvas id="chartDominio"></canvas>
-                    </div>
-                    <div class="chart-box">
-                        <h3>Estado de Inscripción</h3>
-                        <canvas id="chartInscripcion"></canvas>
-                    </div>
-                    <div class="chart-box">
-                        <h3>Tipo de Trabajador</h3>
-                        <canvas id="chartTrabajador"></canvas>
-                    </div>
+    <main class="max-w-7xl mx-auto px-4 py-8 space-y-8">
+        
+        <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+            <div>
+                <h2 class="text-lg font-bold text-gray-900">Porcentaje de docentes de IIEE EIB que culminan cursos en SIFODS</h2>
+                <p class="text-sm text-gray-500 mt-1">Línea de base regional: Meta de negociación obligatoria al 20.6% del público objetivo focalizado.</p>
+            </div>
+            <span class="inline-flex items-center gap-1.5 py-1.5 px-3 rounded-full text-xs font-medium bg-blue-50 text-blue-700 border border-blue-200">
+                <span class="h-2 w-2 rounded-full bg-blue-600 animate-pulse"></span> Sincronizado con Google Sheets
+            </span>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col justify-between">
+                <span class="text-sm font-semibold text-gray-400 uppercase tracking-wider">Universo Meta</span>
+                <div class="flex items-baseline gap-2 mt-2">
+                    <span id="kpi-denominador" class="text-3xl font-bold text-gray-900">...</span>
+                    <span class="text-sm font-medium text-gray-500">Docentes</span>
+                </div>
+                <p class="text-xs text-gray-400 mt-2">Público objetivo en las 8 UGEL</p>
+            </div>
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col justify-between">
+                <span class="text-sm font-semibold text-gray-400 uppercase tracking-wider">Aprobados Reales</span>
+                <div class="flex items-baseline gap-2 mt-2">
+                    <span id="kpi-aprobados" class="text-3xl font-bold text-emerald-600">...</span>
+                    <span class="text-sm font-medium text-gray-500">Culminaron</span>
+                </div>
+                <p class="text-xs text-gray-400 mt-2">Numerador oficial alcanzado</p>
+            </div>
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col justify-between">
+                <span class="text-sm font-semibold text-gray-400 uppercase tracking-wider">Avance Regional</span>
+                <div class="flex items-baseline gap-2 mt-2">
+                    <span id="kpi-porcentaje" class="text-3xl font-bold text-indigo-600">...</span>
+                    <span class="text-sm font-semibold text-indigo-400">vs 20.6%</span>
+                </div>
+                <div class="w-full bg-gray-100 rounded-full h-2 mt-2">
+                    <div id="kpi-progress-bar" class="bg-indigo-600 h-2 rounded-full" style="width: 0%"></div>
                 </div>
             </div>
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col justify-between">
+                <span class="text-sm font-semibold text-gray-400 uppercase tracking-wider">Alerta Estratégica</span>
+                <div class="mt-2">
+                    <span id="kpi-alerta" class="inline-flex items-center px-3 py-1 rounded-lg text-sm font-bold bg-gray-100 text-gray-800">Cargando...</span>
+                </div>
+                <p class="text-xs text-gray-400 mt-2">Estado situacional consolidado</p>
+            </div>
+        </div>
 
-            <div class="section">
-                <div class="section-title">📋 Resumen por Nivel Educativo y UGEL</div>
-                <table class="data-table">
+        <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
+            <h3 class="text-md font-bold text-gray-900 mb-6">Embudo de Permanencia y Avance Curricular por UGEL</h3>
+            <div class="relative w-full h-[380px]">
+                <canvas id="chartEIB"></canvas>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+            <div class="px-6 py-4 border-b border-gray-100 bg-gray-50">
+                <h3 class="text-md font-bold text-gray-900">Reporte Agregado de Cumplimiento Contractual</h3>
+            </div>
+            <div class="overflow-x-auto">
+                <table class="w-full text-left border-collapse">
                     <thead>
-                        <tr>
-                            <th>UGEL</th>
-                            <th>Inicial - Cuna</th>
-                            <th>Inicial - Cuna-Jardín</th>
-                            <th>Inicial - Jardín</th>
-                            <th>Primaria</th>
-                            <th>Secundaria</th>
-                            <th>Total</th>
-                            <th>Inscritos</th>
-                            <th>% Insc.</th>
-                            <th>Estado</th>
+                        <tr class="bg-gray-100/50 text-gray-500 text-xs font-bold uppercase border-b border-gray-100">
+                            <th class="px-6 py-3.5">Jurisdicción (UGEL)</th>
+                            <th class="px-6 py-3.5 text-center">Meta Total</th>
+                            <th class="px-6 py-3.5 text-center">Sin Matrícula</th>
+                            <th class="px-6 py-3.5 text-center">Avance 0%</th>
+                            <th class="px-6 py-3.5 text-center">En Proceso</th>
+                            <th class="px-6 py-3.5 text-center font-semibold text-emerald-700 bg-emerald-50/50">Aprobados</th>
+                            <th class="px-6 py-3.5 text-center">Avance %</th>
+                            <th class="px-6 py-3.5 text-center">Meta Requerida</th>
+                            <th class="px-6 py-3.5 text-center">Condición</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr><td><strong>UGEL Huancavelica</strong></td><td>0</td><td>11</td><td>18</td><td>50</td><td>117</td><td>196</td><td>195</td><td>99.5%</td><td><span class="badge badge-success">🟢</span></td></tr>
-                        <tr><td><strong>UGEL Angaraes</strong></td><td>1</td><td>3</td><td>12</td><td>39</td><td>37</td><td>92</td><td>83</td><td>90.2%</td><td><span class="badge badge-danger">🔴</span></td></tr>
-                        <tr><td><strong>UGEL Acobamba</strong></td><td>0</td><td>0</td><td>11</td><td>24</td><td>52</td><td>87</td><td>87</td><td>100.0%</td><td><span class="badge badge-success">🟢</span></td></tr>
-                        <tr><td><strong>UGEL Churcampa</strong></td><td>0</td><td>1</td><td>6</td><td>31</td><td>17</td><td>55</td><td>54</td><td>98.2%</td><td><span class="badge badge-warning">🟡</span></td></tr>
-                        <tr><td><strong>UGEL Tayacaja</strong></td><td>0</td><td>0</td><td>0</td><td>30</td><td>15</td><td>45</td><td>45</td><td>100.0%</td><td><span class="badge badge-success">🟢</span></td></tr>
-                        <tr><td><strong>UGEL Surcubamba</strong></td><td>0</td><td>1</td><td>3</td><td>7</td><td>15</td><td>26</td><td>25</td><td>96.2%</td><td><span class="badge badge-warning">🟡</span></td></tr>
-                        <tr><td><strong>UGEL Castrovirreyna</strong></td><td>0</td><td>0</td><td>4</td><td>1</td><td>7</td><td>12</td><td>12</td><td>100.0%</td><td><span class="badge badge-success">🟢</span></td></tr>
-                        <tr><td><strong>UGEL Huaytará</strong></td><td>0</td><td>0</td><td>2</td><td>0</td><td>2</td><td>4</td><td>4</td><td>100.0%</td><td><span class="badge badge-success">🟢</span></td></tr>
-                        <tr style="background:#1a5276; color:white; font-weight:700;">
-                            <td>TOTAL</td><td>1</td><td>16</td><td>56</td><td>182</td><td>262</td><td>517</td><td>505</td><td>97.7%</td><td>-</td>
-                        </tr>
-                    </tbody>
+                    <tbody id="tabla-cuerpo" class="divide-y divide-gray-100 text-sm">
+                        </tbody>
                 </table>
             </div>
         </div>
+    </main>
 
-        <!-- TAB 2: SEGUIMIENTO UGEL -->
-        <div id="ugel" class="tab-content">
-            <div class="alert alert-danger">
-                <strong>🚨 PRIORIDAD 1:</strong> UGEL Angaraes requiere atención inmediata. 9 docentes sin inscripción. Contactar coordinador EIB y directores de IIEE.
-            </div>
-
-            <div class="filters">
-                <div class="filter-group">
-                    <label>Filtrar por UGEL</label>
-                    <select id="filterUgel" onchange="filterTable()">
-                        <option value="">Todas las UGEL</option>
-                        <option value="HUANCAVELICA">UGEL Huancavelica</option>
-                        <option value="ANGARAES">UGEL Angaraes</option>
-                        <option value="ACOBAMBA">UGEL Acobamba</option>
-                        <option value="CHURCAMPA">UGEL Churcampa</option>
-                        <option value="TAYACAJA">UGEL Tayacaja</option>
-                        <option value="SURCUBAMBA">UGEL Surcubamba</option>
-                        <option value="CASTROVIRREYNA">UGEL Castrovirreyna</option>
-                        <option value="HUAYTARA">UGEL Huaytará</option>
-                    </select>
-                </div>
-                <div class="filter-group">
-                    <label>Nivel Educativo</label>
-                    <select id="filterNivel" onchange="filterTable()">
-                        <option value="">Todos</option>
-                        <option value="Inicial">Inicial</option>
-                        <option value="Primaria">Primaria</option>
-                        <option value="Secundaria">Secundaria</option>
-                    </select>
-                </div>
-                <div class="filter-group">
-                    <label>Estado Inscripción</label>
-                    <select id="filterEstado" onchange="filterTable()">
-                        <option value="">Todos</option>
-                        <option value="SI">Inscritos</option>
-                        <option value="NO">Sin inscripción</option>
-                    </select>
-                </div>
-            </div>
-
-            <div class="section">
-                <div class="section-title">📊 Matriz de Seguimiento por UGEL</div>
-                <div class="charts-grid">
-                    <div class="chart-box">
-                        <h3>Nivel de Dominio por UGEL</h3>
-                        <canvas id="chartDominioUgel"></canvas>
-                    </div>
-                    <div class="chart-box">
-                        <h3>Inscripción vs Pendientes por UGEL</h3>
-                        <canvas id="chartInscUgel"></canvas>
-                    </div>
-                </div>
-            </div>
-
-            <div class="section">
-                <div class="section-title">📋 Docentes sin Inscripción (12 casos prioritarios)</div>
-                <table class="data-table" id="tablaDocentes">
-                    <thead>
-                        <tr>
-                            <th>N°</th>
-                            <th>DNI</th>
-                            <th>Apellidos y Nombres</th>
-                            <th>UGEL</th>
-                            <th>IIEE</th>
-                            <th>Nivel</th>
-                            <th>Cargo</th>
-                            <th>Lengua</th>
-                            <th>Inscripción</th>
-                            <th>Acción</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr><td>1</td><td>21814746</td><td>CANTO HUARACA, JULIA JUANA</td><td>UGEL HUANCAVELICA</td><td>RAMON CASTILLA Y MARQUESADO</td><td>Secundaria</td><td>PROFESOR</td><td>Quechua Chanka</td><td><span class="badge badge-danger">NO</span></td><td><button class="btn btn-danger" style="padding:4px 10px;font-size:11px;">📞 Contactar</button></td></tr>
-                        <tr><td>2</td><td>41127272</td><td>ORIUNDO QUISPE, MILUSKA IDA</td><td>UGEL CHURCAMPA</td><td>MARIA INMACULADA CONCEPCION</td><td>Primaria</td><td>PROFESOR</td><td>Quechua Chanka</td><td><span class="badge badge-danger">NO</span></td><td><button class="btn btn-danger" style="padding:4px 10px;font-size:11px;">📞 Contactar</button></td></tr>
-                        <tr><td>3</td><td>71139304</td><td>QUINTO CONDOR, VANESA</td><td>UGEL CHURCAMPA</td><td>JOSE ANTONIO ENCINAS FRANCO</td><td>Secundaria</td><td>PROFESOR</td><td>Quechua Chanka</td><td><span class="badge badge-danger">NO</span></td><td><button class="btn btn-danger" style="padding:4px 10px;font-size:11px;">📞 Contactar</button></td></tr>
-                        <tr><td>4</td><td>20031581</td><td>SANTIANI LOZANO, MAXIMO</td><td>UGEL HUANCAVELICA</td><td>JOSE CARLOS MARIATEGUI</td><td>Secundaria</td><td>DIRECTOR I.E.</td><td>Quechua Chanka</td><td><span class="badge badge-danger">NO</span></td><td><button class="btn btn-danger" style="padding:4px 10px;font-size:11px;">📞 Contactar</button></td></tr>
-                        <tr><td>5</td><td>23270454</td><td>QUISPE VIDALON, RAQUEL</td><td>UGEL HUANCAVELICA</td><td>AGUSTO SALAZAR BONDY</td><td>Secundaria</td><td>DIRECTOR I.E.</td><td>Quechua Chanka</td><td><span class="badge badge-danger">NO</span></td><td><button class="btn btn-danger" style="padding:4px 10px;font-size:11px;">📞 Contactar</button></td></tr>
-                        <tr><td>6</td><td>23270259</td><td>QUISPE HUAMAN, FILOMENO</td><td>UGEL HUANCAVELICA</td><td>SERGIO QUIJADA JARA</td><td>Secundaria</td><td>DIRECTOR I.E.</td><td>Quechua Chanka</td><td><span class="badge badge-danger">NO</span></td><td><button class="btn btn-danger" style="padding:4px 10px;font-size:11px;">📞 Contactar</button></td></tr>
-                        <tr><td>7</td><td>71614037</td><td>SANCHEZ CHAVEZ, NIDIA SAIRA</td><td>UGEL SURCUBAMBA</td><td>NAVIO COMUN GAVILAN</td><td>Secundaria</td><td>PROFESOR</td><td>Quechua Chanka</td><td><span class="badge badge-danger">NO</span></td><td><button class="btn btn-danger" style="padding:4px 10px;font-size:11px;">📞 Contactar</button></td></tr>
-                        <tr><td>8</td><td>23274602</td><td>CARRERA DE LA CRUZ, ROBERTO</td><td>UGEL ANGARAES</td><td>DANIEL ALCIDES CARRION</td><td>Secundaria</td><td>PROFESOR</td><td>Quechua Chanka</td><td><span class="badge badge-danger">NO</span></td><td><button class="btn btn-danger" style="padding:4px 10px;font-size:11px;">📞 Contactar</button></td></tr>
-                        <tr><td>9</td><td>23465662</td><td>DAVILA DE LA TORRE, MARIA</td><td>UGEL ANGARAES</td><td>ALBERT EINSTEIN</td><td>Primaria</td><td>PROFESOR</td><td>Quechua Chanka</td><td><span class="badge badge-danger">NO</span></td><td><button class="btn btn-danger" style="padding:4px 10px;font-size:11px;">📞 Contactar</button></td></tr>
-                        <tr><td>10</td><td>42110320</td><td>YARANGO TORRES, BEATRIZ ROCIO</td><td>UGEL ANGARAES</td><td>ALBERT EINSTEIN</td><td>Primaria</td><td>PROFESOR</td><td>Quechua Chanka</td><td><span class="badge badge-danger">NO</span></td><td><button class="btn btn-danger" style="padding:4px 10px;font-size:11px;">📞 Contactar</button></td></tr>
-                        <tr><td>11</td><td>42552462</td><td>ZEVALLOS HUINCHO, GIOVANA</td><td>UGEL ANGARAES</td><td>JOSE GALVEZ BARRENECHEA</td><td>Secundaria</td><td>PROFESOR</td><td>Quechua Chanka</td><td><span class="badge badge-danger">NO</span></td><td><button class="btn btn-danger" style="padding:4px 10px;font-size:11px;">📞 Contactar</button></td></tr>
-                        <tr><td>12</td><td>41339258</td><td>TITO DAVILA, HONECKER</td><td>UGEL ANGARAES</td><td>MIGUEL GRAU SEMINARIO</td><td>Secundaria</td><td>PROFESOR</td><td>Quechua Chanka</td><td><span class="badge badge-danger">NO</span></td><td><button class="btn btn-danger" style="padding:4px 10px;font-size:11px;">📞 Contactar</button></td></tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        <!-- TAB 3: COMUNICACIÓN MASIVA -->
-        <div id="comunicacion" class="tab-content">
-
-            <div class="section">
-                <div class="section-title">📅 Cronograma de Capacitación 2026</div>
-                <div class="timeline">
-                    <div class="timeline-item future">
-                        <div class="timeline-content">
-                            <div class="timeline-title">MAR - ABR 2026 | Matrícula Básico 1</div>
-                            <div class="timeline-desc">Periodo de inscripción abierta en SIFODS. 517 docentes identificados como público objetivo.</div>
-                        </div>
-                    </div>
-                    <div class="timeline-item active">
-                        <div class="timeline-content">
-                            <div class="timeline-title">MAY - JUN 2026 | Curso Básico 1 (EN CURSO)</div>
-                            <div class="timeline-desc">2 unidades | 4 semanas por unidad | 64 horas totales | Virtual y autoformativo. 505 docentes inscritos activos.</div>
-                        </div>
-                    </div>
-                    <div class="timeline-item pending">
-                        <div class="timeline-content">
-                            <div class="timeline-title">JUL 2026 | Matrícula Básico 2</div>
-                            <div class="timeline-desc">Segunda fase de inscripción para docentes que culminaron Básico 1.</div>
-                        </div>
-                    </div>
-                    <div class="timeline-item future">
-                        <div class="timeline-content">
-                            <div class="timeline-title">AGO - SET 2026 | Curso Básico 2</div>
-                            <div class="timeline-desc">Segundo nivel de formación. 64 horas adicionales.</div>
-                        </div>
-                    </div>
-                    <div class="timeline-item future">
-                        <div class="timeline-content">
-                            <div class="timeline-title">DIC 2026 | Verificación FED</div>
-                            <div class="timeline-desc">Corte de datos al 30/09/2026. Verificación del indicador MC-06.01 por DGSEI-MIDIS.</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="section">
-                <div class="section-title">📧 Plantillas de Comunicación Masiva</div>
-
-                <div class="msg-card">
-                    <h4>🔔 MENSAJE 1: Recordatorio de Inscripción <span class="msg-tag" style="background:#fff3cd;color:#856404;">12 destinatarios</span><span class="msg-tag" style="background:#d1ecf1;color:#0c5460;">Email + WhatsApp</span></h4>
-                    <div class="msg-body" id="msg1">Estimado/a docente [NOMBRE]:
-
-Te recordamos que aún no te has inscrito en el curso de Lectura y Escritura en Lengua Originaria (MC-06.01) en la plataforma SIFODS.
-
-📅 Fecha límite de inscripción: [FECHA]
-🌐 Plataforma: sifods.minedu.gob.pe
-📚 Curso: Básico 1 - [LENGUA]
-
-Tu participación es fundamental para fortalecer las competencias lingüísticas de nuestros estudiantes EIB.
-
-¿Necesitas ayuda? Contacta a tu UGEL: [UGEL]
-
-¡No dejes pasar esta oportunidad!
-DEIB - MINEDU | FED 2025-2026</div>
-                    <button class="btn btn-primary copy-btn" onclick="copyMsg('msg1')">📋 Copiar</button>
-                </div>
-
-                <div class="msg-card">
-                    <h4>🚨 MENSAJE 2: Alarma - Inscripción Urgente <span class="msg-tag" style="background:#f8d7da;color:#721c24;">12 destinatarios</span><span class="msg-tag" style="background:#f8d7da;color:#721c24;">WhatsApp + Llamada</span></h4>
-                    <div class="msg-body" id="msg2">Estimado/a docente [NOMBRE]:
-
-⚠️ ALERTA: El plazo de inscripción al curso de Lectura y Escritura en Lengua Originaria vence HOY.
-
-Sin tu inscripción, no podrás:
-❌ Acceder al curso Básico 1 (mayo-junio)
-❌ Obtener la constancia de aprobación
-❌ Contribuir al indicador MC-06.01 del FED
-
-📞 Contacto inmediato:
-• UGEL [UGEL]: [TELÉFONO]
-• DRE Huancavelica: [TELÉFONO]
-• Soporte SIFODS: [CORREO]
-
-⏰ ACCIÓN REQUERIDA: Inscríbete antes de las 23:59 hrs
-
-DEIB - MINEDU | FED 2025-2026</div>
-                    <button class="btn btn-primary copy-btn" onclick="copyMsg('msg2')">📋 Copiar</button>
-                </div>
-
-                <div class="msg-card">
-                    <h4>💪 MENSAJE 3: Motivación - Sigue Adelante <span class="msg-tag" style="background:#d4edda;color:#155724;">505 destinatarios</span><span class="msg-tag" style="background:#d4edda;color:#155724;">Email + WhatsApp semanal</span></h4>
-                    <div class="msg-body" id="msg3">¡Hola, docente [NOMBRE]! 🌟
-
-Sabemos que estás avanzando en tu curso de Lectura y Escritura en Lengua Originaria en SIFODS. ¡Excelente!
-
-📊 Tu progreso actual: [AVANCE]% completado
-📚 Unidad actual: [UNIDAD]
-🎯 Meta: Culminar el 100% de actividades
-
-Recuerda:
-✓ Cada unidad vale el 50% de tu calificación
-✓ Necesitas entre 12 y 20 puntos para aprobar
-✓ Al culminar, recibirás tu constancia oficial
-
-"Cada palabra en nuestra lengua originaria es un puente hacia el futuro de nuestros niños."
-
-¡Tú puedes! 💚
-DEIB - MINEDU | FED 2025-2026</div>
-                    <button class="btn btn-primary copy-btn" onclick="copyMsg('msg3')">📋 Copiar</button>
-                </div>
-
-                <div class="msg-card">
-                    <h4>📅 MENSAJE 4: Recordatorio de Cronograma <span class="msg-tag" style="background:#d1ecf1;color:#0c5460;">505 destinatarios</span><span class="msg-tag" style="background:#d1ecf1;color:#0c5460;">Email semanal</span></h4>
-                    <div class="msg-body" id="msg4">Estimado/a docente [NOMBRE]:
-
-Te compartimos el avance del curso esta semana:
-
-📆 SEMANA [N] del curso Básico 1
-📍 Unidad en desarrollo: [UNIDAD]
-⏳ Fecha límite de esta unidad: [FECHA]
-
-📝 Actividades pendientes:
-• [ACTIVIDAD 1]
-• [ACTIVIDAD 2]
-• [ACTIVIDAD 3]
-
-📈 Avance grupal de tu UGEL [UGEL]:
-• Docentes inscritos: [X]
-• Con avance ≥50%: [Y]
-• Con avance <50%: [Z]
-
-¡No te quedes atrás! Ingresa a SIFODS hoy.
-
-DEIB - MINEDU | FED 2025-2026</div>
-                    <button class="btn btn-primary copy-btn" onclick="copyMsg('msg4')">📋 Copiar</button>
-                </div>
-
-                <div class="msg-card">
-                    <h4>🎉 MENSAJE 5: Felicitación por Culminación <span class="msg-tag" style="background:#e8daef;color:#4a235a;">Evento</span><span class="msg-tag" style="background:#e8daef;color:#4a235a;">Email + WhatsApp</span></h4>
-                    <div class="msg-body" id="msg5">¡FELICIDADES, docente [NOMBRE]! 🎊
-
-Has completado exitosamente el curso de Lectura y Escritura en Lengua Originaria (MC-06.01).
-
-📜 RESULTADOS:
-• Curso: Básico [1/2] - [LENGUA]
-• Calificación final: [NOTA]/20
-• Estado: APROBADO ✅
-
-🏆 Tu constancia está disponible en:
-sifods.minedu.gob.pe → Mis certificados
-
-🌟 Tu esfuerzo fortalece:
-✓ Las competencias lingüísticas de tus estudiantes
-✓ La preservación de nuestras lenguas originarias
-✓ La calidad educativa del Modelo EIB
-
-"Gracias por tu compromiso con la educación intercultural bilingüe del Perú."
-
-DEIB - MINEDU | FED 2025-2026</div>
-                    <button class="btn btn-primary copy-btn" onclick="copyMsg('msg5')">📋 Copiar</button>
-                </div>
-
-                <div class="msg-card">
-                    <h4>⚠️ MENSAJE 6: Alerta de Bajo Avance <span class="msg-tag" style="background:#f8d7da;color:#721c24;">Según SIFODS</span><span class="msg-tag" style="background:#f8d7da;color:#721c24;">WhatsApp + Email</span></h4>
-                    <div class="msg-body" id="msg6">Estimado/a docente [NOMBRE]:
-
-Hemos notado que tu avance en el curso de Lectura y Escritura en Lengua Originaria es bajo.
-
-📊 TU ESTADO ACTUAL:
-• Avance: [AVANCE]% (Meta mínima: 50%)
-• Unidades completadas: [Y]/2
-• Días restantes: [Z]
-
-⚠️ RIESGO: Si no aceleras, podrías:
-❌ No culminar a tiempo
-❌ No aprobar el curso
-❌ No contribuir al indicador MC-06.01
-
-🆘 APOYO DISPONIBLE:
-• Tutor virtual SIFODS: [ENLACE]
-• Coordinador UGEL [UGEL]: [CONTACTO]
-• Material de apoyo: [ENLACE]
-
-¡Aún estás a tiempo! Ingresa hoy a SIFODS.
-
-DEIB - MINEDU | FED 2025-2026</div>
-                    <button class="btn btn-primary copy-btn" onclick="copyMsg('msg6')">📋 Copiar</button>
-                </div>
-            </div>
-
-            <div class="section">
-                <div class="section-title">⚙️ Variables Dinámicas del Sistema</div>
-                <table class="data-table">
-                    <thead>
-                        <tr><th>Variable</th><th>Descripción</th><th>Fuente</th></tr>
-                    </thead>
-                    <tbody>
-                        <tr><td><code>[NOMBRE]</code></td><td>Nombre completo del docente</td><td>BD Excel</td></tr>
-                        <tr><td><code>[DNI]</code></td><td>Documento de identidad</td><td>BD Excel</td></tr>
-                        <tr><td><code>[UGEL]</code></td><td>Nombre de la UGEL</td><td>BD Excel</td></tr>
-                        <tr><td><code>[LENGUA]</code></td><td>Lengua originaria del curso</td><td>BD Excel</td></tr>
-                        <tr><td><code>[NIVEL]</code></td><td>Nivel educativo</td><td>BD Excel</td></tr>
-                        <tr><td><code>[CARGO]</code></td><td>Descripción del cargo</td><td>BD Excel</td></tr>
-                        <tr><td><code>[AVANCE]</code></td><td>% de avance en SIFODS</td><td>API SIFODS</td></tr>
-                        <tr><td><code>[NOTA]</code></td><td>Calificación actual</td><td>API SIFODS</td></tr>
-                        <tr><td><code>[UNIDAD]</code></td><td>Unidad en desarrollo</td><td>API SIFODS</td></tr>
-                        <tr><td><code>[FECHA]</code></td><td>Fecha dinámica del mensaje</td><td>Sistema</td></tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-        <!-- TAB 4: PLAN OPERATIVO -->
-        <div id="operativo" class="tab-content">
-
-            <div class="kpi-grid">
-                <div class="kpi-card">
-                  <div class="label">Semáforo Inscripción</div>
-                  <div class="value" style="color:#28a745;">🟢</div>
-                  <!-- Separamos el número dinámico dentro de un span con ID -->
-                  <div class="detail"><span id="tarjeta-matriculados">505</span>/517 inscritos</div>
-                  <span class="trend up">Meta: 100%</span>
-                </div>
-                <div class="kpi-card">
-                    <div class="label">Semáforo Avance</div>
-                    <div class="value" style="color:#ffc107;">🟡</div>
-                    <div class="detail">Básico 1 en desarrollo (May-Jun)</div>
-                    <span class="trend warn">En progreso</span>
-                </div>
-               <div class="kpi-card">
-                  <div class="label">Semáforo Culminación</div>
-                  <div class="value" style="color:#dc3545;">🔴</div>
-                  <!-- Envolvemos el número en un span con ID para conectarlo a los aprobados del Sheets -->
-                  <div class="detail"><span id="tarjeta-aprobados">0</span> docentes aprobados</div>
-                  <span class="trend down">Meta: ≥12%</span>
-              </div>
-                <div class="kpi-card">
-                    <div class="label">Próxima Verificación</div>
-                    <div class="value" style="color:#1a5276;">DIC</div>
-                    <div class="detail">Corte: 30/09/2026</div>
-                    <span class="trend warn">Programado</span>
-                </div>
-            </div>
-
-            <div class="section">
-                <div class="section-title">🚨 Alertas por UGEL y Plan de Acción</div>
-                <table class="data-table">
-                    <thead>
-                        <tr><th>UGEL</th><th>Total</th><th>Inscritos</th><th>Pendientes</th><th>% Insc.</th><th>Alerta</th><th>Acción</th><th>Prioridad</th></tr>
-                    </thead>
-                    <tbody>
-                        <tr style="background:#f8d7da;"><td><strong>UGEL Angaraes</strong></td><td>92</td><td>83</td><td>9</td><td>90.2%</td><td><span class="badge badge-danger">🔴 CRÍTICO</span></td><td>Contacto directo + Llamada</td><td><span class="badge badge-danger">URGENTE</span></td></tr>
-                        <tr><td>UGEL Huancavelica</td><td>196</td><td>195</td><td>1</td><td>99.5%</td><td><span class="badge badge-warning">🟡 ATENCIÓN</span></td><td>Contacto directo</td><td><span class="badge badge-warning">ALTA</span></td></tr>
-                        <tr><td>UGEL Churcampa</td><td>55</td><td>54</td><td>1</td><td>98.2%</td><td><span class="badge badge-warning">🟡 ATENCIÓN</span></td><td>Contacto directo</td><td><span class="badge badge-warning">ALTA</span></td></tr>
-                        <tr><td>UGEL Surcubamba</td><td>26</td><td>25</td><td>1</td><td>96.2%</td><td><span class="badge badge-warning">🟡 ATENCIÓN</span></td><td>Contacto directo</td><td><span class="badge badge-warning">ALTA</span></td></tr>
-                        <tr><td>UGEL Acobamba</td><td>87</td><td>87</td><td>0</td><td>100.0%</td><td><span class="badge badge-success">🟢 OK</span></td><td>Monitoreo continuo</td><td><span class="badge badge-success">NORMAL</span></td></tr>
-                        <tr><td>UGEL Tayacaja</td><td>45</td><td>45</td><td>0</td><td>100.0%</td><td><span class="badge badge-success">🟢 OK</span></td><td>Monitoreo continuo</td><td><span class="badge badge-success">NORMAL</span></td></tr>
-                        <tr><td>UGEL Castrovirreyna</td><td>12</td><td>12</td><td>0</td><td>100.0%</td><td><span class="badge badge-success">🟢 OK</span></td><td>Monitoreo continuo</td><td><span class="badge badge-success">NORMAL</span></td></tr>
-                        <tr><td>UGEL Huaytará</td><td>4</td><td>4</td><td>0</td><td>100.0%</td><td><span class="badge badge-success">🟢 OK</span></td><td>Monitoreo continuo</td><td><span class="badge badge-success">NORMAL</span></td></tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <div class="section">
-                <div class="section-title">📋 Plan de Acción Inmediata</div>
-                <table class="data-table">
-                    <thead>
-                        <tr><th>N°</th><th>Acción</th><th>Responsable</th><th>Plazo</th><th>Prioridad</th><th>Estado</th></tr>
-                    </thead>
-                    <tbody>
-                        <tr><td>1</td><td>Contactar 12 docentes sin inscripción (especialmente 9 de UGEL Angaraes)</td><td>Coordinador EIB UGEL Angaraes</td><td>48 horas</td><td><span class="badge badge-danger">URGENTE</span></td><td>🔴 Pendiente</td></tr>
-                        <tr><td>2</td><td>Activar tutoría virtual para docentes con bajo avance en SIFODS</td><td>DIFODS + DEIB</td><td>1 semana</td><td><span class="badge badge-warning">ALTA</span></td><td>🟡 En proceso</td></tr>
-                        <tr><td>3</td><td>Envío semanal de recordatorios a todos los inscritos</td><td>DRE Huancavelica</td><td>Semanal</td><td><span class="badge badge-info">MEDIA</span></td><td>🟢 Activo</td></tr>
-                        <tr><td>4</td><td>Coordinar reuniones virtuales DRE-UGEL para monitoreo</td><td>DRE Huancavelica</td><td>Quincenal</td><td><span class="badge badge-info">MEDIA</span></td><td>🟢 Activo</td></tr>
-                        <tr><td>5</td><td>Preparar constancias de aprobación para docentes que culminen</td><td>DIFODS</td><td>Jul 2026</td><td><span class="badge badge-success">PROGRAMADA</span></td><td>⚪ Programado</td></tr>
-                        <tr><td>6</td><td>Reporte de verificación FED con corte 30/09/2026</td><td>DGSEI-MIDIS</td><td>DIC 2026</td><td><span class="badge badge-success">PROGRAMADA</span></td><td>⚪ Programado</td></tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <div class="section">
-                <div class="section-title">👥 Matriz de Responsabilidades</div>
-                <table class="data-table">
-                    <thead>
-                        <tr><th>Nivel</th><th>Responsable</th><th>Acción</th><th>Frecuencia</th></tr>
-                    </thead>
-                    <tbody>
-                        <tr><td>MINEDU Central</td><td>DEIB + DIFODS</td><td>Diseño curso + Plataforma SIFODS</td><td>Continua</td></tr>
-                        <tr><td>MINEDU Central</td><td>DGSEI</td><td>Verificación indicador FED</td><td>DIC 2026</td></tr>
-                        <tr><td>DRE/GRE</td><td>DRE Huancavelica</td><td>Coordinación regional + Monitoreo</td><td>Mensual</td></tr>
-                        <tr><td>UGEL</td><td>8 UGEL de la región</td><td>Monitoreo + Acompañamiento técnico</td><td>Semanal</td></tr>
-                        <tr><td>UGEL</td><td>Coordinador EIB</td><td>Contacto directo con docentes</td><td>Diaria</td></tr>
-                        <tr><td>IIEE</td><td>Directores EIB</td><td>Motivación + Seguimiento interno</td><td>Semanal</td></tr>
-                        <tr><td>Docente</td><td>517 docentes EIB</td><td>Matrícula + Culminación del curso</td><td>Según cronograma</td></tr>
-                    </tbody>
-                </table>
-            </div>
-
-            <div class="section">
-                <div class="section-title">📱 Canales de Comunicación y Cronograma</div>
-                <div class="charts-grid">
-                    <div class="chart-box">
-                        <h3>Canales de Comunicación</h3>
-                        <canvas id="chartCanales"></canvas>
-                    </div>
-                    <div class="chart-box">
-                        <h3>Cronograma de Comunicación</h3>
-                        <canvas id="chartCrono"></canvas>
-                    </div>
-                </div>
-            </div>
-
-            <div class="section">
-                <div class="section-title">🎯 Métricas de Éxito del Indicador</div>
-                <table class="data-table">
-                    <thead>
-                        <tr><th>Métrica</th><th>Meta</th><th>Actual</th><th>Estado</th><th>Fecha Límite</th></tr>
-                    </thead>
-                    <tbody>
-                        <tr><td>📊 Inscripción</td><td>100% de docentes inscritos</td><td>97.7% (505/517)</td><td><span class="badge badge-warning">🟡 Cerca</span></td><td>ABR 2026</td></tr>
-                        <tr><td>📈 Avance curso</td><td>≥80% con avance ≥50%</td><td>En curso</td><td><span class="badge badge-info">🔵 En progreso</span></td><td>JUN 2026</td></tr>
-                        <tr><td>✅ Culminación</td><td>100% actividades completadas</td><td>Pendiente</td><td><span class="badge badge-danger">🔴 Pendiente</span></td><td>SET 2026</td></tr>
-                        <tr><td>📝 Aprobación</td><td>≥12 puntos en calificación</td><td>Pendiente</td><td><span class="badge badge-danger">🔴 Pendiente</span></td><td>SET 2026</td></tr>
-                        <tr><td>📜 Constancia</td><td>100% de aprobados certificados</td><td>Pendiente</td><td><span class="badge badge-danger">🔴 Pendiente</span></td><td>DIC 2026</td></tr>
-                        <tr><td>🏆 Indicador FED</td><td>Valor ≥ meta establecida</td><td>Pendiente</td><td><span class="badge badge-danger">🔴 Pendiente</span></td><td>DIC 2026</td></tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-
-    </div>
+    <footer class="bg-gray-900 text-gray-400 text-center py-6 border-t border-gray-800 text-xs mt-12">
+        &copy; 2026 Coordinación Territorial FED - Huancavelica. Sistema de Modernización de Gestión de Datos Abiertos.
+    </footer>
 
     <script>
-        // Tab switching
-        function showTab(tabId) {
-            document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-            document.querySelectorAll('.nav button').forEach(b => b.classList.remove('active'));
-            document.getElementById(tabId).classList.add('active');
-            event.target.classList.add('active');
+        // Endpoint Web App de Google Apps Script suministrado
+        const URL_API = "https://script.google.com/macros/s/AKfycbwX8luWbEJwOZvS4kRSHR7kq_xx3CcTh358PqN8yUxuho0QgtjdzR32MjnZV7NhzUzVAw/exec";
+
+        async function cargarDashboard() {
+            try {
+                const respuesta = await fetch(URL_API);
+                const datos = await respuesta.json();
+                
+                // 1. Extraer y procesar la fila del TOTAL REGIONAL para los KPIs principales
+                const filaTotal = datos.find(d => d.ugel.toUpperCase() === "TOTAL REGIONAL");
+                const datosUgel = datos.filter(d => d.ugel.toUpperCase() !== "TOTAL REGIONAL");
+
+                if (filaTotal) {
+                    document.getElementById("kpi-denominador").innerText = filaTotal.denominador;
+                    document.getElementById("kpi-aprobados").innerText = filaTotal.aprobados;
+                    
+                    // Formatear el porcentaje a dos decimales
+                    const porc = (filaTotal.porcentajeReal * 100).toFixed(2);
+                    document.getElementById("kpi-porcentaje").innerText = `${porc}%`;
+                    
+                    // Actualizar barra de progreso visual
+                    const progresoBarra = Math.min(porc, 100);
+                    document.getElementById("kpi-progress-bar").style.width = `${progresoBarra}%`;
+                    
+                    // Renderizar la medalla de la alerta ejecutiva
+                    const kpiAlerta = document.getElementById("kpi-alerta");
+                    kpiAlerta.innerText = filaTotal.alerta;
+                    if (filaTotal.alerta.includes("SALVO")) {
+                        kpiAlerta.className = "inline-flex items-center px-3 py-1 rounded-lg text-sm font-bold bg-emerald-100 text-emerald-800";
+                    } else {
+                        kpiAlerta.className = "inline-flex items-center px-3 py-1 rounded-lg text-sm font-bold bg-red-100 text-red-800 animate-pulse";
+                    }
+                }
+
+                // 2. Renderizar la tabla de datos dinámica
+                const tablaCuerpo = document.getElementById("tabla-cuerpo");
+                tablaCuerpo.innerHTML = ""; // Limpiar spinner o cargas anteriores
+
+                // Primero inyectamos las filas de las UGEL individuales
+                datosUgel.forEach(item => {
+                    const esAlertaRoja = item.alerta.includes("Roja");
+                    const esEnTraccion = item.alerta.includes("Tracción");
+                    
+                    let badgeClass = "bg-emerald-100 text-emerald-800 font-semibold";
+                    if (esAlertaRoja) badgeClass = "bg-red-100 text-red-800 font-semibold";
+                    if (esEnTraccion) badgeClass = "bg-amber-100 text-amber-800 font-semibold";
+
+                    const tr = document.createElement("tr");
+                    tr.className = "hover:bg-gray-50/70 transition-colors";
+                    tr.innerHTML = `
+                        <td class="px-6 py-3.5 font-medium text-gray-900">${item.ugel}</td>
+                        <td class="px-6 py-3.5 text-center text-gray-600">${item.denominador}</td>
+                        <td class="px-6 py-3.5 text-center text-gray-500">${item.sinMatricula}</td>
+                        <td class="px-6 py-3.5 text-center text-gray-500">${item.avance0}</td>
+                        <td class="px-6 py-3.5 text-center text-gray-500">${item.enProceso}</td>
+                        <td class="px-6 py-3.5 text-center font-bold text-emerald-600 bg-emerald-50/30">${item.aprobados}</td>
+                        <td class="px-6 py-3.5 text-center font-semibold text-gray-700">${(item.porcentajeReal * 100).toFixed(1)}%</td>
+                        <td class="px-6 py-3.5 text-center font-medium text-indigo-600">${item.metaFed}</td>
+                        <td class="px-6 py-3.5 text-center">
+                            <span class="px-2.5 py-1 rounded-full text-xs ${badgeClass}">${item.alerta}</span>
+                        </td>
+                    `;
+                    tablaCuerpo.appendChild(tr);
+                });
+
+                // Al final inyectamos la fila resumen destacada visualmente
+                if (filaTotal) {
+                    const trTotal = document.createElement("tr");
+                    trTotal.className = "bg-indigo-50/80 font-bold border-t-2 border-indigo-200 text-indigo-950";
+                    trTotal.innerHTML = `
+                        <td class="px-6 py-4 uppercase tracking-wider">${filaTotal.ugel}</td>
+                        <td class="px-6 py-4 text-center">${filaTotal.denominador}</td>
+                        <td class="px-6 py-4 text-center text-indigo-800/80">${filaTotal.sinMatricula}</td>
+                        <td class="px-6 py-4 text-center text-indigo-800/80">${filaTotal.avance0}</td>
+                        <td class="px-6 py-4 text-center text-indigo-800/80">${filaTotal.enProceso}</td>
+                        <td class="px-6 py-4 text-center text-emerald-700 bg-emerald-100/40">${filaTotal.aprobados}</td>
+                        <td class="px-6 py-4 text-center text-indigo-700 font-extrabold">${(filaTotal.porcentajeReal * 100).toFixed(2)}%</td>
+                        <td class="px-6 py-4 text-center text-indigo-600">${filaTotal.metaFed}</td>
+                        <td class="px-6 py-4 text-center">
+                            <span class="px-3 py-1 rounded-lg text-xs bg-indigo-900 text-white">${filaTotal.alerta}</span>
+                        </td>
+                    `;
+                    tablaCuerpo.appendChild(trTotal);
+                }
+
+                // 3. Configuración y Construcción del Gráfico Chart.js de Barras Apiladas
+                const ugelLabels = datosUgel.map(item => item.ugel.replace("UGEL ", ""));
+                const datasetSinMatricula = datosUgel.map(item => item.sinMatricula);
+                const datasetAvance0 = datosUgel.map(item => item.avance0);
+                const datasetEnProceso = datosUgel.map(item => item.enProceso);
+                const datasetAprobados = datosUgel.map(item => item.aprobados);
+
+                const ctx = document.getElementById('chartEIB').getContext('2d');
+                new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: ugelLabels,
+                        datasets: [
+                            {
+                                label: 'Sin Matrícula (Crítico)',
+                                data: datasetSinMatricula,
+                                backgroundColor: '#9CA3AF', // Gris administrativo
+                            },
+                            {
+                                label: 'Avance 0% (Inactivos)',
+                                data: datasetAvance0,
+                                backgroundColor: '#FCA5A5', // Rojo claro descriptivo
+                            },
+                            {
+                                label: 'En Proceso (Tracción)',
+                                data: datasetEnProceso,
+                                backgroundColor: '#60A5FA', // Azul corporativo
+                            },
+                            {
+                                label: 'Aprobados (Meta Oficial)',
+                                data: datasetAprobados,
+                                backgroundColor: '#10B981', // Verde éxito FED
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            x: { stacked: true },
+                            y: { stacked: true, beginAtZero: true }
+                        },
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                                labels: { boxWidth: 12, font: { size: 11, weight: '600' }, padding: 15 }
+                            }
+                        }
+                    }
+                });
+
+            } catch (error) {
+                console.error("Error en el mapeo satelital del dashboard: ", error);
+                document.getElementById("tabla-cuerpo").innerHTML = `
+                    <tr>
+                        <td colspan="9" class="text-center py-8 text-red-600 font-semibold">
+                            ⚠️ Error crítico de conexión: Verifica los permisos de implementación pública en Google Apps Script.
+                        </td>
+                    </tr>
+                `;
+            }
         }
 
-        // Copy message
-        function copyMsg(id) {
-            const text = document.getElementById(id).innerText;
-            navigator.clipboard.writeText(text).then(() => {
-                alert('✅ Mensaje copiado al portapapeles');
-            });
-        }
-
-        // Filter table
-        function filterTable() {
-            // Simplified filter - in production would filter the table rows
-            console.log('Filtering...');
-        }
-
-        // Chart configurations
-        Chart.defaults.font.family = "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif";
-        Chart.defaults.font.size = 11;
-
-        // Chart 1: UGEL Distribution
-        new Chart(document.getElementById('chartUgel'), {
-            type: 'bar',
-            data: {
-                labels: ['Huancavelica', 'Angaraes', 'Acobamba', 'Churcampa', 'Tayacaja', 'Surcubamba', 'Castrovirreyna', 'Huaytará'],
-                datasets: [{
-                    label: 'Docentes',
-                    data: [196, 92, 87, 55, 45, 26, 12, 4],
-                    backgroundColor: ['#1a5276', '#2874a6', '#5dade2', '#85c1e9', '#aed6f1', '#d4e6f1', '#eaf2f8', '#f5f9ff'],
-                    borderRadius: 6
-                }]
-            },
-            options: { indexAxis: 'y', plugins: { legend: { display: false } }, scales: { x: { beginAtZero: true } } }
-        });
-
-        // Chart 2: Nivel Educativo
-        new Chart(document.getElementById('chartNivel'), {
-            type: 'doughnut',
-            data: {
-                labels: ['Secundaria', 'Primaria', 'Inicial - Jardín', 'Inicial - Cuna-Jardín', 'Inicial - Cuna'],
-                datasets: [{
-                    data: [262, 182, 56, 16, 1],
-                    backgroundColor: ['#1a5276', '#2874a6', '#5dade2', '#85c1e9', '#aed6f1'],
-                    borderWidth: 0
-                }]
-            },
-            options: { plugins: { legend: { position: 'right', labels: { boxWidth: 12 } } } }
-        });
-
-        // Chart 3: Forma de Atención
-        new Chart(document.getElementById('chartForma'), {
-            type: 'bar',
-            data: {
-                labels: ['Revitalización', 'Fortalecimiento'],
-                datasets: [{
-                    label: 'Docentes',
-                    data: [289, 228],
-                    backgroundColor: ['#f39c12', '#27ae60'],
-                    borderRadius: 6
-                }]
-            },
-            options: { plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true } } }
-        });
-
-        // Chart 4: Nivel de Dominio
-        new Chart(document.getElementById('chartDominio'), {
-            type: 'bar',
-            data: {
-                labels: ['EN INICIO', 'NO EVALUADO', 'NO DOMINA'],
-                datasets: [{
-                    label: 'Docentes',
-                    data: [348, 121, 48],
-                    backgroundColor: ['#e74c3c', '#f39c12', '#27ae60'],
-                    borderRadius: 6
-                }]
-            },
-            options: { plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true } } }
-        });
-
-        // Chart 5: Inscripción
-        new Chart(document.getElementById('chartInscripcion'), {
-            type: 'doughnut',
-            data: {
-                labels: ['Inscritos', 'Sin inscripción'],
-                datasets: [{
-                    data: [505, 12],
-                    backgroundColor: ['#27ae60', '#e74c3c'],
-                    borderWidth: 0
-                }]
-            },
-            options: { plugins: { legend: { position: 'bottom' } } }
-        });
-
-        // Chart 6: Tipo de Trabajador
-        new Chart(document.getElementById('chartTrabajador'), {
-            type: 'pie',
-            data: {
-                labels: ['DOCENTE', 'DIRECTIVO'],
-                datasets: [{
-                    data: [486, 31],
-                    backgroundColor: ['#1a5276', '#5dade2'],
-                    borderWidth: 0
-                }]
-            },
-            options: { plugins: { legend: { position: 'right' } } }
-        });
-
-        // Chart 7: Dominio por UGEL (stacked)
-        new Chart(document.getElementById('chartDominioUgel'), {
-            type: 'bar',
-            data: {
-                labels: ['Huancavelica', 'Angaraes', 'Acobamba', 'Churcampa', 'Tayacaja', 'Surcubamba', 'Castrovirreyna', 'Huaytará'],
-                datasets: [
-                    { label: 'EN INICIO', data: [137, 53, 59, 28, 25, 17, 10, 2], backgroundColor: '#e74c3c' },
-                    { label: 'NO EVALUADO', data: [48, 25, 20, 18, 14, 6, 1, 2], backgroundColor: '#f39c12' },
-                    { label: 'NO DOMINA', data: [11, 14, 8, 9, 6, 3, 1, 0], backgroundColor: '#27ae60' }
-                ]
-            },
-            options: { scales: { x: { stacked: true }, y: { stacked: true, beginAtZero: true } }, plugins: { legend: { position: 'top' } } }
-        });
-
-        // Chart 8: Inscripción por UGEL
-        new Chart(document.getElementById('chartInscUgel'), {
-            type: 'bar',
-            data: {
-                labels: ['Huancavelica', 'Angaraes', 'Acobamba', 'Churcampa', 'Tayacaja', 'Surcubamba', 'Castrovirreyna', 'Huaytará'],
-                datasets: [
-                    { label: 'Inscritos', data: [195, 83, 87, 54, 45, 25, 12, 4], backgroundColor: '#27ae60' },
-                    { label: 'Pendientes', data: [1, 9, 0, 1, 0, 1, 0, 0], backgroundColor: '#e74c3c' }
-                ]
-            },
-            options: { scales: { y: { beginAtZero: true } }, plugins: { legend: { position: 'top' } } }
-        });
-
-        // Chart 9: Canales
-        new Chart(document.getElementById('chartCanales'), {
-            type: 'bar',
-            data: {
-                labels: ['Email Institucional', 'WhatsApp Business', 'Llamada Telefónica', 'Reporte SIFODS', 'Reporte Excel'],
-                datasets: [{
-                    label: 'Alcance',
-                    data: [505, 505, 12, 517, 517],
-                    backgroundColor: ['#3498db', '#27ae60', '#e74c3c', '#9b59b6', '#f39c12'],
-                    borderRadius: 6
-                }]
-            },
-            options: { indexAxis: 'y', plugins: { legend: { display: false } } }
-        });
-
-        // Chart 10: Cronograma
-        new Chart(document.getElementById('chartCrono'), {
-            type: 'bar',
-            data: {
-                labels: ['Diario', 'Semanal', 'Quincenal', 'Mensual', 'Evento', 'DIC 2026'],
-                datasets: [{
-                    label: 'Frecuencia',
-                    data: [1, 2, 1, 1, 1, 1],
-                    backgroundColor: ['#e74c3c', '#f39c12', '#3498db', '#9b59b6', '#8e44ad', '#1a5276'],
-                    borderRadius: 6
-                }]
-            },
-            options: { plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true, ticks: { stepSize: 1 } } } }
-        });
+        // Ejecutar carga automática al montar el DOM
+        window.onload = cargarDashboard;
     </script>
-<!-- ======================================================== -->
-<!-- MOTOR DE AUTOMATIZACIÓN EN TIEMPO REAL - FED HUANCAVELICA -->
-<!-- ======================================================== -->
-<script>
-  // Enlace oficial de tu Sheets convertido a formato de datos puros (.CSV)
-  const URL_SHEETS_FED = "https://docs.google.com/spreadsheets/d/e/2PACX-1vS2is55ckDSwEh27aDFB_a9I45v3XHnMXp8DEEM-memVbex8GRvEzQHOfmyNCfjSA/pub?gid=447253744&single=true&output=csv";
-
-  let graficoUgel = null;
-
-  async function conectarDashboardReal() {
-      try {
-          const respuesta = await fetch(URL_SHEETS_FED);
-          const datosBrutos = await respuesta.text();
-          
-          // Separamos el contenido por filas y celdas
-          const lineas = datosBrutos.split("\n").map(l => l.split(","));
-          
-          // Extraemos la información de las 8 UGELs (Filas 14 a 21 de tu Sheets)
-          const ugelNombres = [];
-          const matriculadosData = [];
-          const aprobadosData = [];
-
-          // En JavaScript, la fila 14 del Excel es el índice 13
-          for (let i = 13; i <= 20; i++) {
-              if (lineas[i] && lineas[i][1]) {
-                  ugelNombres.push(lineas[i][1].replace("UGEL ", "")); // Quita el texto "UGEL " para que no se amontone
-                  matriculadosData.push(parseInt(lineas[i][2]) || 0);   // Columna C: Con Acceso
-                  aprobadosData.push(parseInt(lineas[i][3]) || 0);      // Columna D: Aprobados
-              }
-          }
-
-          // Extraemos los Totales Consolidados Regionales (Fila 22 del Excel -> índice 21)
-          const totalInscritos = lineas[21][2] || "0"; 
-          const totalAprobados = lineas[21][3] || "0";  
-
-          // Inyectamos los datos en los contenedores HTML de tus tarjetas actuales
-          if(document.getElementById("tarjeta-matriculados")) {
-              document.getElementById("tarjeta-matriculados").innerText = totalInscritos;
-          }
-          if(document.getElementById("tarjeta-aprobados")) {
-              document.getElementById("tarjeta-aprobados").innerText = totalAprobados;
-          }
-
-          // Redibujamos el gráfico de distribución por UGEL usando Chart.js
-          const ctxUgel = document.getElementById('id-grafico-ugel').getContext('2d');
-          
-          if (graficoUgel) { graficoUgel.destroy(); } // Limpia el gráfico previo para evitar errores
-          
-          graficoUgel = new Chart(ctxUgel, {
-              type: 'bar',
-              data: {
-                  labels: ugelNombres,
-                  datasets: [
-                      {
-                          label: 'Con acceso al curso',
-                          data: matriculadosData,
-                          backgroundColor: '#1e3a8a', // Azul institucional
-                          borderRadius: 4
-                      },
-                      {
-                          label: 'Aprobados',
-                          data: aprobadosData,
-                          backgroundColor: '#10b981', // Verde FED
-                          borderRadius: 4
-                      }
-                  ]
-              },
-              options: {
-                  indexAxis: 'y', // Hace las barras horizontales como tu prototipo
-                  responsive: true,
-                  plugins: {
-                      legend: { position: 'top' }
-                  }
-              }
-          });
-
-          console.log("¡Conexión FED exitosa! " + totalInscritos + " docentes sincronizados.");
-
-      } catch (error) {
-          console.error("Error crítico leyendo la base de datos de Sheets:", error);
-      }
-  }
-
-  // Carga automática del script al abrir el sitio web
-  window.addEventListener('DOMContentLoaded', conectarDashboardReal);
-</script>
+</body>
+</html>
