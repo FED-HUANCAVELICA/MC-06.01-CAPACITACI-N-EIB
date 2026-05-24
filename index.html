@@ -14,13 +14,13 @@
 </head>
 <body class="bg-gray-50 text-gray-800">
 
-    <header class="bg-indigo-900 text-white shadow-md sticky top-0 z-50">
+    <header class="bg-indigo-950 text-white shadow-md sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 py-4 flex flex-col sm:flex-row justify-between items-center gap-4">
             <div class="flex items-center gap-3">
-                <span class="bg-red-600 text-xs font-bold uppercase px-2 py-1 rounded">FED 2.0</span>
+                <span class="bg-red-600 text-xs font-bold uppercase px-2.5 py-1 rounded">FED 2.0</span>
                 <h1 class="text-xl font-bold tracking-tight">Huancavelica: Tablero de Monitoreo Territorial</h1>
             </div>
-            <div class="text-sm bg-indigo-800 px-4 py-2 rounded-lg text-indigo-200 font-medium">
+            <div class="text-sm bg-indigo-900 px-4 py-2 rounded-lg text-indigo-200 font-medium border border-indigo-800">
                 Indicador MC-06.01: Competencias Lingüísticas EIB
             </div>
         </div>
@@ -31,7 +31,7 @@
         <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
             <div>
                 <h2 class="text-lg font-bold text-gray-900">Porcentaje de docentes de IIEE EIB que culminan cursos en SIFODS</h2>
-                <p class="text-sm text-gray-500 mt-1">Línea de base regional: Meta de negociación obligatoria al 20.6% del público objetivo focalizado.</p>
+                <p class="text-sm text-gray-500 mt-1">Línea de base regional: Meta de negociación obligatoria al 20.6% del público objetivo focalizado[cite: 34].</p>
             </div>
             <span class="inline-flex items-center gap-1.5 py-1.5 px-3 rounded-full text-xs font-medium bg-blue-50 text-blue-700 border border-blue-200">
                 <span class="h-2 w-2 rounded-full bg-blue-600 animate-pulse"></span> Sincronizado con Google Sheets
@@ -40,7 +40,7 @@
 
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col justify-between">
-                <span class="text-sm font-semibold text-gray-400 uppercase tracking-wider">Universo Meta</span>
+                <span class="text-xs font-bold text-gray-400 uppercase tracking-wider">Universo Meta Regional</span>
                 <div class="flex items-baseline gap-2 mt-2">
                     <span id="kpi-denominador" class="text-3xl font-bold text-gray-900">...</span>
                     <span class="text-sm font-medium text-gray-500">Docentes</span>
@@ -48,25 +48,25 @@
                 <p class="text-xs text-gray-400 mt-2">Público objetivo en las 8 UGEL</p>
             </div>
             <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col justify-between">
-                <span class="text-sm font-semibold text-gray-400 uppercase tracking-wider">Aprobados Reales</span>
+                <span class="text-xs font-bold text-gray-400 uppercase tracking-wider">Aprobados 1° Sesión</span>
                 <div class="flex items-baseline gap-2 mt-2">
                     <span id="kpi-aprobados" class="text-3xl font-bold text-emerald-600">...</span>
-                    <span class="text-sm font-medium text-gray-500">Culminaron</span>
+                    <span class="text-sm font-medium text-gray-500">Docentes</span>
                 </div>
-                <p class="text-xs text-gray-400 mt-2">Numerador oficial alcanzado</p>
+                <p class="text-xs text-gray-400 mt-2">Numerador oficial alcanzado </p>
             </div>
             <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col justify-between">
-                <span class="text-sm font-semibold text-gray-400 uppercase tracking-wider">Avance Regional</span>
+                <span class="text-xs font-bold text-gray-400 uppercase tracking-wider">Avance Regional</span>
                 <div class="flex items-baseline gap-2 mt-2">
                     <span id="kpi-porcentaje" class="text-3xl font-bold text-indigo-600">...</span>
-                    <span class="text-sm font-semibold text-indigo-400">vs 20.6%</span>
+                    <span class="text-sm font-semibold text-indigo-400">vs 20.6% [cite: 34]</span>
                 </div>
                 <div class="w-full bg-gray-100 rounded-full h-2 mt-2">
                     <div id="kpi-progress-bar" class="bg-indigo-600 h-2 rounded-full" style="width: 0%"></div>
                 </div>
             </div>
             <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col justify-between">
-                <span class="text-sm font-semibold text-gray-400 uppercase tracking-wider">Alerta Estratégica</span>
+                <span class="text-xs font-bold text-gray-400 uppercase tracking-wider">Alerta Estratégica</span>
                 <div class="mt-2">
                     <span id="kpi-alerta" class="inline-flex items-center px-3 py-1 rounded-lg text-sm font-bold bg-gray-100 text-gray-800">Cargando...</span>
                 </div>
@@ -74,10 +74,36 @@
             </div>
         </div>
 
-        <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
-            <h3 class="text-md font-bold text-gray-900 mb-6">Comparativa de Avance Territorial Separado por Columnas</h3>
-            <div class="relative w-full h-[420px]">
+        <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 space-y-6">
+            <div>
+                <h3 class="text-md font-bold text-gray-900">Embudo de Permanencia y Avance Curricular por UGEL</h3>
+                <p class="text-xs text-gray-400 mt-0.5">Visualización comparativa con columnas agrupadas de forma independiente para análisis rápido.</p>
+            </div>
+            <div class="relative w-full h-[380px]">
                 <canvas id="chartEIB"></canvas>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-4 border-t border-gray-100">
+                <div class="p-4 rounded-xl border-l-4 border-slate-500 bg-slate-50/50">
+                    <div class="text-xs font-bold text-slate-500 uppercase">Sin Matrícula (Crítico)</div>
+                    <div id="card-total-sinmatricula" class="text-2xl font-bold text-slate-700 mt-1">...</div>
+                    <div class="text-[11px] text-gray-400 mt-0.5">Docentes que no se registraron en el sistema SIFODS.</div>
+                </div>
+                <div class="p-4 rounded-xl border-l-4 border-red-500 bg-red-50/50">
+                    <div class="text-xs font-bold text-red-500 uppercase">Compromiso Pendiente</div>
+                    <div id="card-total-pendiente" class="text-2xl font-bold text-red-700 mt-1">...</div>
+                    <div class="text-[11px] text-gray-400 mt-0.5">Matriculados inactivos con 0% de avance en plataforma.</div>
+                </div>
+                <div class="p-4 rounded-xl border-l-4 border-blue-500 bg-blue-50/50">
+                    <div class="text-xs font-bold text-blue-500 uppercase">En Proceso (Tracción)</div>
+                    <div id="card-total-proceso" class="text-2xl font-bold text-blue-700 mt-1">...</div>
+                    <div class="text-[11px] text-gray-400 mt-0.5">Docentes con avance activo entre el 1% y el 99%.</div>
+                </div>
+                <div class="p-4 rounded-xl border-l-4 border-emerald-500 bg-emerald-50/50">
+                    <div class="text-xs font-bold text-emerald-500 uppercase">Aprobado 1° Sesión</div>
+                    <div id="card-total-aprobado" class="text-2xl font-bold text-emerald-700 mt-1">...</div>
+                    <div class="text-[11px] text-gray-400 mt-0.5">Docentes que culminaron con nota aprobatoria oficial[cite: 52, 96].</div>
+                </div>
             </div>
         </div>
 
@@ -92,9 +118,9 @@
                             <th class="px-6 py-3.5">Jurisdicción (UGEL)</th>
                             <th class="px-6 py-3.5 text-center">Meta Total</th>
                             <th class="px-6 py-3.5 text-center">Sin Matrícula</th>
-                            <th class="px-6 py-3.5 text-center">Avance 0%</th>
+                            <th class="px-6 py-3.5 text-center">Compromiso Pendiente</th>
                             <th class="px-6 py-3.5 text-center">En Proceso</th>
-                            <th class="px-6 py-3.5 text-center font-semibold text-emerald-700 bg-emerald-50/50">Aprobados</th>
+                            <th class="px-6 py-3.5 text-center font-semibold text-emerald-700 bg-emerald-50/50">Aprobado 1° Sesión</th>
                             <th class="px-6 py-3.5 text-center">Avance %</th>
                             <th class="px-6 py-3.5 text-center">Meta Requerida</th>
                             <th class="px-6 py-3.5 text-center">Condición</th>
@@ -112,7 +138,7 @@
     </footer>
 
     <script>
-        // Registrar explícitamente el plugin de las etiquetas de datos
+        // Registrar el plugin de etiquetas numéricas sobre columnas
         Chart.register(ChartDataLabels);
 
         const URL_API = "https://script.google.com/macros/s/AKfycbwX8luWbEJwOZvS4kRSHR7kq_xx3CcTh358PqN8yUxuho0QgtjdzR32MjnZV7NhzUzVAw/exec";
@@ -122,11 +148,12 @@
                 const respuesta = await fetch(URL_API);
                 const datos = await respuesta.json();
                 
-                // 1. Procesar la fila del TOTAL REGIONAL
+                // 1. Separar Fila Total Regional de las filas por UGEL
                 const filaTotal = datos.find(d => d.ugel.toUpperCase() === "TOTAL REGIONAL");
                 const datosUgel = datos.filter(d => d.ugel.toUpperCase() !== "TOTAL REGIONAL");
 
                 if (filaTotal) {
+                    // Cargar KPIs del encabezado principal
                     document.getElementById("kpi-denominador").innerText = filaTotal.denominador;
                     document.getElementById("kpi-aprobados").innerText = filaTotal.aprobados;
                     
@@ -143,6 +170,12 @@
                     } else {
                         kpiAlerta.className = "inline-flex items-center px-3 py-1 rounded-lg text-sm font-bold bg-red-100 text-red-800 animate-pulse";
                     }
+
+                    // Cargar los macro-totales en las 4 Nuevas Tarjetas Explicativas debajo del gráfico
+                    document.getElementById("card-total-sinmatricula").innerText = filaTotal.sinMatricula;
+                    document.getElementById("card-total-pendiente").innerText = filaTotal.avance0;
+                    document.getElementById("card-total-proceso").innerText = filaTotal.enProceso;
+                    document.getElementById("card-total-aprobado").innerText = filaTotal.aprobados;
                 }
 
                 // 2. Renderizar la tabla de datos dinámica
@@ -163,7 +196,7 @@
                         <td class="px-6 py-3.5 font-medium text-gray-900">${item.ugel}</td>
                         <td class="px-6 py-3.5 text-center text-gray-600">${item.denominador}</td>
                         <td class="px-6 py-3.5 text-center text-gray-500">${item.sinMatricula}</td>
-                        <td class="px-6 py-3.5 text-center text-gray-500">${item.avance0}</td>
+                        <td class="px-6 py-3.5 text-center text-red-600 font-medium">${item.avance0}</td>
                         <td class="px-6 py-3.5 text-center text-gray-500">${item.enProceso}</td>
                         <td class="px-6 py-3.5 text-center font-bold text-emerald-600 bg-emerald-50/30">${item.aprobados}</td>
                         <td class="px-6 py-3.5 text-center font-semibold text-gray-700">${(item.porcentajeReal * 100).toFixed(1)}%</td>
@@ -182,7 +215,7 @@
                         <td class="px-6 py-4 uppercase tracking-wider">${filaTotal.ugel}</td>
                         <td class="px-6 py-4 text-center">${filaTotal.denominador}</td>
                         <td class="px-6 py-4 text-center text-indigo-800/80">${filaTotal.sinMatricula}</td>
-                        <td class="px-6 py-4 text-center text-indigo-800/80">${filaTotal.avance0}</td>
+                        <td class="px-6 py-4 text-center text-red-700">${filaTotal.avance0}</td>
                         <td class="px-6 py-4 text-center text-indigo-800/80">${filaTotal.enProceso}</td>
                         <td class="px-6 py-4 text-center text-emerald-700 bg-emerald-100/40">${filaTotal.aprobados}</td>
                         <td class="px-6 py-4 text-center text-indigo-700 font-extrabold">${(filaTotal.porcentajeReal * 100).toFixed(2)}%</td>
@@ -194,7 +227,7 @@
                     tablaCuerpo.appendChild(trTotal);
                 }
 
-                // 3. Configuración del Gráfico Con Barras Separadas y Etiquetas de Datos
+                // 3. Configuración del Gráfico de Barras Separadas con Colores Vibrantes Profesionales
                 const ugelLabels = datosUgel.map(item => item.ugel.replace("UGEL ", ""));
                 const datasetSinMatricula = datosUgel.map(item => item.sinMatricula);
                 const datasetAvance0 = datosUgel.map(item => item.avance0);
@@ -210,22 +243,22 @@
                             {
                                 label: 'Sin Matrícula (Crítico)',
                                 data: datasetSinMatricula,
-                                backgroundColor: '#9CA3AF', 
+                                backgroundColor: '#64748B', // Gris Pizarra Sólido
                             },
                             {
-                                label: 'Avance 0% (Inactivos)',
+                                label: 'Compromiso Pendiente',
                                 data: datasetAvance0,
-                                backgroundColor: '#FCA5A5', 
+                                backgroundColor: '#DC2626', // Rojo Carmesí Alerta
                             },
                             {
                                 label: 'En Proceso (Tracción)',
                                 data: datasetEnProceso,
-                                backgroundColor: '#60A5FA', 
+                                backgroundColor: '#2563EB', // Azul Eléctrico Corporativo
                             },
                             {
-                                label: 'Aprobados (Meta Oficial)',
+                                label: 'Aprobado 1° Sesión',
                                 data: datasetAprobados,
-                                backgroundColor: '#10B981', 
+                                backgroundColor: '#059669', // Verde Esmeralda Brillante
                             }
                         ]
                     },
@@ -234,7 +267,7 @@
                         maintainAspectRatio: false,
                         scales: {
                             x: { 
-                                stacked: false, // Barras agrupadas una al lado de la otra
+                                stacked: false, // Barras separadas una al lado de la otra
                                 grid: { display: false }
                             },
                             y: { 
@@ -245,10 +278,8 @@
                         },
                         plugins: {
                             legend: {
-                                position: 'bottom',
-                                labels: { boxWidth: 12, font: { size: 11, weight: '600' }, padding: 15 }
+                                display: false // Desactivamos la leyenda superior de Chart.js ya que pusimos las tarjetas de alta gama abajo
                             },
-                            // Configuración del Plugin de Etiquetas Numéricas sobre cada columna
                             datalabels: {
                                 anchor: 'end',
                                 align: 'top',
@@ -258,10 +289,9 @@
                                     weight: 'bold',
                                     family: "'Inter', sans-serif"
                                 },
-                                color: '#374151',
+                                color: '#1F2937',
                                 formatter: function(value) {
-                                    // Ocultar etiquetas con valor 0 para no saturar visualmente el gráfico
-                                    return value > 0 ? value : '';
+                                    return value > 0 ? value : ''; // Ocultar ceros para mantener la limpieza
                                 }
                             }
                         }
