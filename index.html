@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>FED 4.1 — AUDITORÍA AVANZADA MC-06.01</title>
+<title>FED 4.2 — PLATAFORMA GERENCIAL MC-06.01</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
 <style>
@@ -42,12 +42,13 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  box-shadow: 0 10px 25px -5px rgba(15,23,42,0.1);
 }
 .header-title { font-size: 21px; font-weight: 800; letter-spacing: -.5px; }
 .header-sub { font-size: 11px; color: #94a3b8; margin-top: 4px; text-transform: uppercase; }
 .badge-fed { background: rgba(239,68,68,0.15); color: #ef4444; border: 1px solid rgba(239,68,68,0.3); padding: 6px 14px; border-radius: 8px; font-size: 10px; font-weight: 700; }
 
-/* BANNER GENERAL KPI */
+/* METRICS PANEL */
 .meta-banner {
   background: var(--bg-card);
   border: 1px solid var(--border);
@@ -80,7 +81,6 @@ body {
   border: 1px solid var(--border);
   border-radius: var(--radius);
   padding: 24px;
-  position: relative;
 }
 .card-header-flex {
   display: flex;
@@ -112,6 +112,7 @@ body {
   border: 1px solid var(--border);
   border-radius: var(--radius);
   padding: 20px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.01);
 }
 .kpi-num { font-size: 28px; font-weight: 800; line-height: 1; margin-bottom: 6px; }
 .kpi-lbl { font-size: 10px; color: var(--text-muted); font-weight: 700; text-transform: uppercase; }
@@ -127,7 +128,6 @@ td { padding: 11px 10px; border-bottom: 1px solid var(--border); color: var(--te
 
 <div class="container">
 
-  <!-- HEADER -->
   <div class="header-card">
     <div>
       <div class="header-title">🗣️ ALLINLLACHU KAMACHIKUQKUNA — AUDITORÍA TERRITORIAL EIB</div>
@@ -136,7 +136,6 @@ td { padding: 11px 10px; border-bottom: 1px solid var(--border); color: var(--te
     <div class="badge-fed">RÚBRICAS DE ALTA DIRECCIÓN</div>
   </div>
 
-  <!-- TARJETAS PRINCIPALES -->
   <div class="meta-banner">
     <div class="metric-box" style="color: var(--blue)">
       <div class="metric-val">0.0%</div>
@@ -149,12 +148,11 @@ td { padding: 11px 10px; border-bottom: 1px solid var(--border); color: var(--te
     </div>
     <div class="divider"></div>
     <div class="metric-box" style="color: var(--red)">
-      <div class="metric-val" id="valActual">1.93%</div>
+      <div class="metric-val">1.93%</div>
       <div class="metric-lbl">Avance Regional</div>
     </div>
   </div>
 
-  <!-- PANEL MIXTO SUPERIOR -->
   <div class="dashboard-grid grid-mix">
     <div class="main-card">
       <div class="card-header-flex">
@@ -181,14 +179,12 @@ td { padding: 11px 10px; border-bottom: 1px solid var(--border); color: var(--te
             </tr>
           </thead>
           <tbody id="tablaCuerpoEib">
-            <!-- Dinámico -->
-          </tbody>
+            </tbody>
         </table>
       </div>
     </div>
   </div>
 
-  <!-- PANEL INFERIOR ASIMÉTRICO SILICON VALLEY -->
   <div class="dashboard-grid grid-split">
     
     <div class="sidebar-panel">
@@ -229,9 +225,6 @@ td { padding: 11px 10px; border-bottom: 1px solid var(--border); color: var(--te
 
 <script>
 Chart.register(ChartDataLabels);
-
-// Si no tienes tu enlace CSV a la mano, deja este texto vacío y el código funcionará igual de forma blindada
-const URL_CSV = ""; 
 
 const dataEib = [
   { ugel: "Acobamba", denom: 87, sin_reg: 0, avance_0: 61, proceso: 24, aprob: 2, bajo_50: 19, alto_50: 5 },
@@ -294,7 +287,6 @@ window.onload = function() {
   });
 
   actualizarBarrasHorizontales();
-  if(URL_CSV !== "") { conectarCSV(); }
 };
 
 function actualizarBarrasHorizontales() {
@@ -336,23 +328,11 @@ function actualizarBarrasHorizontales() {
         }
       },
       scales: {
-        x: { beginAtZero: true, grid: { color: '#f1f5f9' } },
+        x: { beginAtZero: true, grid: { color: '#f1f5f9' }, ticks: { font: { size: 10 } } },
         y: { grid: { display: false }, ticks: { font: { size: 11, weight: '600' }, color: '#334155' } }
       }
     }
   });
-}
-
-async function conectarCSV() {
-  try {
-    const response = await fetch(URL_CSV);
-    const text = await response.text();
-    const filas = text.split("\n").map(f => f.split(","));
-    if(filas.length > 1 && filas[1].length > 1) {
-      const realVal = parseFloat(filas[1][1]) * 100;
-      if (!isNaN(realVal)) { document.getElementById('valActual').textContent = realVal.toFixed(2) + '%'; }
-    }
-  } catch (e) { console.log("Modo offline activo"); }
 }
 </script>
 </body>
