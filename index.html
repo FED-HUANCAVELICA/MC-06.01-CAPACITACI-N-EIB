@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>FED 4.2 — PLATAFORMA GERENCIAL MC-06.01</title>
+<title>FED 4.3 — PLATAFORMA INTEGRAL MC-06.01</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
 <style>
@@ -92,7 +92,7 @@ body {
 }
 .card-title { font-size: 12px; font-weight: 800; color: var(--text-primary); text-transform: uppercase; letter-spacing: .5px; }
 
-.chart-container { position: relative; height: 350px; width: 100%; }
+.chart-container { position: relative; height: 380px; width: 100%; }
 .chart-bar-horizontal { position: relative; height: 260px; width: 100%; }
 
 .select-premium {
@@ -112,7 +112,6 @@ body {
   border: 1px solid var(--border);
   border-radius: var(--radius);
   padding: 20px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.01);
 }
 .kpi-num { font-size: 28px; font-weight: 800; line-height: 1; margin-bottom: 6px; }
 .kpi-lbl { font-size: 10px; color: var(--text-muted); font-weight: 700; text-transform: uppercase; }
@@ -186,7 +185,6 @@ td { padding: 11px 10px; border-bottom: 1px solid var(--border); color: var(--te
   </div>
 
   <div class="dashboard-grid grid-split">
-    
     <div class="sidebar-panel">
       <div class="kpi-mini-card" style="border-left: 4px solid var(--blue);">
         <div class="kpi-num" id="kpiDenom">0</div>
@@ -218,7 +216,6 @@ td { padding: 11px 10px; border-bottom: 1px solid var(--border); color: var(--te
         <canvas id="chartHorizontalUgel"></canvas>
       </div>
     </div>
-
   </div>
 
 </div>
@@ -264,6 +261,7 @@ window.onload = function() {
     <td>${tAprob}</td>
   </tr>`;
 
+  // CORRECCIÓN MATEMÁTICA ANCLAJE DATALABELS VERTICALES
   const ctx = document.getElementById('chartEibGrouped').getContext('2d');
   new Chart(ctx, {
     type: 'bar',
@@ -281,7 +279,18 @@ window.onload = function() {
       maintainAspectRatio: false,
       plugins: {
         legend: { position: 'top', labels: { boxWidth: 10, font: { size: 10, weight: '600' } } },
-        datalabels: { display: (ctx) => ctx.dataset.data[ctx.dataIndex] > 0, anchor: 'end', align: 'top', font: { size: 9, weight: '700' } }
+        datalabels: {
+          display: (context) => context.dataset.data[context.dataIndex] > 0,
+          anchor: 'end',
+          align: 'end',  // Forzar alineación externa al final de la barra
+          offset: -2,    // Compensa para evitar sobreposición interna
+          font: { size: 9, weight: '800' },
+          color: '#0f172a'
+        }
+      },
+      scales: {
+        x: { grid: { display: false }, ticks: { font: { size: 10, weight: '600' } } },
+        y: { beginAtZero: true, grace: '15%', grid: { color: '#f1f5f9' } } // Añade un 15% de holgura superior
       }
     }
   });
