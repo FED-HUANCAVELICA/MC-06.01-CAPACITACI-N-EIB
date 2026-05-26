@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>FED — CAPACITACIÓN EIB</title>
+<title>FED 4.4 — DATA ACTUALIZADA DIFOS</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
 <style>
@@ -39,10 +39,12 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  box-shadow: 0 10px 25px -5px rgba(15,23,42,0.1);
 }
-.header-title { font-size: 21px; font-weight: 800; }
+.header-title { font-size: 21px; font-weight: 800; letter-spacing: -.5px; }
 .header-sub { font-size: 11px; color: #94a3b8; margin-top: 4px; text-transform: uppercase; }
 .badge-fed { background: rgba(239,68,68,0.15); color: #ef4444; border: 1px solid rgba(239,68,68,0.3); padding: 6px 14px; border-radius: 8px; font-size: 10px; font-weight: 700; }
+
 .meta-banner {
   background: var(--bg-card);
   border: 1px solid var(--border);
@@ -57,6 +59,7 @@ body {
 .metric-val { font-size: 38px; font-weight: 900; line-height: 1; margin-bottom: 4px; }
 .metric-lbl { font-size: 10px; color: var(--text-muted); font-weight: 700; text-transform: uppercase; }
 .divider { width: 1px; height: 45px; background: var(--border); }
+
 .dashboard-grid {
   display: grid;
   grid-template-columns: 1fr;
@@ -81,16 +84,19 @@ body {
   border-bottom: 1px solid var(--border);
   padding-bottom: 12px;
 }
-.card-title { font-size: 12px; font-weight: 800; color: var(--text-primary); text-transform: uppercase; }
+.card-title { font-size: 12px; font-weight: 800; color: var(--text-primary); text-transform: uppercase; letter-spacing: .5px; }
 .chart-container { position: relative; height: 380px; width: 100%; }
 .chart-bar-horizontal { position: relative; height: 260px; width: 100%; }
+
 .select-premium {
   padding: 8px 16px;
   border-radius: 8px;
   border: 1px solid var(--border);
   background: #f8fafc;
   font-weight: 700;
+  color: var(--text-primary);
   outline: none;
+  cursor: pointer;
 }
 .sidebar-panel { display: flex; flex-direction: column; gap: 16px; justify-content: center; }
 .kpi-mini-card {
@@ -101,6 +107,7 @@ body {
 }
 .kpi-num { font-size: 28px; font-weight: 800; line-height: 1; margin-bottom: 6px; }
 .kpi-lbl { font-size: 10px; color: var(--text-muted); font-weight: 700; text-transform: uppercase; }
+
 table { width: 100%; border-collapse: collapse; text-align: left; font-size: 12px; }
 th { background: #f8fafc; color: var(--text-sec); font-weight: 700; padding: 12px 10px; border-bottom: 2px solid var(--border); text-transform: uppercase; font-size: 9px; }
 td { padding: 11px 10px; border-bottom: 1px solid var(--border); color: var(--text-primary); }
@@ -110,14 +117,17 @@ td { padding: 11px 10px; border-bottom: 1px solid var(--border); color: var(--te
 <body>
 
 <div class="container">
+
+  <!-- HEADER -->
   <div class="header-card">
     <div>
       <div class="header-title">🗣️ ALLINLLACHU KAMACHIKUQKUNA — AUDITORÍA TERRITORIAL EIB</div>
       <div class="header-sub">Análisis Macroscópico y Desglose Nominal por Niveles de Rendimiento SIFODS · Indicador MC-06.01</div>
     </div>
-    <div class="badge-fed">RÚBRICAS DE ALTA DIRECCIÓN</div>
+    <div class="badge-fed">CORTE EN VIVO DIFOS</div>
   </div>
 
+  <!-- TARJETAS PRINCIPALES SINCRO EXCEL -->
   <div class="meta-banner">
     <div class="metric-box" style="color: var(--blue)">
       <div class="metric-val">0.0%</div>
@@ -130,11 +140,12 @@ td { padding: 11px 10px; border-bottom: 1px solid var(--border); color: var(--te
     </div>
     <div class="divider"></div>
     <div class="metric-box" style="color: var(--red)">
-      <div class="metric-val">1.93%</div>
+      <div class="metric-val">2.71%</div>
       <div class="metric-lbl">Avance Regional</div>
     </div>
   </div>
 
+  <!-- PANEL SUPERIOR MACRO -->
   <div class="dashboard-grid grid-mix">
     <div class="main-card">
       <div class="card-header-flex">
@@ -160,12 +171,15 @@ td { padding: 11px 10px; border-bottom: 1px solid var(--border); color: var(--te
               <th>Aprob.</th>
             </tr>
           </thead>
-          <tbody id="tablaCuerpoEib"></tbody>
+          <tbody id="tablaCuerpoEib">
+            <!-- Dinámico -->
+          </tbody>
         </table>
       </div>
     </div>
   </div>
 
+  <!-- PANEL INFERIOR ASIMÉTRICO SILICON VALLEY -->
   <div class="dashboard-grid grid-split">
     <div class="sidebar-panel">
       <div class="kpi-mini-card" style="border-left: 4px solid var(--blue);">
@@ -177,6 +191,7 @@ td { padding: 11px 10px; border-bottom: 1px solid var(--border); color: var(--te
         <div class="kpi-lbl">Casos Críticos en Ruta</div>
       </div>
     </div>
+
     <div class="main-card">
       <div class="card-header-flex" style="margin-bottom: 12px;">
         <div class="card-title" style="color: var(--blue);">🎯 Sinceramiento Colectivo Nominal por Rangos</div>
@@ -198,20 +213,22 @@ td { padding: 11px 10px; border-bottom: 1px solid var(--border); color: var(--te
       </div>
     </div>
   </div>
+
 </div>
 
 <script>
 Chart.register(ChartDataLabels);
 
+// DATA OFICIAL ACTUALIZADA DESDE TU CAPTURA DE GOOGLE SHEETS
 const dataEib = [
-  { ugel: "Acobamba", denom: 87, sin_reg: 0, avance_0: 61, proceso: 24, aprob: 2, bajo_50: 19, alto_50: 5 },
-  { ugel: "Angaraes", denom: 92, sin_reg: 8, avance_0: 56, proceso: 27, aprob: 1, bajo_50: 22, alto_50: 5 },
+  { ugel: "Acobamba", denom: 87, sin_reg: 0, avance_0: 60, proceso: 23, aprob: 4, bajo_50: 18, alto_50: 5 },
+  { ugel: "Angaraes", denom: 92, sin_reg: 8, avance_0: 52, proceso: 31, aprob: 1, bajo_50: 25, alto_50: 6 },
   { ugel: "Castrovirreyna", denom: 12, sin_reg: 0, avance_0: 3, proceso: 7, aprob: 2, bajo_50: 2, alto_50: 5 },
-  { ugel: "Churcampa", denom: 55, sin_reg: 1, avance_0: 38, proceso: 15, aprob: 1, bajo_50: 11, alto_50: 4 },
-  { ugel: "Huancavelica", denom: 196, sin_reg: 0, avance_0: 121, proceso: 72, aprob: 3, bajo_50: 58, alto_50: 14 },
+  { ugel: "Churcampa", denom: 55, sin_reg: 1, avance_0: 34, proceso: 19, aprob: 1, bajo_50: 14, alto_50: 5 },
+  { ugel: "Huancavelica", denom: 196, sin_reg: 0, avance_0: 112, proceso: 79, aprob: 5, bajo_50: 63, alto_50: 16 },
   { ugel: "Huaytara", denom: 4, sin_reg: 0, avance_0: 1, proceso: 3, aprob: 0, bajo_50: 2, alto_50: 1 },
-  { ugel: "Surcubamba", denom: 26, sin_reg: 1, avance_0: 18, proceso: 7, aprob: 0, bajo_50: 6, alto_50: 1 },
-  { ugel: "Tayacaja", denom: 45, sin_reg: 0, avance_0: 30, proceso: 14, aprob: 1, bajo_50: 11, alto_50: 3 }
+  { ugel: "Surcubamba", denom: 26, sin_reg: 1, avance_0: 18, proceso: 7, aprob: 0, bajo_50: 5, alto_50: 2 },
+  { ugel: "Tayacaja", denom: 45, sin_reg: 0, avance_0: 28, proceso: 16, aprob: 1, bajo_50: 12, alto_50: 4 }
 ];
 
 let chartHorizontal;
