@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>FED 3.0 — RANGOS DE AVANCE MC-06.01</title>
+<title>FED 3.1 — RANGOS DE AVANCE MC-06.01</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
 <style>
@@ -115,32 +115,20 @@ table { width: 100%; border-collapse: collapse; text-align: left; font-size: 12p
 th { background: #f8fafc; color: var(--text-sec); font-weight: 700; padding: 12px 10px; border-bottom: 2px solid var(--border); text-transform: uppercase; font-size: 9px; }
 td { padding: 11px 10px; border-bottom: 1px solid var(--border); color: var(--text-primary); font-weight: 500; }
 .total-row { background: #f1f5f9; font-weight: 700; }
-
-.alert-box {
-  background: #fffbeb;
-  border-left: 4px solid var(--amber);
-  color: #92400e;
-  padding: 16px;
-  border-radius: 10px;
-  margin-top: 24px;
-  font-size: 12.5px;
-}
 </style>
 </head>
 <body>
 
 <div class="container">
 
-  <!-- HEADER -->
   <div class="header-card">
     <div>
       <div class="header-title">🗣️ ALLINLLACHU KAMACHIKUQKUNA — AUDITORÍA TERRITORIAL EIB</div>
-      <div class="header-sub">Análisis de Profundidad por Rangos de Avance en SIFODS · Indicador MC-06.01</div>
+      <div class="header-sub">Cursos de Lectura y Escritura en Lengua Originaria Quechua Chanka (SIFODS-MINEDU) · Indicador MC-06.01</div>
     </div>
     <div class="badge-fed">CORTES EN VIVO 2026</div>
   </div>
 
-  <!-- TARJETAS DE COBERTURA -->
   <div class="meta-banner">
     <div class="metric-box" style="color: var(--blue)">
       <div class="metric-val">0.0%</div>
@@ -154,11 +142,10 @@ td { padding: 11px 10px; border-bottom: 1px solid var(--border); color: var(--te
     <div class="divider"></div>
     <div class="metric-box" style="color: var(--red)">
       <div class="metric-val" id="valActual">1.93%</div>
-      <div class="metric-lbl">Avance Real Certificado</div>
+      <div class="metric-lbl">Avance Regional</div>
     </div>
   </div>
 
-  <!-- BLOQUE DE ARRIBA REPLICADO DE LA CAPTURA image_7ac2ac.jpg -->
   <div class="dashboard-grid grid-mix">
     <div class="main-card">
       <div class="card-title">📊 Auditoría de Tránsito y Estados de Avance Nominal por UGEL</div>
@@ -181,45 +168,36 @@ td { padding: 11px 10px; border-bottom: 1px solid var(--border); color: var(--te
             </tr>
           </thead>
           <tbody id="tablaCuerpoEib">
-            <!-- Carga dinámica -->
-          </tbody>
+            </tbody>
         </table>
       </div>
     </div>
   </div>
 
-  <!-- NUEVO BLOQUE BAJO: AUDITORÍA DE MICROAVANCE POR UGEL (TU REQUERIMIENTO) -->
   <div class="dashboard-grid grid-2col">
     
-    <!-- EXPLICACIÓN Y SELECTOR INTERACTIVO -->
-    <div class="main-card" style="display: flex; flex-direction: column; justify-content: space-between;">
-      <div>
-        <div class="card-title" style="color: var(--blue);">🎯 Sinceramiento del Estado "En Proceso"</div>
-        <div class="selector-box">
-          <label for="ugelSelect">Selecciona la UGEL a Fiscalizar:</label>
-          <select id="ugelSelect" onchange="actualizarAnilloFiltro()">
-            <option value="Acobamba">Acobamba</option>
-            <option value="Angaraes">Angaraes</option>
-            <option value="Castrovirreyna">Castrovirreyna</option>
-            <option value="Churcampa">Churcampa</option>
-            <option value="Huancavelica">Huancavelica</option>
-            <option value="Huaytara">Huaytará</option>
-            <option value="Surcubamba">Surcubamba</option>
-            <option value="Tayacaja">Tayacaja</option>
-          </select>
-        </div>
-        <p style="color: var(--text-sec); line-height: 1.6; margin-bottom: 12px;">
-          Esta tarjeta desglosa el comportamiento interno del grupo de docentes <strong>"En Proceso"</strong> de la UGEL seleccionada. Permite clasificar de forma predictiva cuántos docentes muestran un avance crítico inferior al 50% frente a aquellos que ya superaron la mitad del curso y representan la meta de rescate inmediato para el cumplimiento del compromiso FED.
-        </p>
+    <div class="main-card" style="display: flex; flex-direction: column; justify-content: center;">
+      <div class="card-title" style="color: var(--blue);">🎯 Sinceramiento Colectivo Nominal</div>
+      <div class="selector-box">
+        <label for="ugelSelect">Selecciona la UGEL a Fiscalizar:</label>
+        <select id="ugelSelect" onchange="actualizarAnilloFiltro()">
+          <option value="Acobamba">Acobamba</option>
+          <option value="Angaraes">Angaraes</option>
+          <option value="Castrovirreyna">Castrovirreyna</option>
+          <option value="Churcampa">Churcampa</option>
+          <option value="Huancavelica">Huancavelica</option>
+          <option value="Huaytara">Huaytará</option>
+          <option value="Surcubamba">Surcubamba</option>
+          <option value="Tayacaja">Tayacaja</option>
+        </select>
       </div>
-      <div style="background: #f8fafc; padding: 12px; border-radius: 8px; border-left: 4px solid var(--blue); font-weight: 600;">
-        📌 Recomendación: Las UGEL con alto índice de "Menos del 50%" requieren talleres prácticos de asistencia nominal urgente.
-      </div>
+      <p style="color: var(--text-sec); line-height: 1.6;">
+        Desglose del universo total de la provincia seleccionada para auditar el avance cualitativo dentro de la plataforma del SIFODS.
+      </p>
     </div>
 
-    <!-- GRÁFICO ANILLO DINÁMICO POR UGEL -->
     <div class="main-card">
-      <div class="card-title" id="anilloTitle">🍩 Rangos de Microavance Interno: UGEL Acobamba</div>
+      <div class="card-title" id="anilloTitle">🍩 Estado de Avance: UGEL Acobamba</div>
       <div class="chart-ring-container">
         <canvas id="chartAnilloUgel"></canvas>
       </div>
@@ -227,16 +205,14 @@ td { padding: 11px 10px; border-bottom: 1px solid var(--border); color: var(--te
 
   </div>
 
-  <div class="alert-box">
-    <strong>💡 Estrategia de Sustentación para la Mesa Técnica:</strong> Al presentarte ante los directores de UGEL, no les pidas simplemente "avanzar". Muéstrales el anillo inferior; si una UGEL tiene la mayoría de su personal en el rango naranja (Menos del 50%), significa que el cuello de botella está en el inicio de los módulos del SIFODS.
-  </div>
-
 </div>
 
 <script>
 Chart.register(ChartDataLabels);
 
-// Data Maestra idéntica a tu RESUMEN_DASHBOARD de la captura image_7ac2ac.jpg
+const URL_CSV = "REEMPLAZA_CON_TU_MISMO_ENLACE_CSV_AQUÍ";
+
+// Estructura de datos completa (Se integran aprobados, procesos y congelados para el anillo)
 const dataEib = [
   { ugel: "Acobamba", denom: 87, sin_reg: 0, avance_0: 61, proceso: 24, aprob: 2, bajo_50: 19, alto_50: 5 },
   { ugel: "Angaraes", denom: 92, sin_reg: 8, avance_0: 56, proceso: 27, aprob: 1, bajo_50: 22, alto_50: 5 },
@@ -251,7 +227,6 @@ const dataEib = [
 let chartAnillo;
 
 window.onload = function() {
-  // 1. POBLAR LA TABLA SUPERIOR
   const tbody = document.getElementById('tablaCuerpoEib');
   let tDenom = 0, tSinReg = 0, t0 = 0, tProc = 0, tAprob = 0;
 
@@ -276,7 +251,6 @@ window.onload = function() {
     <td>${tAprob}</td>
   </tr>`;
 
-  // 2. RENDERIZAR GRÁFICO SUPERIOR (LADO A LADO)
   const ctx = document.getElementById('chartEibGrouped').getContext('2d');
   new Chart(ctx, {
     type: 'bar',
@@ -299,7 +273,6 @@ window.onload = function() {
     }
   });
 
-  // 3. INICIALIZAR EL GRÁFICO ANILLO INFERIOR
   actualizarAnilloFiltro();
 };
 
@@ -307,8 +280,7 @@ function actualizarAnilloFiltro() {
   const ugelSeleccionada = document.getElementById('ugelSelect').value;
   const ugelData = dataEib.find(d => d.ugel === ugelSeleccionada);
   
-  document.getElementById('anilloTitle').textContent = `🍩 Rangos de Microavance Interno: UGEL ${ugelSeleccionada}`;
-
+  document.getElementById('anilloTitle').textContent = `🍩 Estado de Avance Neto: UGEL ${ugelSeleccionada}`;
   const ctxAnillo = document.getElementById('chartAnilloUgel').getContext('2d');
 
   if (chartAnillo) { chartAnillo.destroy(); }
@@ -316,24 +288,23 @@ function actualizarAnilloFiltro() {
   chartAnillo = new Chart(ctxAnillo, {
     type: 'doughnut',
     data: {
-      labels: ['Avance Crítico (< 50%)', 'Avance Óptimo (≥ 50%)'],
+      labels: ['Aprobado (100%)', 'En Proceso Alto (≥ 50%)', 'En Proceso Crítico (< 50%)', 'Avance 0% (Inactivos)'],
       datasets: [{
-        data: [ugelData.bajo_50, ugelData.alto_50],
-        backgroundColor: ['#f97316', '#3b82f6']
+        data: [ugelData.aprob, ugelData.alto_50, ugelData.bajo_50, ugelData.avance_0],
+        backgroundColor: ['#10b981', '#3b82f6', '#f97316', '#ef4444']
       }]
     },
     options: {
       responsive: true,
       maintainAspectRatio: false,
       plugins: {
-        legend: { position: 'right', labels: { boxWidth: 12, font: { size: 11, weight: '600' } } },
+        legend: { position: 'right', labels: { boxWidth: 12, font: { size: 10, weight: '600' } } },
         datalabels: {
           color: '#ffffff',
-          font: { weight: '700', size: 11 },
+          font: { weight: '700', size: 10 },
           formatter: (value, ctx) => {
             let sum = ctx.chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
-            let percentage = sum > 0 ? ((value * 100) / sum).toFixed(1) + "%" : "0%";
-            return `${value}\n(${percentage})`;
+            return value > 0 ? `${value}\n(${((value * 100) / sum).toFixed(1)}%)` : '';
           }
         }
       }
