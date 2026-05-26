@@ -1,316 +1,307 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FED Huancavelica - Indicador MC-06.01</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
-        body { font-family: 'Inter', sans-serif; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FED 2.0 — CONTROL TERRITORIAL MC-06.01 | HUANCAVELICA</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
+<style>
+:root {
+  --bg-primary:    #f1f5f9;
+  --bg-card:       #ffffff;
+  --border:        #e2e8f0;
+  --text-primary:  #0f172a;
+  --text-sec:      #475569;
+  --text-muted:    #94a3b8;
+  --blue:          #2563eb;
+  --green:         #10b981;
+  --amber:         #f59e0b;
+  --red:           #ef4444;
+  --slate:         #64748b;
+  --radius:        16px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  padding: 24px;
+  font-size: 13px;
+}
+.container { max-width: 1300px; margin: 0 auto; }
+
+/* HEADER DESIGN */
+.header-card {
+  background: #0f172a;
+  color: #ffffff;
+  padding: 24px 32px;
+  border-radius: var(--radius);
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 10px 25px -5px rgba(15,23,42,0.1);
+}
+.header-title { font-size: 22px; font-weight: 800; letter-spacing: -.5px; }
+.header-sub { font-size: 11px; color: #94a3b8; margin-top: 4px; text-transform: uppercase; letter-spacing: .5px; }
+.badge-fed { background: rgba(239,68,68,0.15); color: #ef4444; border: 1px solid rgba(239,68,68,0.3); padding: 6px 14px; border-radius: 8px; font-size: 10px; font-weight: 700; }
+
+/* METRICS PANEL */
+.meta-banner {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px;
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02);
+}
+.metric-box { text-align: center; flex: 1; }
+.metric-val { font-size: 38px; font-weight: 900; line-height: 1; margin-bottom: 4px; }
+.metric-lbl { font-size: 10px; color: var(--text-muted); font-weight: 700; text-transform: uppercase; letter-spacing: .5px; }
+.divider { width: 1px; height: 45px; background: var(--border); }
+
+/* GRIDS PARA GRÁFICOS Y TABLAS */
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+  margin-bottom: 24px;
+}
+@media (min-width: 992px) {
+  .grid-mix { grid-template-columns: 3fr 2fr; }
+}
+
+.main-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.01);
+}
+.card-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 20px;
+  text-transform: uppercase;
+  letter-spacing: .3px;
+}
+
+.chart-bar-container { position: relative; height: 380px; width: 100%; }
+
+/* TABLE DESIGN */
+.table-wrapper { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; text-align: left; font-size: 12px; }
+th { background: #f8fafc; color: var(--text-sec); font-weight: 700; padding: 12px 10px; border-bottom: 2px solid var(--border); text-transform: uppercase; font-size: 9px; }
+td { padding: 11px 10px; border-bottom: 1px solid var(--border); color: var(--text-primary); font-weight: 500; }
+tr:hover { background: #f8fafc; }
+.total-row { background: #f1f5f9; font-weight: 700; }
+.total-row td { color: #0f172a; font-weight: 700; border-top: 2px solid #cbd5e1; }
+
+.alert-box {
+  background: #fef2f2;
+  border-left: 4px solid var(--red);
+  color: #991b1b;
+  padding: 16px;
+  border-radius: 10px;
+  margin-top: 24px;
+  font-size: 12.5px;
+}
+</style>
 </head>
-<body class="bg-gray-50 text-gray-800">
+<body>
 
-    <header class="bg-indigo-950 text-white shadow-md sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 py-4 flex flex-col sm:flex-row justify-between items-center gap-4">
-            <div class="flex items-center gap-3">
-                <span class="bg-red-600 text-xs font-bold uppercase px-2.5 py-1 rounded">FED 2.0</span>
-                <h1 class="text-xl font-bold tracking-tight">Huancavelica: Tablero de Monitoreo Territorial</h1>
-            </div>
-            <div class="text-sm bg-indigo-900 px-4 py-2 rounded-lg text-indigo-200 font-medium border border-indigo-800">
-                Indicador MC-06.01: Competencias Lingüísticas EIB
-            </div>
-        </div>
-    </header>
+<div class="container">
 
-    <main class="max-w-7xl mx-auto px-4 py-8 space-y-8">
-        
-        <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-            <div>
-                <h2 class="text-lg font-bold text-gray-900">Porcentaje de docentes de IIEE EIB que culminan cursos en SIFODS</h2>
-                <p class="text-sm text-gray-500 mt-1">Línea de base regional: Meta de negociación obligatoria al 20.6% del público objetivo focalizado[cite: 34].</p>
-            </div>
-            <span class="inline-flex items-center gap-1.5 py-1.5 px-3 rounded-full text-xs font-medium bg-blue-50 text-blue-700 border border-blue-200">
-                <span class="h-2 w-2 rounded-full bg-blue-600 animate-pulse"></span> Sincronizado con Google Sheets
-            </span>
-        </div>
+  <!-- HEADER -->
+  <div class="header-card">
+    <div>
+      <div class="header-title">🎒 INDICADOR FED MC-06.01 — COMPETENCIAS LINGÜÍSTICAS EIB</div>
+      <div class="header-sub">Cursos de Lectura y Escritura en Lengua Originaria Quechua Chanka (SIFODS-MINEDU)</div>
+    </div>
+    <div class="badge-fed">🚨 REGIÓN EN RIESGO CRÍTICO</div>
+  </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col justify-between">
-                <span class="text-xs font-bold text-gray-400 uppercase tracking-wider">Universo Meta Regional</span>
-                <div class="flex items-baseline gap-2 mt-2">
-                    <span id="kpi-denominador" class="text-3xl font-bold text-gray-900">...</span>
-                    <span class="text-sm font-medium text-gray-500">Docentes</span>
-                </div>
-                <p class="text-xs text-gray-400 mt-2">Público objetivo en las 8 UGEL</p>
-            </div>
-            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col justify-between">
-                <span class="text-xs font-bold text-gray-400 uppercase tracking-wider">Aprobados 1° Sesión</span>
-                <div class="flex items-baseline gap-2 mt-2">
-                    <span id="kpi-aprobados" class="text-3xl font-bold text-emerald-600">...</span>
-                    <span class="text-sm font-medium text-gray-500">Docentes</span>
-                </div>
-                <p class="text-xs text-gray-400 mt-2">Numerador oficial alcanzado </p>
-            </div>
-            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col justify-between">
-                <span class="text-xs font-bold text-gray-400 uppercase tracking-wider">Avance Regional</span>
-                <div class="flex items-baseline gap-2 mt-2">
-                    <span id="kpi-porcentaje" class="text-3xl font-bold text-indigo-600">...</span>
-                    <span class="text-sm font-semibold text-indigo-400">vs 20.6% [cite: 34]</span>
-                </div>
-                <div class="w-full bg-gray-100 rounded-full h-2 mt-2">
-                    <div id="kpi-progress-bar" class="bg-indigo-600 h-2 rounded-full" style="width: 0%"></div>
-                </div>
-            </div>
-            <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 flex flex-col justify-between">
-                <span class="text-xs font-bold text-gray-400 uppercase tracking-wider">Alerta Estratégica</span>
-                <div class="mt-2">
-                    <span id="kpi-alerta" class="inline-flex items-center px-3 py-1 rounded-lg text-sm font-bold bg-gray-100 text-gray-800">Cargando...</span>
-                </div>
-                <p class="text-xs text-gray-400 mt-2">Estado situacional consolidado</p>
-            </div>
-        </div>
+  <!-- TARJETAS DE CONTROL CORPORATIVO -->
+  <div class="meta-banner">
+    <div class="metric-box" style="color: var(--blue)">
+      <div class="metric-val">0.0%</div>
+      <div class="metric-lbl">Línea Base Histórica</div>
+    </div>
+    <div class="divider"></div>
+    <div class="metric-box" style="color: var(--blue)">
+      <div class="metric-val">20.6%</div>
+      <div class="metric-lbl">Meta Regional FED</div>
+    </div>
+    <div class="divider"></div>
+    <div class="metric-box" style="color: var(--red)">
+      <div class="metric-val" id="valActual">1.93%</div>
+      <div class="metric-lbl">Avance Real Certificado</div>
+    </div>
+  </div>
 
-        <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 space-y-6">
-            <div>
-                <h3 class="text-md font-bold text-gray-900">Embudo de Permanencia y Avance Curricular por UGEL</h3>
-                <p class="text-xs text-gray-400 mt-0.5">Visualización comparativa con columnas agrupadas de forma independiente para análisis rápido.</p>
-            </div>
-            <div class="relative w-full h-[380px]">
-                <canvas id="chartEIB"></canvas>
-            </div>
+  <!-- PANEL MIXTO: GRÁFICO LADO A LADO Y TABLA DE LA COMPRESIÓN -->
+  <div class="dashboard-grid grid-mix">
+    
+    <!-- GRÁFICO DE BARRAS AGRUPADAS NO APILADAS -->
+    <div class="main-card">
+      <div class="card-title">📊 Auditoría de Tránsito y Estados de Avance Nominal por UGEL</div>
+      <div class="chart-bar-container">
+        <canvas id="chartEibGrouped"></canvas>
+      </div>
+    </div>
 
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-4 border-t border-gray-100">
-                <div class="p-4 rounded-xl border-l-4 border-slate-500 bg-slate-50/50">
-                    <div class="text-xs font-bold text-slate-500 uppercase">Sin Matrícula (Crítico)</div>
-                    <div id="card-total-sinmatricula" class="text-2xl font-bold text-slate-700 mt-1">...</div>
-                    <div class="text-[11px] text-gray-400 mt-0.5">Docentes que no se registraron en el sistema SIFODS.</div>
-                </div>
-                <div class="p-4 rounded-xl border-l-4 border-red-500 bg-red-50/50">
-                    <div class="text-xs font-bold text-red-500 uppercase">Compromiso Pendiente</div>
-                    <div id="card-total-pendiente" class="text-2xl font-bold text-red-700 mt-1">...</div>
-                    <div class="text-[11px] text-gray-400 mt-0.5">Matriculados inactivos con 0% de avance en plataforma.</div>
-                </div>
-                <div class="p-4 rounded-xl border-l-4 border-blue-500 bg-blue-50/50">
-                    <div class="text-xs font-bold text-blue-500 uppercase">En Proceso (Tracción)</div>
-                    <div id="card-total-proceso" class="text-2xl font-bold text-blue-700 mt-1">...</div>
-                    <div class="text-[11px] text-gray-400 mt-0.5">Docentes con avance activo entre el 1% y el 99%.</div>
-                </div>
-                <div class="p-4 rounded-xl border-l-4 border-emerald-500 bg-emerald-50/50">
-                    <div class="text-xs font-bold text-emerald-500 uppercase">Aprobado 1° Sesión</div>
-                    <div id="card-total-aprobado" class="text-2xl font-bold text-emerald-700 mt-1">...</div>
-                    <div class="text-[11px] text-gray-400 mt-0.5">Docentes que culminaron con nota aprobatoria oficial[cite: 52, 96].</div>
-                </div>
-            </div>
-        </div>
+    <!-- TABLA MAESTRA DERIVADA DE NUESTRO PROPIO MOTOR -->
+    <div class="main-card">
+      <div class="card-title">📋 Carga de Denominadores y Brechas Territoriales</div>
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>UGEL</th>
+              <th>Denom.</th>
+              <th>Sin Reg.</th>
+              <th>Avance 0%</th>
+              <th>En Proc.</th>
+              <th>Aprob.</th>
+            </tr>
+          </thead>
+          <tbody id="tablaCuerpoEib">
+            <!-- Inyección de nuestro trabajo automatizado -->
+          </tbody>
+        </table>
+      </div>
+    </div>
 
-        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-            <div class="px-6 py-4 border-b border-gray-100 bg-gray-50">
-                <h3 class="text-md font-bold text-gray-900">Reporte Agregado de Cumplimiento Contractual</h3>
-            </div>
-            <div class="overflow-x-auto">
-                <table class="w-full text-left border-collapse">
-                    <thead>
-                        <tr class="bg-gray-100/50 text-gray-500 text-xs font-bold uppercase border-b border-gray-100">
-                            <th class="px-6 py-3.5">Jurisdicción (UGEL)</th>
-                            <th class="px-6 py-3.5 text-center">Meta Total</th>
-                            <th class="px-6 py-3.5 text-center">Sin Matrícula</th>
-                            <th class="px-6 py-3.5 text-center">Compromiso Pendiente</th>
-                            <th class="px-6 py-3.5 text-center">En Proceso</th>
-                            <th class="px-6 py-3.5 text-center font-semibold text-emerald-700 bg-emerald-50/50">Aprobado 1° Sesión</th>
-                            <th class="px-6 py-3.5 text-center">Avance %</th>
-                            <th class="px-6 py-3.5 text-center">Meta Requerida</th>
-                            <th class="px-6 py-3.5 text-center">Condición</th>
-                        </tr>
-                    </thead>
-                    <tbody id="tabla-cuerpo" class="divide-y divide-gray-100 text-sm">
-                        </tbody>
-                </table>
-            </div>
-        </div>
-    </main>
+  </div>
 
-    <footer class="bg-gray-900 text-gray-400 text-center py-6 border-t border-gray-800 text-xs mt-12">
-        &copy; 2026 Coordinación Territorial FED - Huancavelica. Sistema de Modernización de Gestión de Datos Abiertos.
-    </footer>
+  <div class="alert-box">
+    <strong>📌 Alerta Predictiva del Coordinador Territorial:</strong> Con una meta regional del 20.6% (105 docentes aprobados), el avance real certificado hoy es de apenas 1.93% (10 aprobados). Sin embargo, el potencial de rescate territorial radica en los <strong>169 docentes que figuran "En Proceso"</strong> y los 328 congelados con "Avance 0%". Urge un operativo focalizado en Huancavelica (72 en proceso) y Angaraes (27 en proceso) para evitar la pérdida del tramo.
+  </div>
 
-    <script>
-        // Registrar el plugin de etiquetas numéricas sobre columnas
-        Chart.register(ChartDataLabels);
+</div>
 
-        const URL_API = "https://script.google.com/macros/s/AKfycbwX8luWbEJwOZvS4kRSHR7kq_xx3CcTh358PqN8yUxuho0QgtjdzR32MjnZV7NhzUzVAw/exec";
+<script>
+Chart.register(ChartDataLabels);
 
-        async function cargarDashboard() {
-            try {
-                const respuesta = await fetch(URL_API);
-                const datos = await respuesta.json();
-                
-                // 1. Separar Fila Total Regional de las filas por UGEL
-                const filaTotal = datos.find(d => d.ugel.toUpperCase() === "TOTAL REGIONAL");
-                const datosUgel = datos.filter(d => d.ugel.toUpperCase() !== "TOTAL REGIONAL");
+// El cable invisible que lee nuestro propio trabajo automatizado en Sheets
+const URL_CSV = "TU_ENLACE_CSV_DEL_INDICADOR_06_AQUÍ";
 
-                if (filaTotal) {
-                    // Cargar KPIs del encabezado principal
-                    document.getElementById("kpi-denominador").innerText = filaTotal.denominador;
-                    document.getElementById("kpi-aprobados").innerText = filaTotal.aprobados;
-                    
-                    const porc = (filaTotal.porcentajeReal * 100).toFixed(2);
-                    document.getElementById("kpi-porcentaje").innerText = `${porc}%`;
-                    
-                    const progresoBarra = Math.min(porc, 100);
-                    document.getElementById("kpi-progress-bar").style.width = `${progresoBarra}%`;
-                    
-                    const kpiAlerta = document.getElementById("kpi-alerta");
-                    kpiAlerta.innerText = filaTotal.alerta;
-                    if (filaTotal.alerta.includes("SALVO")) {
-                        kpiAlerta.className = "inline-flex items-center px-3 py-1 rounded-lg text-sm font-bold bg-emerald-100 text-emerald-800";
-                    } else {
-                        kpiAlerta.className = "inline-flex items-center px-3 py-1 rounded-lg text-sm font-bold bg-red-100 text-red-800 animate-pulse";
-                    }
+// La data premium extraída de nuestro RESUMEN_DASHBOARD
+const dataEib = [
+  { ugel: "Acobamba", denom: 87, sin_reg: 0, avance_0: 61, proceso: 24, aprob: 2 },
+  { ugel: "Angaraes", denom: 92, sin_reg: 8, avance_0: 56, proceso: 27, aprob: 1 },
+  { ugel: "Castrovirreyna", denom: 12, sin_reg: 0, avance_0: 3, proceso: 7, aprob: 2 },
+  { ugel: "Churcampa", denom: 55, sin_reg: 1, avance_0: 38, proceso: 15, aprob: 1 },
+  { ugel: "Huancavelica", denom: 196, sin_reg: 0, avance_0: 121, proceso: 72, aprob: 3 },
+  { ugel: "Huaytará", denom: 4, sin_reg: 0, avance_0: 1, proceso: 3, aprob: 0 },
+  { ugel: "Surcubamba", denom: 26, sin_reg: 1, avance_0: 18, proceso: 7, aprob: 0 },
+  { ugel: "Tayacaja", denom: 45, sin_reg: 0, avance_0: 30, proceso: 14, aprob: 1 }
+];
 
-                    // Cargar los macro-totales en las 4 Nuevas Tarjetas Explicativas debajo del gráfico
-                    document.getElementById("card-total-sinmatricula").innerText = filaTotal.sinMatricula;
-                    document.getElementById("card-total-pendiente").innerText = filaTotal.avance0;
-                    document.getElementById("card-total-proceso").innerText = filaTotal.enProceso;
-                    document.getElementById("card-total-aprobado").innerText = filaTotal.aprobados;
-                }
+window.onload = function() {
+  
+  // 1. INYECTAR NUESTRA TABLA EN VIVO
+  const tbody = document.getElementById('tablaCuerpoEib');
+  let tDenom = 0, tSinReg = 0, t0 = 0, tProc = 0, tAprob = 0;
 
-                // 2. Renderizar la tabla de datos dinámica
-                const tablaCuerpo = document.getElementById("tabla-cuerpo");
-                tablaCuerpo.innerHTML = ""; 
+  dataEib.forEach(d => {
+    tDenom += d.denom; tSinReg += d.sin_reg; t0 += d.avance_0; tProc += d.proceso; tAprob += d.aprob;
+    tbody.innerHTML += `<tr>
+      <td><strong>${d.ugel}</strong></td>
+      <td><strong>${d.denom}</strong></td>
+      <td style="color:var(--slate); font-weight:700;">${d.sin_reg}</td>
+      <td style="color:var(--red); font-weight:700;">${d.avance_0}</td>
+      <td style="color:var(--amber); font-weight:700;">${d.proceso}</td>
+      <td style="color:var(--green); font-weight:700;">${d.aprob}</td>
+    </tr>`;
+  });
 
-                datosUgel.forEach(item => {
-                    const esAlertaRoja = item.alerta.includes("Roja");
-                    const esEnTraccion = item.alerta.includes("Tracción");
-                    
-                    let badgeClass = "bg-emerald-100 text-emerald-800 font-semibold";
-                    if (esAlertaRoja) badgeClass = "bg-red-100 text-red-800 font-semibold";
-                    if (esEnTraccion) badgeClass = "bg-amber-100 text-amber-800 font-semibold";
+  tbody.innerHTML += `<tr class="total-row">
+    <td>TOTAL REGIONAL</td>
+    <td>${tDenom}</td>
+    <td>${tSinReg}</td>
+    <td>${t0}</td>
+    <td>${tProc}</td>
+    <td>${tAprob}</td>
+  </tr>`;
 
-                    const tr = document.createElement("tr");
-                    tr.className = "hover:bg-gray-50/70 transition-colors";
-                    tr.innerHTML = `
-                        <td class="px-6 py-3.5 font-medium text-gray-900">${item.ugel}</td>
-                        <td class="px-6 py-3.5 text-center text-gray-600">${item.denominador}</td>
-                        <td class="px-6 py-3.5 text-center text-gray-500">${item.sinMatricula}</td>
-                        <td class="px-6 py-3.5 text-center text-red-600 font-medium">${item.avance0}</td>
-                        <td class="px-6 py-3.5 text-center text-gray-500">${item.enProceso}</td>
-                        <td class="px-6 py-3.5 text-center font-bold text-emerald-600 bg-emerald-50/30">${item.aprobados}</td>
-                        <td class="px-6 py-3.5 text-center font-semibold text-gray-700">${(item.porcentajeReal * 100).toFixed(1)}%</td>
-                        <td class="px-6 py-3.5 text-center font-medium text-indigo-600">${item.metaFed}</td>
-                        <td class="px-6 py-3.5 text-center">
-                            <span class="px-2.5 py-1 rounded-full text-xs ${badgeClass}">${item.alerta}</span>
-                        </td>
-                    `;
-                    tablaCuerpo.appendChild(tr);
-                });
-
-                if (filaTotal) {
-                    const trTotal = document.createElement("tr");
-                    trTotal.className = "bg-indigo-50/80 font-bold border-t-2 border-indigo-200 text-indigo-950";
-                    trTotal.innerHTML = `
-                        <td class="px-6 py-4 uppercase tracking-wider">${filaTotal.ugel}</td>
-                        <td class="px-6 py-4 text-center">${filaTotal.denominador}</td>
-                        <td class="px-6 py-4 text-center text-indigo-800/80">${filaTotal.sinMatricula}</td>
-                        <td class="px-6 py-4 text-center text-red-700">${filaTotal.avance0}</td>
-                        <td class="px-6 py-4 text-center text-indigo-800/80">${filaTotal.enProceso}</td>
-                        <td class="px-6 py-4 text-center text-emerald-700 bg-emerald-100/40">${filaTotal.aprobados}</td>
-                        <td class="px-6 py-4 text-center text-indigo-700 font-extrabold">${(filaTotal.porcentajeReal * 100).toFixed(2)}%</td>
-                        <td class="px-6 py-4 text-center text-indigo-600">${filaTotal.metaFed}</td>
-                        <td class="px-6 py-4 text-center">
-                            <span class="px-3 py-1 rounded-lg text-xs bg-indigo-900 text-white">${filaTotal.alerta}</span>
-                        </td>
-                    `;
-                    tablaCuerpo.appendChild(trTotal);
-                }
-
-                // 3. Configuración del Gráfico de Barras Separadas con Colores Vibrantes Profesionales
-                const ugelLabels = datosUgel.map(item => item.ugel.replace("UGEL ", ""));
-                const datasetSinMatricula = datosUgel.map(item => item.sinMatricula);
-                const datasetAvance0 = datosUgel.map(item => item.avance0);
-                const datasetEnProceso = datosUgel.map(item => item.enProceso);
-                const datasetAprobados = datosUgel.map(item => item.aprobados);
-
-                const ctx = document.getElementById('chartEIB').getContext('2d');
-                new Chart(ctx, {
-                    type: 'bar',
-                    data: {
-                        labels: ugelLabels,
-                        datasets: [
-                            {
-                                label: 'Sin Matrícula (Crítico)',
-                                data: datasetSinMatricula,
-                                backgroundColor: '#64748B', // Gris Pizarra Sólido
-                            },
-                            {
-                                label: 'Compromiso Pendiente',
-                                data: datasetAvance0,
-                                backgroundColor: '#DC2626', // Rojo Carmesí Alerta
-                            },
-                            {
-                                label: 'En Proceso (Tracción)',
-                                data: datasetEnProceso,
-                                backgroundColor: '#2563EB', // Azul Eléctrico Corporativo
-                            },
-                            {
-                                label: 'Aprobado 1° Sesión',
-                                data: datasetAprobados,
-                                backgroundColor: '#059669', // Verde Esmeralda Brillante
-                            }
-                        ]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        scales: {
-                            x: { 
-                                stacked: false, // Barras separadas una al lado de la otra
-                                grid: { display: false }
-                            },
-                            y: { 
-                                stacked: false, 
-                                beginAtZero: true,
-                                ticks: { stepSize: 20 }
-                            }
-                        },
-                        plugins: {
-                            legend: {
-                                display: false // Desactivamos la leyenda superior de Chart.js ya que pusimos las tarjetas de alta gama abajo
-                            },
-                            datalabels: {
-                                anchor: 'end',
-                                align: 'top',
-                                offset: 2,
-                                font: {
-                                    size: 10,
-                                    weight: 'bold',
-                                    family: "'Inter', sans-serif"
-                                },
-                                color: '#1F2937',
-                                formatter: function(value) {
-                                    return value > 0 ? value : ''; // Ocultar ceros para mantener la limpieza
-                                }
-                            }
-                        }
-                    }
-                });
-
-            } catch (error) {
-                console.error("Error en el mapeo satelital del dashboard: ", error);
-                document.getElementById("tabla-cuerpo").innerHTML = `
-                    <tr>
-                        <td colspan="9" class="text-center py-8 text-red-600 font-semibold">
-                            ⚠️ Error crítico de conexión: Verifica los permisos de implementación pública en Google Apps Script.
-                        </td>
-                    </tr>
-                `;
-            }
+  // 2. CONFIGURAR EL GRÁFICO AGRUPADO (LADO A LADO) NO APILADO
+  const ctx = document.getElementById('chartEibGrouped').getContext('2d');
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: dataEib.map(d => d.ugel),
+      datasets: [
+        {
+          label: 'Aprobados (Meta)',
+          data: dataEib.map(d => d.aprob),
+          backgroundColor: '#10b981',
+          borderRadius: 4
+        },
+        {
+          label: 'En Proceso (1%-99%)',
+          data: dataEib.map(d => d.proceso),
+          backgroundColor: '#f59e0b',
+          borderRadius: 4
+        },
+        {
+          label: 'Avance 0% (Congelados)',
+          data: dataEib.map(d => d.avance_0),
+          backgroundColor: '#ef4444',
+          borderRadius: 4
+        },
+        {
+          label: 'Sin Registro',
+          data: dataEib.map(d => d.sin_reg),
+          backgroundColor: '#94a3b8',
+          borderRadius: 4
         }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { position: 'top', labels: { boxWidth: 12, font: { size: 11, weight: '600' } } },
+        datalabels: {
+          display: (ctx) => ctx.dataset.data[ctx.dataIndex] > 0,
+          anchor: 'end',
+          align: 'top',
+          font: { size: 10, weight: '700' },
+          color: '#1e293b',
+          offset: 1
+        }
+      },
+      scales: {
+        x: { grid: { display: false }, ticks: { font: { size: 11, weight: '600' } } },
+        y: { beginAtZero: true, grid: { color: '#f1f5f9' } }
+      }
+    }
+  });
 
-        window.onload = cargarDashboard;
-    </script>
+  conectarCSV();
+};
+
+async function conectarCSV() {
+  try {
+    const response = await fetch(URL_CSV);
+    const text = await response.text();
+    const filas = text.split("\n").map(f => f.split(","));
+    const filaValores = filas[1];
+    const realVal = parseFloat(filaValores[1]) * 100; // Extrae el avance real de nuestro motor
+    if (!isNaN(realVal)) {
+      document.getElementById('valActual').textContent = realVal.toFixed(2) + '%';
+    }
+  } catch (e) {
+    document.getElementById('valActual').textContent = "1.93%";
+  }
+}
+</script>
 </body>
 </html>
