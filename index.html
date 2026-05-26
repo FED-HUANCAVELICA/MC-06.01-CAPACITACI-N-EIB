@@ -3,18 +3,19 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>FED 3.1 — RANGOS DE AVANCE MC-06.01</title>
+<title>FED 4.0 — AUDITORÍA AVANZADA MC-06.01</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
 <style>
 :root {
-  --bg-primary:    #f1f5f9;
+  --bg-primary:    #f8fafc;
   --bg-card:       #ffffff;
   --border:        #e2e8f0;
   --text-primary:  #0f172a;
   --text-sec:      #475569;
   --text-muted:    #94a3b8;
   --blue:          #2563eb;
+  --blue-light:    #eff6ff;
   --green:         #10b981;
   --amber:         #f59e0b;
   --orange:        #f97316;
@@ -43,11 +44,11 @@ body {
   align-items: center;
   justify-content: space-between;
 }
-.header-title { font-size: 21px; font-weight: 800; letter-spacing: -.5px; }
-.header-sub { font-size: 11px; color: #94a3b8; margin-top: 4px; text-transform: uppercase; letter-spacing: .5px; }
+.header-title { font-size: 22px; font-weight: 800; letter-spacing: -.5px; }
+.header-sub { font-size: 11px; color: #94a3b8; margin-top: 4px; text-transform: uppercase; }
 .badge-fed { background: rgba(239,68,68,0.15); color: #ef4444; border: 1px solid rgba(239,68,68,0.3); padding: 6px 14px; border-radius: 8px; font-size: 10px; font-weight: 700; }
 
-/* METRICS PANEL */
+/* BANNER GENERAL KPI */
 .meta-banner {
   background: var(--bg-card);
   border: 1px solid var(--border);
@@ -72,7 +73,7 @@ body {
 }
 @media (min-width: 992px) {
   .grid-mix { grid-template-columns: 3fr 2fr; }
-  .grid-2col { grid-template-columns: 1fr 1fr; }
+  .grid-split { grid-template-columns: 1fr 3fr; } /* Layout asimétrico de alta gama */
 }
 
 .main-card {
@@ -80,40 +81,49 @@ body {
   border: 1px solid var(--border);
   border-radius: var(--radius);
   padding: 24px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.01);
+  position: relative;
 }
-.card-title { font-size: 13px; font-weight: 700; color: var(--text-primary); margin-bottom: 20px; text-transform: uppercase; }
-
-.chart-container { position: relative; height: 360px; width: 100%; }
-.chart-ring-container { position: relative; height: 250px; width: 100%; }
-
-/* SELECTOR EXCLUSIVO */
-.selector-box {
-  background: #f8fafc;
-  padding: 10px 16px;
-  border-radius: 10px;
-  border: 1px solid var(--border);
-  font-weight: 700;
-  color: var(--text-sec);
-  margin-bottom: 16px;
+.card-header-flex {
   display: flex;
+  justify-content: space-between;
   align-items: center;
-  gap: 12px;
+  margin-bottom: 24px;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 12px;
 }
-.selector-box select {
-  padding: 6px 12px;
-  border-radius: 6px;
+.card-title { font-size: 12px; font-weight: 800; color: var(--text-primary); text-transform: uppercase; letter-spacing: .5px; }
+
+/* CONTENEDORES DE GRÁFICOS */
+.chart-container { position: relative; height: 350px; width: 100%; }
+.chart-bar-horizontal { position: relative; height: 260px; width: 100%; }
+
+/* SELECTOR INTEGRADO */
+.select-premium {
+  padding: 8px 16px;
+  border-radius: 8px;
   border: 1px solid var(--border);
-  outline: none;
-  font-weight: 600;
+  background: #f8fafc;
+  font-weight: 700;
   color: var(--text-primary);
+  outline: none;
   cursor: pointer;
 }
 
-/* TABLE */
+/* MINI-KPI SIDEBAR */
+.sidebar-panel { display: flex; flex-direction: column; gap: 16px; }
+.kpi-mini-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+}
+.kpi-num { font-size: 28px; font-weight: 800; line-height: 1; margin-bottom: 6px; }
+.kpi-lbl { font-size: 10px; color: var(--text-muted); font-weight: 700; text-transform: uppercase; }
+
+/* TABLA */
 table { width: 100%; border-collapse: collapse; text-align: left; font-size: 12px; }
 th { background: #f8fafc; color: var(--text-sec); font-weight: 700; padding: 12px 10px; border-bottom: 2px solid var(--border); text-transform: uppercase; font-size: 9px; }
-td { padding: 11px 10px; border-bottom: 1px solid var(--border); color: var(--text-primary); font-weight: 500; }
+td { padding: 11px 10px; border-bottom: 1px solid var(--border); color: var(--text-primary); }
 .total-row { background: #f1f5f9; font-weight: 700; }
 </style>
 </head>
@@ -121,14 +131,16 @@ td { padding: 11px 10px; border-bottom: 1px solid var(--border); color: var(--te
 
 <div class="container">
 
+  <!-- HEADER -->
   <div class="header-card">
     <div>
       <div class="header-title">🗣️ ALLINLLACHU KAMACHIKUQKUNA — AUDITORÍA TERRITORIAL EIB</div>
-      <div class="header-sub">Cursos de Lectura y Escritura en Lengua Originaria Quechua Chanka (SIFODS-MINEDU) · Indicador MC-06.01</div>
+      <div class="header-sub">Análisis Macroscópico y Desglose Nominal por Niveles de Rendimiento SIFODS · Indicador MC-06.01</div>
     </div>
-    <div class="badge-fed">CORTES EN VIVO 2026</div>
+    <div class="badge-fed">RÚBRICAS DE ALTA DIRECCIÓN</div>
   </div>
 
+  <!-- TARJETAS PRINCIPALES -->
   <div class="meta-banner">
     <div class="metric-box" style="color: var(--blue)">
       <div class="metric-val">0.0%</div>
@@ -146,15 +158,20 @@ td { padding: 11px 10px; border-bottom: 1px solid var(--border); color: var(--te
     </div>
   </div>
 
+  <!-- SECCIÓN SUPERIOR PANEL MIXTO -->
   <div class="dashboard-grid grid-mix">
     <div class="main-card">
-      <div class="card-title">📊 Auditoría de Tránsito y Estados de Avance Nominal por UGEL</div>
+      <div class="card-header-flex">
+        <div class="card-title">📊 Auditoría de Tránsito y Estados de Avance Nominal por UGEL</div>
+      </div>
       <div class="chart-container">
         <canvas id="chartEibGrouped"></canvas>
       </div>
     </div>
     <div class="main-card">
-      <div class="card-title">📋 Carga de Denominadores y Brechas Territoriales</div>
+      <div class="card-header-flex">
+        <div class="card-title">📋 Carga de Denominadores y Brechas Territoriales</div>
+      </div>
       <div style="overflow-x: auto;">
         <table>
           <thead>
@@ -168,38 +185,47 @@ td { padding: 11px 10px; border-bottom: 1px solid var(--border); color: var(--te
             </tr>
           </thead>
           <tbody id="tablaCuerpoEib">
-            </tbody>
+            <!-- Dinámico -->
+          </tbody>
         </table>
       </div>
     </div>
   </div>
 
-  <div class="dashboard-grid grid-2col">
+  <!-- SECCIÓN INFERIOR COMPACTA ESTILO SILICON VALLEY (TU REQUERIMIENTO REFACTORIZADO) -->
+  <div class="dashboard-grid grid-split">
     
-    <div class="main-card" style="display: flex; flex-direction: column; justify-content: center;">
-      <div class="card-title" style="color: var(--blue);">🎯 Sinceramiento Colectivo Nominal</div>
-      <div class="selector-box">
-        <label for="ugelSelect">Selecciona la UGEL a Fiscalizar:</label>
-        <select id="ugelSelect" onchange="actualizarAnilloFiltro()">
-          <option value="Acobamba">Acobamba</option>
-          <option value="Angaraes">Angaraes</option>
-          <option value="Castrovirreyna">Castrovirreyna</option>
-          <option value="Churcampa">Churcampa</option>
-          <option value="Huancavelica">Huancavelica</option>
-          <option value="Huaytara">Huaytará</option>
-          <option value="Surcubamba">Surcubamba</option>
-          <option value="Tayacaja">Tayacaja</option>
-        </select>
+    <!-- CONEXIÓN DE MINI INDICADORES LATERALES (SIDEBAR) -->
+    <div class="sidebar-panel">
+      <div class="kpi-mini-card" style="border-left: 4px solid var(--blue);">
+        <div class="kpi-num" id="kpiDenom" style="color: var(--text-primary);">0</div>
+        <div class="kpi-lbl">Universo Meta UGEL</div>
       </div>
-      <p style="color: var(--text-sec); line-height: 1.6;">
-        Desglose del universo total de la provincia seleccionada para auditar el avance cualitativo dentro de la plataforma del SIFODS.
-      </p>
+      <div class="kpi-mini-card" style="border-left: 4px solid var(--orange);">
+        <div class="kpi-num" id="kpiRescate" style="color: var(--orange);">0</div>
+        <div class="kpi-lbl">Casos Críticos en Ruta</div>
+      </div>
     </div>
 
+    <!-- PANEL DE BARRAS HORIZONTALES OPTIMIZADO (ADIÓS ANILLO ENCIMADO) -->
     <div class="main-card">
-      <div class="card-title" id="anilloTitle">🍩 Estado de Avance: UGEL Acobamba</div>
-      <div class="chart-ring-container">
-        <canvas id="chartAnilloUgel"></canvas>
+      <div class="card-header-flex" style="margin-bottom: 12px;">
+        <div class="card-title" id="barTitle" style="color: var(--blue);">🎯 Sinceramiento Colectivo Nominal</div>
+        <div>
+          <select id="ugelSelect" class="select-premium" onchange="actualizarBarrasHorizontales()">
+            <option value="Acobamba">UGEL Acobamba</option>
+            <option value="Angaraes">UGEL Angaraes</option>
+            <option value="Castrovirreyna">UGEL Castrovirreyna</option>
+            <option value="Churcampa">UGEL Churcampa</option>
+            <option value="Huancavelica">UGEL Huancavelica</option>
+            <option value="Huaytara">UGEL Huaytará</option>
+            <option value="Surcubamba">UGEL Surcubamba</option>
+            <option value="Tayacaja">UGEL Tayacaja</option>
+          </select>
+        </div>
+      </div>
+      <div class="chart-bar-horizontal">
+        <canvas id="chartHorizontalUgel"></canvas>
       </div>
     </div>
 
@@ -212,7 +238,6 @@ Chart.register(ChartDataLabels);
 
 const URL_CSV = "REEMPLAZA_CON_TU_MISMO_ENLACE_CSV_AQUÍ";
 
-// Estructura de datos completa (Se integran aprobados, procesos y congelados para el anillo)
 const dataEib = [
   { ugel: "Acobamba", denom: 87, sin_reg: 0, avance_0: 61, proceso: 24, aprob: 2, bajo_50: 19, alto_50: 5 },
   { ugel: "Angaraes", denom: 92, sin_reg: 8, avance_0: 56, proceso: 27, aprob: 1, bajo_50: 22, alto_50: 5 },
@@ -224,7 +249,7 @@ const dataEib = [
   { ugel: "Tayacaja", denom: 45, sin_reg: 0, avance_0: 30, proceso: 14, aprob: 1, bajo_50: 11, alto_50: 3 }
 ];
 
-let chartAnillo;
+let chartHorizontal;
 
 window.onload = function() {
   const tbody = document.getElementById('tablaCuerpoEib');
@@ -273,40 +298,51 @@ window.onload = function() {
     }
   });
 
-  actualizarAnilloFiltro();
+  actualizarBarrasHorizontales();
 };
 
-function actualizarAnilloFiltro() {
+function actualizarBarrasHorizontales() {
   const ugelSeleccionada = document.getElementById('ugelSelect').value;
   const ugelData = dataEib.find(d => d.ugel === ugelSeleccionada);
   
-  document.getElementById('anilloTitle').textContent = `🍩 Estado de Avance Neto: UGEL ${ugelSeleccionada}`;
-  const ctxAnillo = document.getElementById('chartAnilloUgel').getContext('2d');
+  // Actualizar Mini KPIs Laterales
+  document.getElementById('kpiDenom').textContent = ugelData.denom;
+  document.getElementById('kpiRescate').textContent = ugelData.bajo_50 + ugelData.avance_0;
 
-  if (chartAnillo) { chartAnillo.destroy(); }
+  const ctxBar = document.getElementById('chartHorizontalUgel').getContext('2d');
+  if (chartHorizontal) { chartHorizontal.destroy(); }
 
-  chartAnillo = new Chart(ctxAnillo, {
-    type: 'doughnut',
+  chartHorizontal = new Chart(ctxBar, {
+    type: 'bar',
     data: {
       labels: ['Aprobado (100%)', 'En Proceso Alto (≥ 50%)', 'En Proceso Crítico (< 50%)', 'Avance 0% (Inactivos)'],
       datasets: [{
         data: [ugelData.aprob, ugelData.alto_50, ugelData.bajo_50, ugelData.avance_0],
-        backgroundColor: ['#10b981', '#3b82f6', '#f97316', '#ef4444']
+        backgroundColor: ['#10b981', '#2563eb', '#f97316', '#ef4444'],
+        borderRadius: 5,
+        barThickness: 24
       }]
     },
     options: {
+      indexAxis: 'y',
       responsive: true,
       maintainAspectRatio: false,
       plugins: {
-        legend: { position: 'right', labels: { boxWidth: 12, font: { size: 10, weight: '600' } } },
+        legend: { display: false },
         datalabels: {
-          color: '#ffffff',
-          font: { weight: '700', size: 10 },
+          anchor: 'end',
+          align: 'right',
+          color: '#0f172a',
+          font: { weight: '800', size: 11 },
           formatter: (value, ctx) => {
             let sum = ctx.chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
-            return value > 0 ? `${value}\n(${((value * 100) / sum).toFixed(1)}%)` : '';
+            return value > 0 ? `${value} agentes (${((value * 100) / sum).toFixed(1)}%)` : '0 agentes (0%)';
           }
         }
+      },
+      scales: {
+        x: { beginAtZero: true, grid: { color: '#f1f5f9' }, ticks: { font: { size: 10 } } },
+        y: { grid: { display: false }, ticks: { font: { size: 11, weight: '600' }, color: '#334155' } }
       }
     }
   });
