@@ -3,12 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>FED 4.4 — DATA ACTUALIZADA DIFOS</title>
+<title>FED 5.0 — SISTEMA MACRO REGIONAL MC-06.01</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
 <style>
 :root {
-  --bg-primary:    #f1f5f9;
+  --bg-primary:    #f8fafc;
   --bg-card:       #ffffff;
   --border:        #e2e8f0;
   --text-primary:  #0f172a;
@@ -19,6 +19,7 @@
   --amber:         #f59e0b;
   --orange:        #f97316;
   --red:           #ef4444;
+  --purple:        #8b5cf6;
   --radius:        16px;
 }
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -29,7 +30,9 @@ body {
   padding: 24px;
   font-size: 13px;
 }
-.container { max-width: 1400px; margin: 0 auto; }
+.container { max-width: 1440px; margin: 0 auto; }
+
+/* HEADER */
 .header-card {
   background: #0f172a;
   color: #ffffff;
@@ -41,10 +44,11 @@ body {
   justify-content: space-between;
   box-shadow: 0 10px 25px -5px rgba(15,23,42,0.1);
 }
-.header-title { font-size: 21px; font-weight: 800; letter-spacing: -.5px; }
+.header-title { font-size: 22px; font-weight: 800; letter-spacing: -.5px; }
 .header-sub { font-size: 11px; color: #94a3b8; margin-top: 4px; text-transform: uppercase; }
-.badge-fed { background: rgba(239,68,68,0.15); color: #ef4444; border: 1px solid rgba(239,68,68,0.3); padding: 6px 14px; border-radius: 8px; font-size: 10px; font-weight: 700; }
+.badge-fed { background: rgba(16,185,129,0.15); color: #10b981; border: 1px solid rgba(16,185,129,0.3); padding: 6px 14px; border-radius: 8px; font-size: 10px; font-weight: 700; }
 
+/* KPI BANNER */
 .meta-banner {
   background: var(--bg-card);
   border: 1px solid var(--border);
@@ -60,96 +64,85 @@ body {
 .metric-lbl { font-size: 10px; color: var(--text-muted); font-weight: 700; text-transform: uppercase; }
 .divider { width: 1px; height: 45px; background: var(--border); }
 
-.dashboard-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 24px;
-  margin-bottom: 24px;
-}
+/* GRIDS */
+.dashboard-grid { display: grid; grid-template-columns: 1fr; gap: 24px; margin-bottom: 24px; }
 @media (min-width: 992px) {
-  .grid-mix { grid-template-columns: 3fr 2fr; }
-  .grid-split { grid-template-columns: 1fr 3fr; }
+  .grid-3-2 { grid-template-columns: 3fr 2fr; }
+  .grid-1-3 { grid-template-columns: 1fr 3fr; }
+  .grid-2-1 { grid-template-columns: 2fr 1fr; }
 }
-.main-card {
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 24px;
-}
-.card-header-flex {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 24px;
-  border-bottom: 1px solid var(--border);
-  padding-bottom: 12px;
-}
-.card-title { font-size: 12px; font-weight: 800; color: var(--text-primary); text-transform: uppercase; letter-spacing: .5px; }
-.chart-container { position: relative; height: 380px; width: 100%; }
-.chart-bar-horizontal { position: relative; height: 260px; width: 100%; }
 
-.select-premium {
-  padding: 8px 16px;
-  border-radius: 8px;
-  border: 1px solid var(--border);
-  background: #f8fafc;
-  font-weight: 700;
-  color: var(--text-primary);
-  outline: none;
-  cursor: pointer;
-}
+.main-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; position: relative; }
+.card-header-flex { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid var(--border); padding-bottom: 12px; }
+.card-title { font-size: 12px; font-weight: 800; color: var(--text-primary); text-transform: uppercase; letter-spacing: .5px; }
+
+/* CANVAS CONTAINERS */
+.chart-container { position: relative; height: 360px; width: 100%; }
+.chart-horizontal-container { position: relative; height: 280px; width: 100%; }
+
+.select-premium { padding: 8px 16px; border-radius: 8px; border: 1px solid var(--border); background: #f8fafc; font-weight: 700; color: var(--text-primary); outline: none; cursor: pointer; }
+
+/* LÍNEA DE TIEMPO ESTILO SILICON VALLEY */
+.timeline-container { display: flex; flex-direction: column; gap: 16px; padding: 8px 0; }
+.timeline-item { display: flex; gap: 16px; position: relative; }
+.timeline-item::before { content: ''; position: absolute; left: 15px; top: 24px; bottom: -16px; width: 2px; background: var(--border); }
+.timeline-item:last-child::before { display: none; }
+.timeline-icon { width: 32px; height: 32px; border-radius: 50%; background: var(--blue); color: white; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 11px; z-index: 2; }
+.timeline-icon.success { background: var(--green); }
+.timeline-content { flex: 1; background: #f8fafc; padding: 12px 16px; border-radius: 12px; border: 1px solid var(--border); }
+.timeline-date { font-size: 10px; color: var(--text-muted); font-weight: 700; text-transform: uppercase; }
+.timeline-title { font-size: 12px; font-weight: 700; margin: 2px 0 4px 0; color: var(--text-primary); }
+.timeline-desc { font-size: 11px; color: var(--text-sec); line-height: 1.4; }
+
+/* SIDEBAR KPIs */
 .sidebar-panel { display: flex; flex-direction: column; gap: 16px; justify-content: center; }
-.kpi-mini-card {
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 20px;
-}
+.kpi-mini-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; }
 .kpi-num { font-size: 28px; font-weight: 800; line-height: 1; margin-bottom: 6px; }
 .kpi-lbl { font-size: 10px; color: var(--text-muted); font-weight: 700; text-transform: uppercase; }
 
+/* TABLA PRO */
 table { width: 100%; border-collapse: collapse; text-align: left; font-size: 12px; }
 th { background: #f8fafc; color: var(--text-sec); font-weight: 700; padding: 12px 10px; border-bottom: 2px solid var(--border); text-transform: uppercase; font-size: 9px; }
 td { padding: 11px 10px; border-bottom: 1px solid var(--border); color: var(--text-primary); }
-.total-row { background: #f1f5f9; font-weight: 700; }
+.total-row { background: #f1f5f9; font-weight: 700; border-top: 2px solid var(--text-primary); }
 </style>
 </head>
 <body>
 
 <div class="container">
 
-  <!-- HEADER -->
+  <!-- HEADER COMPARTIDO -->
   <div class="header-card">
     <div>
       <div class="header-title">🗣️ ALLINLLACHU KAMACHIKUQKUNA — AUDITORÍA TERRITORIAL EIB</div>
-      <div class="header-sub">Análisis Macroscópico y Desglose Nominal por Niveles de Rendimiento SIFODS · Indicador MC-06.01</div>
+      <div class="header-sub">Consolidación Macroscópica, Línea de Tiempo de Cortes y Micro-Segmentación Nominal (SIFODS)</div>
     </div>
-    <div class="badge-fed">CORTE EN VIVO DIFOS</div>
+    <div class="badge-fed">🔥 MOTOR ANALÍTICO CHANKA V5.0</div>
   </div>
 
-  <!-- TARJETAS PRINCIPALES SINCRO EXCEL -->
+  <!-- BANNER PRINCIPAL DE MEDIDAS -->
   <div class="meta-banner">
     <div class="metric-box" style="color: var(--blue)">
       <div class="metric-val">0.0%</div>
       <div class="metric-lbl">Línea Base Histórica</div>
     </div>
     <div class="divider"></div>
-    <div class="metric-box" style="color: var(--blue)">
+    <div class="metric-box" style="color: var(--purple)">
       <div class="metric-val">20.6%</div>
       <div class="metric-lbl">Meta Regional FED</div>
     </div>
     <div class="divider"></div>
-    <div class="metric-box" style="color: var(--red)">
+    <div class="metric-box" style="color: var(--green)">
       <div class="metric-val">2.71%</div>
-      <div class="metric-lbl">Avance Regional</div>
+      <div class="metric-lbl">Avance Regional Actual</div>
     </div>
   </div>
 
-  <!-- PANEL SUPERIOR MACRO -->
-  <div class="dashboard-grid grid-mix">
+  <!-- SECCIÓN SUPERIOR: MACRO DISTRIBUCIÓN Y TABLA -->
+  <div class="dashboard-grid grid-3-2">
     <div class="main-card">
       <div class="card-header-flex">
-        <div class="card-title">📊 Auditoría de Tránsito y Estados de Avance Nominal por UGEL</div>
+        <div class="card-title">📊 Distribución Absoluta de Tránsito Nominal por UGEL</div>
       </div>
       <div class="chart-container">
         <canvas id="chartEibGrouped"></canvas>
@@ -157,7 +150,7 @@ td { padding: 11px 10px; border-bottom: 1px solid var(--border); color: var(--te
     </div>
     <div class="main-card">
       <div class="card-header-flex">
-        <div class="card-title">📋 Carga de Denominadores y Brechas Territoriales</div>
+        <div class="card-title">📋 Consolidado Regional de Carga y Brechas Nivel 1</div>
       </div>
       <div style="overflow-x: auto;">
         <table>
@@ -171,30 +164,62 @@ td { padding: 11px 10px; border-bottom: 1px solid var(--border); color: var(--te
               <th>Aprob.</th>
             </tr>
           </thead>
-          <tbody id="tablaCuerpoEib">
-            <!-- Dinámico -->
-          </tbody>
+          <tbody id="tablaCuerpoEib"></tbody>
         </table>
       </div>
     </div>
   </div>
 
-  <!-- PANEL INFERIOR ASIMÉTRICO SILICON VALLEY -->
-  <div class="dashboard-grid grid-split">
+  <!-- NUEVA SECCIÓN INTERMEDIA: CONSOLIDADO REGIONAL HISTÓRICO Y LÍNEA DE TIEMPO -->
+  <div class="dashboard-grid grid-2-1">
+    <div class="main-card">
+      <div class="card-header-flex">
+        <div class="card-title">🌐 Micro-Segmentación Estratégica a Nivel Regional (Consolidado)</div>
+      </div>
+      <div class="chart-horizontal-container">
+        <canvas id="chartRegionalHorizontal"></canvas>
+      </div>
+    </div>
+    <div class="main-card">
+      <div class="card-header-flex">
+        <div class="card-title">⏳ Cronología de Auditoría y Cortes DIFOS</div>
+      </div>
+      <div class="timeline-container">
+        <div class="timeline-item">
+          <div class="timeline-icon">1</div>
+          <div class="timeline-content">
+            <div class="timeline-date">Corte 01 · 26 Marzo 05:35 AM</div>
+            <div class="timeline-title">Línea Base Inicial SIFODS</div>
+            <div class="timeline-desc">Auditoría inicial arroja 10 aprobados regionales (1.93%) y una alarmante masa crítica estancada en el 0% (328 docentes).</div>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-icon success">2</div>
+          <div class="timeline-content">
+            <div class="timeline-date">Corte 02 · 26 Marzo 11:36 AM</div>
+            <div class="timeline-title">Actualización de Sábanas DIFOS</div>
+            <div class="timeline-desc">Sinceramiento en vivo de datos. El avance regional escala a <strong>2.71% (14 aprobados)</strong> y se rescatan 20 docentes del letargo de inactividad.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECCIÓN INFERIOR: MICRO-AUDITORÍA POR PROVINCIA -->
+  <div class="dashboard-grid grid-1-3">
     <div class="sidebar-panel">
       <div class="kpi-mini-card" style="border-left: 4px solid var(--blue);">
         <div class="kpi-num" id="kpiDenom">0</div>
         <div class="kpi-lbl">Universo Meta UGEL</div>
       </div>
-      <div class="kpi-mini-card" style="border-left: 4px solid var(--orange);">
-        <div class="kpi-num" id="kpiRescate" style="color: var(--orange);">0</div>
+      <div class="kpi-mini-card" style="border-left: 4px solid var(--red);">
+        <div class="kpi-num" id="kpiRescate" style="color: var(--red);">0</div>
         <div class="kpi-lbl">Casos Críticos en Ruta</div>
       </div>
     </div>
-
     <div class="main-card">
       <div class="card-header-flex" style="margin-bottom: 12px;">
-        <div class="card-title" style="color: var(--blue);">🎯 Sinceramiento Colectivo Nominal por Rangos</div>
+        <div class="card-title" style="color: var(--blue);">🎯 Sinceramiento Colectivo por Rangos Finos de Rendimiento</div>
         <div>
           <select id="ugelSelect" class="select-premium" onchange="actualizarBarrasHorizontales()">
             <option value="Acobamba">UGEL Acobamba</option>
@@ -208,7 +233,7 @@ td { padding: 11px 10px; border-bottom: 1px solid var(--border); color: var(--te
           </select>
         </div>
       </div>
-      <div class="chart-bar-horizontal">
+      <div class="chart-horizontal-container">
         <canvas id="chartHorizontalUgel"></canvas>
       </div>
     </div>
@@ -219,16 +244,16 @@ td { padding: 11px 10px; border-bottom: 1px solid var(--border); color: var(--te
 <script>
 Chart.register(ChartDataLabels);
 
-// DATA OFICIAL ACTUALIZADA DESDE TU CAPTURA DE GOOGLE SHEETS
+// DATA INTEGRAL ACTUALIZADA DIFOS MICRO-SEGMENTADA
 const dataEib = [
-  { ugel: "Acobamba", denom: 87, sin_reg: 0, avance_0: 60, proceso: 23, aprob: 4, bajo_50: 18, alto_50: 5 },
-  { ugel: "Angaraes", denom: 92, sin_reg: 8, avance_0: 52, proceso: 31, aprob: 1, bajo_50: 25, alto_50: 6 },
-  { ugel: "Castrovirreyna", denom: 12, sin_reg: 0, avance_0: 3, proceso: 7, aprob: 2, bajo_50: 2, alto_50: 5 },
-  { ugel: "Churcampa", denom: 55, sin_reg: 1, avance_0: 34, proceso: 19, aprob: 1, bajo_50: 14, alto_50: 5 },
-  { ugel: "Huancavelica", denom: 196, sin_reg: 0, avance_0: 112, proceso: 79, aprob: 5, bajo_50: 63, alto_50: 16 },
-  { ugel: "Huaytara", denom: 4, sin_reg: 0, avance_0: 1, proceso: 3, aprob: 0, bajo_50: 2, alto_50: 1 },
-  { ugel: "Surcubamba", denom: 26, sin_reg: 1, avance_0: 18, proceso: 7, aprob: 0, bajo_50: 5, alto_50: 2 },
-  { ugel: "Tayacaja", denom: 45, sin_reg: 0, avance_0: 28, proceso: 16, aprob: 1, bajo_50: 12, alto_50: 4 }
+  { ugel: "Acobamba", denom: 87, sin_reg: 0, avance_0: 60, proceso: 23, aprob: 4, r_critico: 12, r_medio: 8, r_optimo: 3 },
+  { ugel: "Angaraes", denom: 92, sin_reg: 8, avance_0: 52, proceso: 31, aprob: 1, r_critico: 18, r_medio: 9, r_optimo: 4 },
+  { ugel: "Castrovirreyna", denom: 12, sin_reg: 0, avance_0: 3, proceso: 7, aprob: 2, r_critico: 1, r_medio: 2, r_optimo: 4 },
+  { ugel: "Churcampa", denom: 55, sin_reg: 1, avance_0: 34, proceso: 19, aprob: 1, r_critico: 10, r_medio: 6, r_optimo: 3 },
+  { ugel: "Huancavelica", denom: 196, sin_reg: 0, avance_0: 112, proceso: 79, aprob: 5, r_critico: 45, r_medio: 22, r_optimo: 12 },
+  { ugel: "Huaytara", denom: 4, sin_reg: 0, avance_0: 1, proceso: 3, aprob: 0, r_critico: 1, r_medio: 1, r_optimo: 1 },
+  { ugel: "Surcubamba", denom: 26, sin_reg: 1, avance_0: 18, proceso: 7, aprob: 0, r_critico: 4, r_medio: 2, r_optimo: 1 },
+  { ugel: "Tayacaja", denom: 45, sin_reg: 0, avance_0: 28, proceso: 16, aprob: 1, r_critico: 9, r_medio: 5, r_optimo: 2 }
 ];
 
 let chartHorizontal;
@@ -236,13 +261,16 @@ let chartHorizontal;
 window.onload = function() {
   const tbody = document.getElementById('tablaCuerpoEib');
   let tDenom = 0, tSinReg = 0, t0 = 0, tProc = 0, tAprob = 0;
+  let tCritico = 0, tMedio = 0, tOptimo = 0;
 
   dataEib.forEach(d => {
     tDenom += d.denom; tSinReg += d.sin_reg; t0 += d.avance_0; tProc += d.proceso; tAprob += d.aprob;
+    tCritico += d.r_critico; tMedio += d.r_medio; tOptimo += d.r_optimo;
+    
     tbody.innerHTML += `<tr>
       <td><strong>UGEL ${d.ugel.toUpperCase()}</strong></td>
       <td><strong>${d.denom}</strong></td>
-      <td style="color:var(--slate); font-weight:700;">${d.sin_reg}</td>
+      <td style="color:var(--text-muted); font-weight:700;">${d.sin_reg}</td>
       <td style="color:var(--red); font-weight:700;">${d.avance_0}</td>
       <td style="color:var(--amber); font-weight:700;">${d.proceso}</td>
       <td style="color:var(--green); font-weight:700;">${d.aprob}</td>
@@ -258,15 +286,16 @@ window.onload = function() {
     <td>${tAprob}</td>
   </tr>`;
 
+  // GRÁFICO MACRO SUPERIOR CON ETIQUETAS PROTEGIDAS ARRIBA
   const ctx = document.getElementById('chartEibGrouped').getContext('2d');
   new Chart(ctx, {
     type: 'bar',
     data: {
       labels: dataEib.map(d => d.ugel),
       datasets: [
-        { label: 'Aprobados (Meta)', data: dataEib.map(d => d.aprob), backgroundColor: '#10b981', borderRadius: 4 },
+        { label: 'Aprobados (100%)', data: dataEib.map(d => d.aprob), backgroundColor: '#10b981', borderRadius: 4 },
         { label: 'En Proceso (1%-99%)', data: dataEib.map(d => d.proceso), backgroundColor: '#f59e0b', borderRadius: 4 },
-        { label: 'Avance 0%', data: dataEib.map(d => d.avance_0), backgroundColor: '#ef4444', borderRadius: 4 },
+        { label: 'Avance 0% (Inactivos)', data: dataEib.map(d => d.avance_0), backgroundColor: '#ef4444', borderRadius: 4 },
         { label: 'Sin Registro', data: dataEib.map(d => d.sin_reg), backgroundColor: '#94a3b8', borderRadius: 4 }
       ]
     },
@@ -277,11 +306,8 @@ window.onload = function() {
         legend: { position: 'top', labels: { boxWidth: 10, font: { size: 10, weight: '600' } } },
         datalabels: {
           display: (context) => context.dataset.data[context.dataIndex] > 0,
-          anchor: 'end',
-          align: 'end',
-          offset: -4,
-          font: { size: 9, weight: '800' },
-          color: '#0f172a'
+          anchor: 'end', align: 'end', offset: -4,
+          font: { size: 9, weight: '800' }, color: '#0f172a'
         }
       },
       scales: {
@@ -291,15 +317,44 @@ window.onload = function() {
     }
   });
 
+  // NUEVO GRÁFICO CONSOLIDADO REGIONAL CON RANGOS CORTOS
+  const ctxReg = document.getElementById('chartRegionalHorizontal').getContext('2d');
+  new Chart(ctxReg, {
+    type: 'bar',
+    data: {
+      labels: ['Aprobado (100%)', 'Tránsito Óptimo (70%-99%)', 'Proceso Medio (31%-69%)', 'Inicio Crítico (1%-30%)', 'Avance 0% (Inactivo)', 'Sin Registro'],
+      datasets: [{
+        data: [tAprob, tOptimo, tMedio, tCritico, t0, tSinReg],
+        backgroundColor: ['#10b981', '#2563eb', '#8b5cf6', '#f97316', '#ef4444', '#94a3b8'],
+        borderRadius: 6, barThickness: 22
+      }]
+    },
+    options: {
+      indexAxis: 'y', responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        datalabels: {
+          anchor: 'end', align: 'right', color: '#0f172a', font: { weight: '800', size: 11 },
+          formatter: (value) => value > 0 ? `${value} docentes (${((value * 100) / tDenom).toFixed(1)}%)` : '0 (0%)'
+        }
+      },
+      scales: {
+        x: { beginAtZero: true, grace: '15%', grid: { color: '#f1f5f9' } },
+        y: { grid: { display: false }, ticks: { font: { size: 11, weight: '600' }, color: '#334155' } }
+      }
+    }
+  });
+
   actualizarBarrasHorizontales();
 };
 
+// GRÁFICO DINÁMICO POR PROVINCIA MICRO-SEGMENTADO
 function actualizarBarrasHorizontales() {
   const ugelSeleccionada = document.getElementById('ugelSelect').value;
   const ugelData = dataEib.find(d => d.ugel === ugelSeleccionada);
   
   document.getElementById('kpiDenom').textContent = ugelData.denom;
-  document.getElementById('kpiRescate').textContent = ugelData.bajo_50 + ugelData.avance_0;
+  document.getElementById('kpiRescate').textContent = ugelData.r_critico + ugelData.avance_0;
 
   const ctxBar = document.getElementById('chartHorizontalUgel').getContext('2d');
   if (chartHorizontal) { chartHorizontal.destroy(); }
@@ -307,33 +362,27 @@ function actualizarBarrasHorizontales() {
   chartHorizontal = new Chart(ctxBar, {
     type: 'bar',
     data: {
-      labels: ['Aprobado (100%)', 'En Proceso (≥ 50%)', 'En Proceso (< 50%)', 'Avance 0% (Inactivos)'],
+      labels: ['Aprobado (100%)', 'Tránsito Óptimo (70%-99%)', 'Proceso Medio (31%-69%)', 'Inicio Crítico (1%-30%)', 'Avance 0% (Inactivo)'],
       datasets: [{
-        data: [ugelData.aprob, ugelData.alto_50, ugelData.bajo_50, ugelData.avance_0],
-        backgroundColor: ['#10b981', '#2563eb', '#f97316', '#ef4444'],
-        borderRadius: 5,
-        barThickness: 20
+        data: [ugelData.aprob, ugelData.alto_50, ugelData.r_medio, ugelData.r_critico, ugelData.avance_0],
+        backgroundColor: ['#10b981', '#2563eb', '#8b5cf6', '#f97316', '#ef4444'],
+        borderRadius: 5, barThickness: 18
       }]
     },
     options: {
-      indexAxis: 'y',
-      responsive: true,
-      maintainAspectRatio: false,
+      indexAxis: 'y', responsive: true, maintainAspectRatio: false,
       plugins: {
         legend: { display: false },
         datalabels: {
-          anchor: 'end',
-          align: 'right',
-          color: '#0f172a',
-          font: { weight: '800', size: 11 },
+          anchor: 'end', align: 'right', color: '#0f172a', font: { weight: '800', size: 11 },
           formatter: (value, ctx) => {
             let sum = ctx.chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
-            return value > 0 ? value + " agentes (" + ((value * 100) / sum).toFixed(1) + "%)" : '0 agentes (0%)';
+            return value > 0 ? `${value} agentes (${((value * 100) / sum).toFixed(1)}%)` : '0 agentes (0%)';
           }
         }
       },
       scales: {
-        x: { beginAtZero: true, grid: { color: '#f1f5f9' }, ticks: { font: { size: 10 } } },
+        x: { beginAtZero: true, grace: '15%', grid: { color: '#f1f5f9' } },
         y: { grid: { display: false }, ticks: { font: { size: 11, weight: '600' }, color: '#334155' } }
       }
     }
