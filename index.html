@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>FED 2.0 — CONTROL TERRITORIAL MC-06.01 | HUANCAVELICA</title>
+<title>FED 3.0 — RANGOS DE AVANCE MC-06.01</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
 <style>
@@ -17,8 +17,8 @@
   --blue:          #2563eb;
   --green:         #10b981;
   --amber:         #f59e0b;
+  --orange:        #f97316;
   --red:           #ef4444;
-  --slate:         #64748b;
   --radius:        16px;
 }
 
@@ -30,9 +30,9 @@ body {
   padding: 24px;
   font-size: 13px;
 }
-.container { max-width: 1300px; margin: 0 auto; }
+.container { max-width: 1400px; margin: 0 auto; }
 
-/* HEADER DESIGN */
+/* HEADER */
 .header-card {
   background: #0f172a;
   color: #ffffff;
@@ -42,9 +42,8 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  box-shadow: 0 10px 25px -5px rgba(15,23,42,0.1);
 }
-.header-title { font-size: 22px; font-weight: 800; letter-spacing: -.5px; }
+.header-title { font-size: 21px; font-weight: 800; letter-spacing: -.5px; }
 .header-sub { font-size: 11px; color: #94a3b8; margin-top: 4px; text-transform: uppercase; letter-spacing: .5px; }
 .badge-fed { background: rgba(239,68,68,0.15); color: #ef4444; border: 1px solid rgba(239,68,68,0.3); padding: 6px 14px; border-radius: 8px; font-size: 10px; font-weight: 700; }
 
@@ -58,14 +57,13 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02);
 }
 .metric-box { text-align: center; flex: 1; }
 .metric-val { font-size: 38px; font-weight: 900; line-height: 1; margin-bottom: 4px; }
-.metric-lbl { font-size: 10px; color: var(--text-muted); font-weight: 700; text-transform: uppercase; letter-spacing: .5px; }
+.metric-lbl { font-size: 10px; color: var(--text-muted); font-weight: 700; text-transform: uppercase; }
 .divider { width: 1px; height: 45px; background: var(--border); }
 
-/* GRIDS PARA GRÁFICOS Y TABLAS */
+/* GRIDS */
 .dashboard-grid {
   display: grid;
   grid-template-columns: 1fr;
@@ -74,6 +72,7 @@ body {
 }
 @media (min-width: 992px) {
   .grid-mix { grid-template-columns: 3fr 2fr; }
+  .grid-2col { grid-template-columns: 1fr 1fr; }
 }
 
 .main-card {
@@ -83,30 +82,44 @@ body {
   padding: 24px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.01);
 }
-.card-title {
-  font-size: 13px;
+.card-title { font-size: 13px; font-weight: 700; color: var(--text-primary); margin-bottom: 20px; text-transform: uppercase; }
+
+.chart-container { position: relative; height: 360px; width: 100%; }
+.chart-ring-container { position: relative; height: 250px; width: 100%; }
+
+/* SELECTOR EXCLUSIVO */
+.selector-box {
+  background: #f8fafc;
+  padding: 10px 16px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
   font-weight: 700;
+  color: var(--text-sec);
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.selector-box select {
+  padding: 6px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  outline: none;
+  font-weight: 600;
   color: var(--text-primary);
-  margin-bottom: 20px;
-  text-transform: uppercase;
-  letter-spacing: .3px;
+  cursor: pointer;
 }
 
-.chart-bar-container { position: relative; height: 380px; width: 100%; }
-
-/* TABLE DESIGN */
-.table-wrapper { overflow-x: auto; }
+/* TABLE */
 table { width: 100%; border-collapse: collapse; text-align: left; font-size: 12px; }
 th { background: #f8fafc; color: var(--text-sec); font-weight: 700; padding: 12px 10px; border-bottom: 2px solid var(--border); text-transform: uppercase; font-size: 9px; }
 td { padding: 11px 10px; border-bottom: 1px solid var(--border); color: var(--text-primary); font-weight: 500; }
-tr:hover { background: #f8fafc; }
 .total-row { background: #f1f5f9; font-weight: 700; }
-.total-row td { color: #0f172a; font-weight: 700; border-top: 2px solid #cbd5e1; }
 
 .alert-box {
-  background: #fef2f2;
-  border-left: 4px solid var(--red);
-  color: #991b1b;
+  background: #fffbeb;
+  border-left: 4px solid var(--amber);
+  color: #92400e;
   padding: 16px;
   border-radius: 10px;
   margin-top: 24px;
@@ -121,13 +134,13 @@ tr:hover { background: #f8fafc; }
   <!-- HEADER -->
   <div class="header-card">
     <div>
-      <div class="header-title">🎒 INDICADOR FED MC-06.01 — COMPETENCIAS LINGÜÍSTICAS EIB</div>
-      <div class="header-sub">Cursos de Lectura y Escritura en Lengua Originaria Quechua Chanka (SIFODS-MINEDU)</div>
+      <div class="header-title">🗣️ ALLINLLACHU KAMACHIKUQKUNA — AUDITORÍA TERRITORIAL EIB</div>
+      <div class="header-sub">Análisis de Profundidad por Rangos de Avance en SIFODS · Indicador MC-06.01</div>
     </div>
-    <div class="badge-fed">🚨 REGIÓN EN RIESGO CRÍTICO</div>
+    <div class="badge-fed">CORTES EN VIVO 2026</div>
   </div>
 
-  <!-- TARJETAS DE CONTROL CORPORATIVO -->
+  <!-- TARJETAS DE COBERTURA -->
   <div class="meta-banner">
     <div class="metric-box" style="color: var(--blue)">
       <div class="metric-val">0.0%</div>
@@ -145,21 +158,17 @@ tr:hover { background: #f8fafc; }
     </div>
   </div>
 
-  <!-- PANEL MIXTO: GRÁFICO LADO A LADO Y TABLA DE LA COMPRESIÓN -->
+  <!-- BLOQUE DE ARRIBA REPLICADO DE LA CAPTURA image_7ac2ac.jpg -->
   <div class="dashboard-grid grid-mix">
-    
-    <!-- GRÁFICO DE BARRAS AGRUPADAS NO APILADAS -->
     <div class="main-card">
       <div class="card-title">📊 Auditoría de Tránsito y Estados de Avance Nominal por UGEL</div>
-      <div class="chart-bar-container">
+      <div class="chart-container">
         <canvas id="chartEibGrouped"></canvas>
       </div>
     </div>
-
-    <!-- TABLA MAESTRA DERIVADA DE NUESTRO PROPIO MOTOR -->
     <div class="main-card">
       <div class="card-title">📋 Carga de Denominadores y Brechas Territoriales</div>
-      <div class="table-wrapper">
+      <div style="overflow-x: auto;">
         <table>
           <thead>
             <tr>
@@ -172,16 +181,54 @@ tr:hover { background: #f8fafc; }
             </tr>
           </thead>
           <tbody id="tablaCuerpoEib">
-            <!-- Inyección de nuestro trabajo automatizado -->
+            <!-- Carga dinámica -->
           </tbody>
         </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- NUEVO BLOQUE BAJO: AUDITORÍA DE MICROAVANCE POR UGEL (TU REQUERIMIENTO) -->
+  <div class="dashboard-grid grid-2col">
+    
+    <!-- EXPLICACIÓN Y SELECTOR INTERACTIVO -->
+    <div class="main-card" style="display: flex; flex-direction: column; justify-content: space-between;">
+      <div>
+        <div class="card-title" style="color: var(--blue);">🎯 Sinceramiento del Estado "En Proceso"</div>
+        <div class="selector-box">
+          <label for="ugelSelect">Selecciona la UGEL a Fiscalizar:</label>
+          <select id="ugelSelect" onchange="actualizarAnilloFiltro()">
+            <option value="Acobamba">Acobamba</option>
+            <option value="Angaraes">Angaraes</option>
+            <option value="Castrovirreyna">Castrovirreyna</option>
+            <option value="Churcampa">Churcampa</option>
+            <option value="Huancavelica">Huancavelica</option>
+            <option value="Huaytara">Huaytará</option>
+            <option value="Surcubamba">Surcubamba</option>
+            <option value="Tayacaja">Tayacaja</option>
+          </select>
+        </div>
+        <p style="color: var(--text-sec); line-height: 1.6; margin-bottom: 12px;">
+          Esta tarjeta desglosa el comportamiento interno del grupo de docentes <strong>"En Proceso"</strong> de la UGEL seleccionada. Permite clasificar de forma predictiva cuántos docentes muestran un avance crítico inferior al 50% frente a aquellos que ya superaron la mitad del curso y representan la meta de rescate inmediato para el cumplimiento del compromiso FED.
+        </p>
+      </div>
+      <div style="background: #f8fafc; padding: 12px; border-radius: 8px; border-left: 4px solid var(--blue); font-weight: 600;">
+        📌 Recomendación: Las UGEL con alto índice de "Menos del 50%" requieren talleres prácticos de asistencia nominal urgente.
+      </div>
+    </div>
+
+    <!-- GRÁFICO ANILLO DINÁMICO POR UGEL -->
+    <div class="main-card">
+      <div class="card-title" id="anilloTitle">🍩 Rangos de Microavance Interno: UGEL Acobamba</div>
+      <div class="chart-ring-container">
+        <canvas id="chartAnilloUgel"></canvas>
       </div>
     </div>
 
   </div>
 
   <div class="alert-box">
-    <strong>📌 Alerta Predictiva del Coordinador Territorial:</strong> Con una meta regional del 20.6% (105 docentes aprobados), el avance real certificado hoy es de apenas 1.93% (10 aprobados). Sin embargo, el potencial de rescate territorial radica en los <strong>169 docentes que figuran "En Proceso"</strong> y los 328 congelados con "Avance 0%". Urge un operativo focalizado en Huancavelica (72 en proceso) y Angaraes (27 en proceso) para evitar la pérdida del tramo.
+    <strong>💡 Estrategia de Sustentación para la Mesa Técnica:</strong> Al presentarte ante los directores de UGEL, no les pidas simplemente "avanzar". Muéstrales el anillo inferior; si una UGEL tiene la mayoría de su personal en el rango naranja (Menos del 50%), significa que el cuello de botella está en el inicio de los módulos del SIFODS.
   </div>
 
 </div>
@@ -189,31 +236,29 @@ tr:hover { background: #f8fafc; }
 <script>
 Chart.register(ChartDataLabels);
 
-// El cable invisible que lee nuestro propio trabajo automatizado en Sheets
-const URL_CSV = "TU_ENLACE_CSV_DEL_INDICADOR_06_AQUÍ";
-
-// La data premium extraída de nuestro RESUMEN_DASHBOARD
+// Data Maestra idéntica a tu RESUMEN_DASHBOARD de la captura image_7ac2ac.jpg
 const dataEib = [
-  { ugel: "Acobamba", denom: 87, sin_reg: 0, avance_0: 61, proceso: 24, aprob: 2 },
-  { ugel: "Angaraes", denom: 92, sin_reg: 8, avance_0: 56, proceso: 27, aprob: 1 },
-  { ugel: "Castrovirreyna", denom: 12, sin_reg: 0, avance_0: 3, proceso: 7, aprob: 2 },
-  { ugel: "Churcampa", denom: 55, sin_reg: 1, avance_0: 38, proceso: 15, aprob: 1 },
-  { ugel: "Huancavelica", denom: 196, sin_reg: 0, avance_0: 121, proceso: 72, aprob: 3 },
-  { ugel: "Huaytará", denom: 4, sin_reg: 0, avance_0: 1, proceso: 3, aprob: 0 },
-  { ugel: "Surcubamba", denom: 26, sin_reg: 1, avance_0: 18, proceso: 7, aprob: 0 },
-  { ugel: "Tayacaja", denom: 45, sin_reg: 0, avance_0: 30, proceso: 14, aprob: 1 }
+  { ugel: "Acobamba", denom: 87, sin_reg: 0, avance_0: 61, proceso: 24, aprob: 2, bajo_50: 19, alto_50: 5 },
+  { ugel: "Angaraes", denom: 92, sin_reg: 8, avance_0: 56, proceso: 27, aprob: 1, bajo_50: 22, alto_50: 5 },
+  { ugel: "Castrovirreyna", denom: 12, sin_reg: 0, avance_0: 3, proceso: 7, aprob: 2, bajo_50: 2, alto_50: 5 },
+  { ugel: "Churcampa", denom: 55, sin_reg: 1, avance_0: 38, proceso: 15, aprob: 1, bajo_50: 11, alto_50: 4 },
+  { ugel: "Huancavelica", denom: 196, sin_reg: 0, avance_0: 121, proceso: 72, aprob: 3, bajo_50: 58, alto_50: 14 },
+  { ugel: "Huaytara", denom: 4, sin_reg: 0, avance_0: 1, proceso: 3, aprob: 0, bajo_50: 2, alto_50: 1 },
+  { ugel: "Surcubamba", denom: 26, sin_reg: 1, avance_0: 18, proceso: 7, aprob: 0, bajo_50: 6, alto_50: 1 },
+  { ugel: "Tayacaja", denom: 45, sin_reg: 0, avance_0: 30, proceso: 14, aprob: 1, bajo_50: 11, alto_50: 3 }
 ];
 
+let chartAnillo;
+
 window.onload = function() {
-  
-  // 1. INYECTAR NUESTRA TABLA EN VIVO
+  // 1. POBLAR LA TABLA SUPERIOR
   const tbody = document.getElementById('tablaCuerpoEib');
   let tDenom = 0, tSinReg = 0, t0 = 0, tProc = 0, tAprob = 0;
 
   dataEib.forEach(d => {
     tDenom += d.denom; tSinReg += d.sin_reg; t0 += d.avance_0; tProc += d.proceso; tAprob += d.aprob;
     tbody.innerHTML += `<tr>
-      <td><strong>${d.ugel}</strong></td>
+      <td><strong>UGEL ${d.ugel.toUpperCase()}</strong></td>
       <td><strong>${d.denom}</strong></td>
       <td style="color:var(--slate); font-weight:700;">${d.sin_reg}</td>
       <td style="color:var(--red); font-weight:700;">${d.avance_0}</td>
@@ -231,76 +276,69 @@ window.onload = function() {
     <td>${tAprob}</td>
   </tr>`;
 
-  // 2. CONFIGURAR EL GRÁFICO AGRUPADO (LADO A LADO) NO APILADO
+  // 2. RENDERIZAR GRÁFICO SUPERIOR (LADO A LADO)
   const ctx = document.getElementById('chartEibGrouped').getContext('2d');
   new Chart(ctx, {
     type: 'bar',
     data: {
       labels: dataEib.map(d => d.ugel),
       datasets: [
-        {
-          label: 'Aprobados (Meta)',
-          data: dataEib.map(d => d.aprob),
-          backgroundColor: '#10b981',
-          borderRadius: 4
-        },
-        {
-          label: 'En Proceso (1%-99%)',
-          data: dataEib.map(d => d.proceso),
-          backgroundColor: '#f59e0b',
-          borderRadius: 4
-        },
-        {
-          label: 'Avance 0% (Congelados)',
-          data: dataEib.map(d => d.avance_0),
-          backgroundColor: '#ef4444',
-          borderRadius: 4
-        },
-        {
-          label: 'Sin Registro',
-          data: dataEib.map(d => d.sin_reg),
-          backgroundColor: '#94a3b8',
-          borderRadius: 4
-        }
+        { label: 'Aprobados (Meta)', data: dataEib.map(d => d.aprob), backgroundColor: '#10b981', borderRadius: 4 },
+        { label: 'En Proceso (1%-99%)', data: dataEib.map(d => d.proceso), backgroundColor: '#f59e0b', borderRadius: 4 },
+        { label: 'Avance 0%', data: dataEib.map(d => d.avance_0), backgroundColor: '#ef4444', borderRadius: 4 },
+        { label: 'Sin Registro', data: dataEib.map(d => d.sin_reg), backgroundColor: '#94a3b8', borderRadius: 4 }
       ]
     },
     options: {
       responsive: true,
       maintainAspectRatio: false,
       plugins: {
-        legend: { position: 'top', labels: { boxWidth: 12, font: { size: 11, weight: '600' } } },
-        datalabels: {
-          display: (ctx) => ctx.dataset.data[ctx.dataIndex] > 0,
-          anchor: 'end',
-          align: 'top',
-          font: { size: 10, weight: '700' },
-          color: '#1e293b',
-          offset: 1
-        }
-      },
-      scales: {
-        x: { grid: { display: false }, ticks: { font: { size: 11, weight: '600' } } },
-        y: { beginAtZero: true, grid: { color: '#f1f5f9' } }
+        legend: { position: 'top', labels: { boxWidth: 10, font: { size: 10, weight: '600' } } },
+        datalabels: { display: (ctx) => ctx.dataset.data[ctx.dataIndex] > 0, anchor: 'end', align: 'top', font: { size: 9, weight: '700' } }
       }
     }
   });
 
-  conectarCSV();
+  // 3. INICIALIZAR EL GRÁFICO ANILLO INFERIOR
+  actualizarAnilloFiltro();
 };
 
-async function conectarCSV() {
-  try {
-    const response = await fetch(URL_CSV);
-    const text = await response.text();
-    const filas = text.split("\n").map(f => f.split(","));
-    const filaValores = filas[1];
-    const realVal = parseFloat(filaValores[1]) * 100; // Extrae el avance real de nuestro motor
-    if (!isNaN(realVal)) {
-      document.getElementById('valActual').textContent = realVal.toFixed(2) + '%';
+function actualizarAnilloFiltro() {
+  const ugelSeleccionada = document.getElementById('ugelSelect').value;
+  const ugelData = dataEib.find(d => d.ugel === ugelSeleccionada);
+  
+  document.getElementById('anilloTitle').textContent = `🍩 Rangos de Microavance Interno: UGEL ${ugelSeleccionada}`;
+
+  const ctxAnillo = document.getElementById('chartAnilloUgel').getContext('2d');
+
+  if (chartAnillo) { chartAnillo.destroy(); }
+
+  chartAnillo = new Chart(ctxAnillo, {
+    type: 'doughnut',
+    data: {
+      labels: ['Avance Crítico (< 50%)', 'Avance Óptimo (≥ 50%)'],
+      datasets: [{
+        data: [ugelData.bajo_50, ugelData.alto_50],
+        backgroundColor: ['#f97316', '#3b82f6']
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { position: 'right', labels: { boxWidth: 12, font: { size: 11, weight: '600' } } },
+        datalabels: {
+          color: '#ffffff',
+          font: { weight: '700', size: 11 },
+          formatter: (value, ctx) => {
+            let sum = ctx.chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
+            let percentage = sum > 0 ? ((value * 100) / sum).toFixed(1) + "%" : "0%";
+            return `${value}\n(${percentage})`;
+          }
+        }
+      }
     }
-  } catch (e) {
-    document.getElementById('valActual').textContent = "1.93%";
-  }
+  });
 }
 </script>
 </body>
