@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>FED 4.3 — PLATAFORMA INTEGRAL MC-06.01</title>
+<title>FED — CAPACITACIÓN EIB</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
 <style>
@@ -21,7 +21,6 @@
   --red:           #ef4444;
   --radius:        16px;
 }
-
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 body {
   background: var(--bg-primary);
@@ -31,8 +30,6 @@ body {
   font-size: 13px;
 }
 .container { max-width: 1400px; margin: 0 auto; }
-
-/* HEADER */
 .header-card {
   background: #0f172a;
   color: #ffffff;
@@ -42,13 +39,10 @@ body {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  box-shadow: 0 10px 25px -5px rgba(15,23,42,0.1);
 }
-.header-title { font-size: 21px; font-weight: 800; letter-spacing: -.5px; }
+.header-title { font-size: 21px; font-weight: 800; }
 .header-sub { font-size: 11px; color: #94a3b8; margin-top: 4px; text-transform: uppercase; }
 .badge-fed { background: rgba(239,68,68,0.15); color: #ef4444; border: 1px solid rgba(239,68,68,0.3); padding: 6px 14px; border-radius: 8px; font-size: 10px; font-weight: 700; }
-
-/* METRICS PANEL */
 .meta-banner {
   background: var(--bg-card);
   border: 1px solid var(--border);
@@ -63,8 +57,6 @@ body {
 .metric-val { font-size: 38px; font-weight: 900; line-height: 1; margin-bottom: 4px; }
 .metric-lbl { font-size: 10px; color: var(--text-muted); font-weight: 700; text-transform: uppercase; }
 .divider { width: 1px; height: 45px; background: var(--border); }
-
-/* GRIDS */
 .dashboard-grid {
   display: grid;
   grid-template-columns: 1fr;
@@ -75,7 +67,6 @@ body {
   .grid-mix { grid-template-columns: 3fr 2fr; }
   .grid-split { grid-template-columns: 1fr 3fr; }
 }
-
 .main-card {
   background: var(--bg-card);
   border: 1px solid var(--border);
@@ -90,22 +81,17 @@ body {
   border-bottom: 1px solid var(--border);
   padding-bottom: 12px;
 }
-.card-title { font-size: 12px; font-weight: 800; color: var(--text-primary); text-transform: uppercase; letter-spacing: .5px; }
-
+.card-title { font-size: 12px; font-weight: 800; color: var(--text-primary); text-transform: uppercase; }
 .chart-container { position: relative; height: 380px; width: 100%; }
 .chart-bar-horizontal { position: relative; height: 260px; width: 100%; }
-
 .select-premium {
   padding: 8px 16px;
   border-radius: 8px;
   border: 1px solid var(--border);
   background: #f8fafc;
   font-weight: 700;
-  color: var(--text-primary);
   outline: none;
-  cursor: pointer;
 }
-
 .sidebar-panel { display: flex; flex-direction: column; gap: 16px; justify-content: center; }
 .kpi-mini-card {
   background: var(--bg-card);
@@ -115,8 +101,6 @@ body {
 }
 .kpi-num { font-size: 28px; font-weight: 800; line-height: 1; margin-bottom: 6px; }
 .kpi-lbl { font-size: 10px; color: var(--text-muted); font-weight: 700; text-transform: uppercase; }
-
-/* TABLA */
 table { width: 100%; border-collapse: collapse; text-align: left; font-size: 12px; }
 th { background: #f8fafc; color: var(--text-sec); font-weight: 700; padding: 12px 10px; border-bottom: 2px solid var(--border); text-transform: uppercase; font-size: 9px; }
 td { padding: 11px 10px; border-bottom: 1px solid var(--border); color: var(--text-primary); }
@@ -126,7 +110,6 @@ td { padding: 11px 10px; border-bottom: 1px solid var(--border); color: var(--te
 <body>
 
 <div class="container">
-
   <div class="header-card">
     <div>
       <div class="header-title">🗣️ ALLINLLACHU KAMACHIKUQKUNA — AUDITORÍA TERRITORIAL EIB</div>
@@ -177,8 +160,7 @@ td { padding: 11px 10px; border-bottom: 1px solid var(--border); color: var(--te
               <th>Aprob.</th>
             </tr>
           </thead>
-          <tbody id="tablaCuerpoEib">
-            </tbody>
+          <tbody id="tablaCuerpoEib"></tbody>
         </table>
       </div>
     </div>
@@ -195,7 +177,6 @@ td { padding: 11px 10px; border-bottom: 1px solid var(--border); color: var(--te
         <div class="kpi-lbl">Casos Críticos en Ruta</div>
       </div>
     </div>
-
     <div class="main-card">
       <div class="card-header-flex" style="margin-bottom: 12px;">
         <div class="card-title" style="color: var(--blue);">🎯 Sinceramiento Colectivo Nominal por Rangos</div>
@@ -217,7 +198,6 @@ td { padding: 11px 10px; border-bottom: 1px solid var(--border); color: var(--te
       </div>
     </div>
   </div>
-
 </div>
 
 <script>
@@ -261,7 +241,6 @@ window.onload = function() {
     <td>${tAprob}</td>
   </tr>`;
 
-  // CORRECCIÓN MATEMÁTICA ANCLAJE DATALABELS VERTICALES
   const ctx = document.getElementById('chartEibGrouped').getContext('2d');
   new Chart(ctx, {
     type: 'bar',
@@ -282,15 +261,15 @@ window.onload = function() {
         datalabels: {
           display: (context) => context.dataset.data[context.dataIndex] > 0,
           anchor: 'end',
-          align: 'end',  // Forzar alineación externa al final de la barra
-          offset: -2,    // Compensa para evitar sobreposición interna
+          align: 'end',
+          offset: -4,
           font: { size: 9, weight: '800' },
           color: '#0f172a'
         }
       },
       scales: {
         x: { grid: { display: false }, ticks: { font: { size: 10, weight: '600' } } },
-        y: { beginAtZero: true, grace: '15%', grid: { color: '#f1f5f9' } } // Añade un 15% de holgura superior
+        y: { beginAtZero: true, grace: '15%', grid: { color: '#f1f5f9' } }
       }
     }
   });
@@ -332,7 +311,7 @@ function actualizarBarrasHorizontales() {
           font: { weight: '800', size: 11 },
           formatter: (value, ctx) => {
             let sum = ctx.chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
-            return value > 0 ? `${value} agentes (${((value * 100) / sum).toFixed(1)}%)` : '0 agentes (0%)';
+            return value > 0 ? value + " agentes (" + ((value * 100) / sum).toFixed(1) + "%)" : '0 agentes (0%)';
           }
         }
       },
