@@ -1,393 +1,315 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>FED 5.0 — SISTEMA MACRO REGIONAL MC-06.01</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.2.0/dist/chartjs-plugin-datalabels.min.js"></script>
-<style>
-:root {
-  --bg-primary:    #f8fafc;
-  --bg-card:       #ffffff;
-  --border:        #e2e8f0;
-  --text-primary:  #0f172a;
-  --text-sec:      #475569;
-  --text-muted:    #94a3b8;
-  --blue:          #2563eb;
-  --green:         #10b981;
-  --amber:         #f59e0b;
-  --orange:        #f97316;
-  --red:           #ef4444;
-  --purple:        #8b5cf6;
-  --radius:        16px;
-}
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-body {
-  background: var(--bg-primary);
-  color: var(--text-primary);
-  font-family: 'Segoe UI', system-ui, sans-serif;
-  padding: 24px;
-  font-size: 13px;
-}
-.container { max-width: 1440px; margin: 0 auto; }
-
-/* HEADER */
-.header-card {
-  background: #0f172a;
-  color: #ffffff;
-  padding: 24px 32px;
-  border-radius: var(--radius);
-  margin-bottom: 24px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  box-shadow: 0 10px 25px -5px rgba(15,23,42,0.1);
-}
-.header-title { font-size: 22px; font-weight: 800; letter-spacing: -.5px; }
-.header-sub { font-size: 11px; color: #94a3b8; margin-top: 4px; text-transform: uppercase; }
-.badge-fed { background: rgba(16,185,129,0.15); color: #10b981; border: 1px solid rgba(16,185,129,0.3); padding: 6px 14px; border-radius: 8px; font-size: 10px; font-weight: 700; }
-
-/* KPI BANNER */
-.meta-banner {
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 24px;
-  margin-bottom: 24px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-.metric-box { text-align: center; flex: 1; }
-.metric-val { font-size: 38px; font-weight: 900; line-height: 1; margin-bottom: 4px; }
-.metric-lbl { font-size: 10px; color: var(--text-muted); font-weight: 700; text-transform: uppercase; }
-.divider { width: 1px; height: 45px; background: var(--border); }
-
-/* GRIDS */
-.dashboard-grid { display: grid; grid-template-columns: 1fr; gap: 24px; margin-bottom: 24px; }
-@media (min-width: 992px) {
-  .grid-3-2 { grid-template-columns: 3fr 2fr; }
-  .grid-1-3 { grid-template-columns: 1fr 3fr; }
-  .grid-2-1 { grid-template-columns: 2fr 1fr; }
-}
-
-.main-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; position: relative; }
-.card-header-flex { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid var(--border); padding-bottom: 12px; }
-.card-title { font-size: 12px; font-weight: 800; color: var(--text-primary); text-transform: uppercase; letter-spacing: .5px; }
-
-/* CANVAS CONTAINERS */
-.chart-container { position: relative; height: 360px; width: 100%; }
-.chart-horizontal-container { position: relative; height: 280px; width: 100%; }
-
-.select-premium { padding: 8px 16px; border-radius: 8px; border: 1px solid var(--border); background: #f8fafc; font-weight: 700; color: var(--text-primary); outline: none; cursor: pointer; }
-
-/* LÍNEA DE TIEMPO ESTILO SILICON VALLEY */
-.timeline-container { display: flex; flex-direction: column; gap: 16px; padding: 8px 0; }
-.timeline-item { display: flex; gap: 16px; position: relative; }
-.timeline-item::before { content: ''; position: absolute; left: 15px; top: 24px; bottom: -16px; width: 2px; background: var(--border); }
-.timeline-item:last-child::before { display: none; }
-.timeline-icon { width: 32px; height: 32px; border-radius: 50%; background: var(--blue); color: white; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 11px; z-index: 2; }
-.timeline-icon.success { background: var(--green); }
-.timeline-content { flex: 1; background: #f8fafc; padding: 12px 16px; border-radius: 12px; border: 1px solid var(--border); }
-.timeline-date { font-size: 10px; color: var(--text-muted); font-weight: 700; text-transform: uppercase; }
-.timeline-title { font-size: 12px; font-weight: 700; margin: 2px 0 4px 0; color: var(--text-primary); }
-.timeline-desc { font-size: 11px; color: var(--text-sec); line-height: 1.4; }
-
-/* SIDEBAR KPIs */
-.sidebar-panel { display: flex; flex-direction: column; gap: 16px; justify-content: center; }
-.kpi-mini-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; }
-.kpi-num { font-size: 28px; font-weight: 800; line-height: 1; margin-bottom: 6px; }
-.kpi-lbl { font-size: 10px; color: var(--text-muted); font-weight: 700; text-transform: uppercase; }
-
-/* TABLA PRO */
-table { width: 100%; border-collapse: collapse; text-align: left; font-size: 12px; }
-th { background: #f8fafc; color: var(--text-sec); font-weight: 700; padding: 12px 10px; border-bottom: 2px solid var(--border); text-transform: uppercase; font-size: 9px; }
-td { padding: 11px 10px; border-bottom: 1px solid var(--border); color: var(--text-primary); }
-.total-row { background: #f1f5f9; font-weight: 700; border-top: 2px solid var(--text-primary); }
-</style>
+  <meta charset="UTF-8">
+  <title>FED 2025-2026 - Monitoreo Indicador MC-06.01</title>
+  <!-- Tailwind CSS para el Layout Premium de Alta Gama -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Chart.js y Plugin de Etiquetas Flotantes -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
 </head>
-<body>
+<body class="bg-slate-100 font-sans antialiased text-slate-800">
 
-<div class="container">
+  <!-- Cabecera Institucional Estilo Oscuro Premium -->
+  <header class="bg-slate-900 text-white p-5 shadow-md border-b-4 border-blue-600">
+    <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
+      <div>
+        <h1 class="text-xl font-black tracking-wide flex items-center gap-2">
+          🗣️ ALLINLLACHU KAMACHIKUQKUNA — MONITOREO NOMINAL FED 2026
+        </h1>
+        <p class="text-xs text-slate-400 font-medium">Indicador MC-06.01: Competencias Lingüísticas EIB (Corte de Mayo)</p>
+      </div>
+      <div class="bg-blue-950 px-4 py-2 rounded-lg border border-blue-800 text-right">
+        <span class="text-[10px] uppercase font-bold text-blue-400 block tracking-widest">Sincronización Territorial</span>
+        <span class="text-xs font-mono text-emerald-400 font-bold">100% Transparente (API Sheets-CSV)</span>
+      </div>
+    </div>
+  </header>
 
-  <!-- HEADER COMPARTIDO -->
-  <div class="header-card">
-    <div>
-      <div class="header-title">🗣️ ALLINLLACHU KAMACHIKUQKUNA — AUDITORÍA TERRITORIAL EIB</div>
-      <div class="header-sub">Consolidación Macroscópica, Línea de Tiempo de Cortes y Micro-Segmentación Nominal (SIFODS)</div>
-    </div>
-    <div class="badge-fed">🔥 MOTOR ANALÍTICO CHANKA V5.0</div>
-  </div>
+  <main class="max-w-7xl mx-auto p-4 md:p-6 space-y-6">
 
-  <!-- BANNER PRINCIPAL DE MEDIDAS -->
-  <div class="meta-banner">
-    <div class="metric-box" style="color: var(--blue)">
-      <div class="metric-val">0.0%</div>
-      <div class="metric-lbl">Línea Base Histórica</div>
-    </div>
-    <div class="divider"></div>
-    <div class="metric-box" style="color: var(--purple)">
-      <div class="metric-val">20.6%</div>
-      <div class="metric-lbl">Meta Regional FED</div>
-    </div>
-    <div class="divider"></div>
-    <div class="metric-box" style="color: var(--green)">
-      <div class="metric-val">2.71%</div>
-      <div class="metric-lbl">Avance Regional Actual</div>
-    </div>
-  </div>
-
-  <!-- SECCIÓN SUPERIOR: MACRO DISTRIBUCIÓN Y TABLA -->
-  <div class="dashboard-grid grid-3-2">
-    <div class="main-card">
-      <div class="card-header-flex">
-        <div class="card-title">📊 Distribución Absoluta de Tránsito Nominal por UGEL</div>
-      </div>
-      <div class="chart-container">
-        <canvas id="chartEibGrouped"></canvas>
-      </div>
-    </div>
-    <div class="main-card">
-      <div class="card-header-flex">
-        <div class="card-title">📋 Consolidado Regional de Carga y Brechas Nivel 1</div>
-      </div>
-      <div style="overflow-x: auto;">
-        <table>
-          <thead>
-            <tr>
-              <th>UGEL</th>
-              <th>Denom.</th>
-              <th>Sin Reg.</th>
-              <th>Avance 0%</th>
-              <th>En Proc.</th>
-              <th>Aprob.</th>
-            </tr>
-          </thead>
-          <tbody id="tablaCuerpoEib"></tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-
-  <!-- NUEVA SECCIÓN INTERMEDIA: CONSOLIDADO REGIONAL HISTÓRICO Y LÍNEA DE TIEMPO -->
-  <div class="dashboard-grid grid-2-1">
-    <div class="main-card">
-      <div class="card-header-flex">
-        <div class="card-title">🌐 Micro-Segmentación Estratégica a Nivel Regional (Consolidado)</div>
-      </div>
-      <div class="chart-horizontal-container">
-        <canvas id="chartRegionalHorizontal"></canvas>
-      </div>
-    </div>
-    <div class="main-card">
-      <div class="card-header-flex">
-        <div class="card-title">⏳ Cronología de Auditoría y Cortes DIFOS</div>
-      </div>
-      <div class="timeline-container">
-        <div class="timeline-item">
-          <div class="timeline-icon">1</div>
-          <div class="timeline-content">
-            <div class="timeline-date">Corte 01 · 22 Mayo 05:35 AM</div>
-            <div class="timeline-title">Línea Base Inicial SIFODS</div>
-            <div class="timeline-desc">Auditoría inicial arroja 10 aprobados regionales (1.93%) y una alarmante masa crítica estancada en el 0% (328 docentes).</div>
-          </div>
+    <!-- FILA INTERMEDIA: Panel Regional Macro + Línea de Tiempo Histórica -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      
+      <!-- Panel Macro Regional (Izquierda y Centro) -->
+      <div class="lg:col-span-2 bg-white p-5 rounded-xl shadow-sm border border-slate-200">
+        <div class="flex justify-between items-center mb-4 border-b pb-2">
+          <h2 class="text-sm font-bold text-slate-700 uppercase tracking-wider flex items-center gap-2">
+            📊 Consolidado Departamental - Región Huancavelica
+          </h2>
+          <span id="txt-total-regional" class="bg-blue-100 text-blue-800 text-xs font-extrabold px-2.5 py-0.5 rounded font-mono">Cargando...</span>
         </div>
-        <div class="timeline-item">
-          <div class="timeline-icon success">2</div>
-          <div class="timeline-content">
-            <div class="timeline-date">Corte 02 · 26 Mayo 11:36 AM</div>
-            <div class="timeline-title">Actualización de Sábanas DIFOS</div>
-            <div class="timeline-desc">Sinceramiento en vivo de datos. El avance regional escala a <strong>2.71% (14 aprobados)</strong> y se rescatan 20 docentes del letargo de inactividad.</div>
-          </div>
+        <div class="relative h-80">
+          <canvas id="chartRegional"></canvas>
         </div>
       </div>
-    </div>
-  </div>
 
-  <!-- SECCIÓN INFERIOR: MICRO-AUDITORÍA POR PROVINCIA -->
-  <div class="dashboard-grid grid-1-3">
-    <div class="sidebar-panel">
-      <div class="kpi-mini-card" style="border-left: 4px solid var(--blue);">
-        <div class="kpi-num" id="kpiDenom">0</div>
-        <div class="kpi-lbl">Universo Meta UGEL</div>
-      </div>
-      <div class="kpi-mini-card" style="border-left: 4px solid var(--red);">
-        <div class="kpi-num" id="kpiRescate" style="color: var(--red);">0</div>
-        <div class="kpi-lbl">Casos Críticos en Ruta</div>
-      </div>
-    </div>
-    <div class="main-card">
-      <div class="card-header-flex" style="margin-bottom: 12px;">
-        <div class="card-title" style="color: var(--blue);">🎯 Sinceramiento Colectivo por Rangos Finos de Rendimiento</div>
+      <!-- Bitácora Histórica del Territorio (Derecha) -->
+      <div class="bg-white p-5 rounded-xl shadow-sm border border-slate-200 flex flex-col justify-between">
         <div>
-          <select id="ugelSelect" class="select-premium" onchange="actualizarBarrasHorizontales()">
-            <option value="Acobamba">UGEL Acobamba</option>
-            <option value="Angaraes">UGEL Angaraes</option>
-            <option value="Castrovirreyna">UGEL Castrovirreyna</option>
-            <option value="Churcampa">UGEL Churcampa</option>
-            <option value="Huancavelica">UGEL Huancavelica</option>
-            <option value="Huaytara">UGEL Huaytará</option>
-            <option value="Surcubamba">UGEL Surcubamba</option>
-            <option value="Tayacaja">UGEL Tayacaja</option>
+          <h2 class="text-sm font-bold text-slate-700 uppercase tracking-wider mb-4 border-b pb-2">📜 Bitácora del Proceso</h2>
+          <div class="space-y-4">
+            <div class="flex gap-3">
+              <div class="flex flex-col items-center"><span class="w-6 h-6 rounded-full bg-slate-300 text-slate-600 text-xs font-bold flex items-center justify-center">1</span><div class="w-0.5 h-full bg-slate-200"></div></div>
+              <div class="bg-slate-50 p-2.5 rounded-lg border border-slate-200 w-full"><span class="text-[9px] font-bold text-slate-500 block">CORTE 01 - 22 MAYO</span><p class="text-xs font-bold text-slate-700">Línea Base Inicial SIFODS</p><p class="text-[11px] text-slate-500">Auditoría sincera con 0.0% de aprobados reales detectados.</p></div>
+            </div>
+            <div class="flex gap-3">
+              <div class="flex flex-col items-center"><span class="w-6 h-6 rounded-full bg-blue-600 text-white text-xs font-bold flex items-center justify-center">2</span></div>
+              <div class="bg-blue-50 p-2.5 rounded-lg border border-blue-200 w-full"><span class="text-[9px] font-bold text-blue-500 block">CORTE 03 - HOY (29 MAYO)</span><p class="text-xs font-bold text-blue-800">Actualización Transparente</p><p class="text-[11px] text-blue-600 font-medium">Sincronización en vivo con la sábana de la DIFOS.</p></div>
+            </div>
+          </div>
+        </div>
+        <!-- Indicador de Alerta Predictiva Regional -->
+        <div id="alerta-regional-box" class="mt-4 p-3 rounded-lg text-center font-bold text-xs uppercase tracking-wide">
+          Evaluando Región...
+        </div>
+      </div>
+    </div>
+
+    <!-- FILA INFERIOR: Sinceramiento Colectivo Micro por UGEL (Grid Asimétrico) -->
+    <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+      
+      <!-- KPIs de Soporte de la UGEL Seleccionada (Izquierda) -->
+      <div class="space-y-4">
+        <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200">
+          <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest block">Denominador Territorial</span>
+          <div id="kpi-denom-ugel" class="text-3xl font-black text-slate-800 font-mono mt-1">--</div>
+          <span class="text-[11px] text-slate-500 block mt-1 font-medium">Universo Meta Focalizado</span>
+        </div>
+        <div class="bg-white p-4 rounded-xl shadow-sm border border-slate-200 border-l-4 border-orange-500">
+          <span class="text-[10px] font-bold text-orange-500 uppercase tracking-widest block">Masa Inactiva en Ruta</span>
+          <div id="kpi-inactivos-ugel" class="text-3xl font-black text-orange-600 font-mono mt-1">--</div>
+          <span class="text-[11px] text-slate-500 block mt-1 font-medium">Docentes con Avance 0%</span>
+        </div>
+      </div>
+
+      <!-- Gráfico Detallado por Rangos de Rendimiento por UGEL (Centro e Izquierda) -->
+      <div class="lg:col-span-3 bg-white p-5 rounded-xl shadow-sm border border-slate-200">
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 mb-4 border-b pb-2">
+          <h2 class="text-sm font-bold text-slate-700 uppercase tracking-wider flex items-center gap-2">
+            🎯 Sinceramiento por Rangos Finos de Rendimiento por Provincia
+          </h2>
+          <!-- Selector Desplegable Nominal de UGEL -->
+          <select id="selectorUgel" class="bg-slate-50 border border-slate-300 text-slate-700 text-xs rounded-lg font-bold p-2 focus:ring-blue-500 focus:border-blue-500">
+            <!-- Se poblará dinámicamente mediante la API -->
           </select>
         </div>
-      </div>
-      <div class="chart-horizontal-container">
-        <canvas id="chartHorizontalUgel"></canvas>
+        <div class="relative h-80">
+          <canvas id="chartUgel"></canvas>
+        </div>
       </div>
     </div>
-  </div>
+  </main>
 
-</div>
+  <script>
+    // 1. URL TRANSPARENTE DEL REPOSITORIO DE DATOS GENERADO POR EL USUARIO
+    const urlCsv = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQm94v72LtmdKsjcXTakeHjCd3WfN64sdoglUGFJZLF7IXf5hdPBjAhOC9G40Z5YgNevLwLTOL4sEGn/pub?gid=611908867&single=true&output=csv";
 
-<script>
-Chart.register(ChartDataLabels);
+    // Variables globales para el manejo de gráficos
+    let chartRegionalRef = null;
+    let chartUgelRef = null;
+    let baseDatosGlobal = [];
 
-// DATA INTEGRAL ACTUALIZADA DIFOS MICRO-SEGMENTADA
-const dataEib = [
-  { ugel: "Acobamba", denom: 87, sin_reg: 0, avance_0: 60, proceso: 23, aprob: 4, r_critico: 12, r_medio: 8, r_optimo: 3 },
-  { ugel: "Angaraes", denom: 92, sin_reg: 8, avance_0: 52, proceso: 31, aprob: 1, r_critico: 18, r_medio: 9, r_optimo: 4 },
-  { ugel: "Castrovirreyna", denom: 12, sin_reg: 0, avance_0: 3, proceso: 7, aprob: 2, r_critico: 1, r_medio: 2, r_optimo: 4 },
-  { ugel: "Churcampa", denom: 55, sin_reg: 1, avance_0: 34, proceso: 19, aprob: 1, r_critico: 10, r_medio: 6, r_optimo: 3 },
-  { ugel: "Huancavelica", denom: 196, sin_reg: 0, avance_0: 112, proceso: 79, aprob: 5, r_critico: 45, r_medio: 22, r_optimo: 12 },
-  { ugel: "Huaytara", denom: 4, sin_reg: 0, avance_0: 1, proceso: 3, aprob: 0, r_critico: 1, r_medio: 1, r_optimo: 1 },
-  { ugel: "Surcubamba", denom: 26, sin_reg: 1, avance_0: 18, proceso: 7, aprob: 0, r_critico: 4, r_medio: 2, r_optimo: 1 },
-  { ugel: "Tayacaja", denom: 45, sin_reg: 0, avance_0: 28, proceso: 16, aprob: 1, r_critico: 9, r_medio: 5, r_optimo: 2 }
-];
+    // Registrar globalmente el plugin de etiquetas de Chart.js
+    Chart.register(ChartDataLabels);
 
-let chartHorizontal;
+    // 2. FUNCIÓN DE EXTRACCIÓN Y PURIFICACIÓN TRANSPARENTE DE DATOS (API SHEETS)
+    async function inicializarDashboardFED() {
+      try {
+        const respuesta = await fetch(urlCsv);
+        const textoPlano = await respuesta.text();
+        const lineas = textoPlano.split("\n");
+        
+        baseDatosGlobal = [];
+        let registroTotalRegional = null;
 
-window.onload = function() {
-  const tbody = document.getElementById('tablaCuerpoEib');
-  let tDenom = 0, tSinReg = 0, t0 = 0, tProc = 0, tAprob = 0;
-  let tCritico = 0, tMedio = 0, tOptimo = 0;
+        for (let i = 1; i < lineas.length; i++) {
+          if (!lineas[i].trim()) continue;
 
-  dataEib.forEach(d => {
-    tDenom += d.denom; tSinReg += d.sin_reg; t0 += d.avance_0; tProc += d.proceso; tAprob += d.aprob;
-    tCritico += d.r_critico; tMedio += d.r_medio; tOptimo += d.r_optimo;
-    
-    tbody.innerHTML += `<tr>
-      <td><strong>UGEL ${d.ugel.toUpperCase()}</strong></td>
-      <td><strong>${d.denom}</strong></td>
-      <td style="color:var(--text-muted); font-weight:700;">${d.sin_reg}</td>
-      <td style="color:var(--red); font-weight:700;">${d.avance_0}</td>
-      <td style="color:var(--amber); font-weight:700;">${d.proceso}</td>
-      <td style="color:var(--green); font-weight:700;">${d.aprob}</td>
-    </tr>`;
-  });
+          // Autodetecta el separador regional del CSV de Google (Coma o Punto y coma)
+          const token = lineas[i].includes(";") ? ";" : ",";
+          const columnas = lineas[i].split(token);
 
-  tbody.innerHTML += `<tr class="total-row">
-    <td>TOTAL REGIONAL</td>
-    <td>${tDenom}</td>
-    <td>${tSinReg}</td>
-    <td>${t0}</td>
-    <td>${tProc}</td>
-    <td>${tAprob}</td>
-  </tr>`;
+          // Función limpiadora: Purifica caracteres de porcentaje, comas de decimales y espacios en blanco
+          const purificarNum = (val) => {
+            if (!val) return 0;
+            let limpio = val.replace("%", "").replace(",", ".").trim();
+            return parseFloat(limpio) || 0;
+          };
 
-  // GRÁFICO MACRO SUPERIOR CON ETIQUETAS PROTEGIDAS ARRIBA
-  const ctx = document.getElementById('chartEibGrouped').getContext('2d');
-  new Chart(ctx, {
-    type: 'bar',
-    data: {
-      labels: dataEib.map(d => d.ugel),
-      datasets: [
-        { label: 'Aprobados (100%)', data: dataEib.map(d => d.aprob), backgroundColor: '#10b981', borderRadius: 4 },
-        { label: 'En Proceso (1%-99%)', data: dataEib.map(d => d.proceso), backgroundColor: '#f59e0b', borderRadius: 4 },
-        { label: 'Avance 0% (Inactivos)', data: dataEib.map(d => d.avance_0), backgroundColor: '#ef4444', borderRadius: 4 },
-        { label: 'Sin Registro', data: dataEib.map(d => d.sin_reg), backgroundColor: '#94a3b8', borderRadius: 4 }
-      ]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: {
-        legend: { position: 'top', labels: { boxWidth: 10, font: { size: 10, weight: '600' } } },
-        datalabels: {
-          display: (context) => context.dataset.data[context.dataIndex] > 0,
-          anchor: 'end', align: 'end', offset: -4,
-          font: { size: 9, weight: '800' }, color: '#0f172a'
-        }
-      },
-      scales: {
-        x: { grid: { display: false }, ticks: { font: { size: 10, weight: '600' } } },
-        y: { beginAtZero: true, grace: '15%', grid: { color: '#f1f5f9' } }
-      }
-    }
-  });
+          const nombreFila = columnas[0].trim();
 
-  // NUEVO GRÁFICO CONSOLIDADO REGIONAL CON RANGOS CORTOS
-  const ctxReg = document.getElementById('chartRegionalHorizontal').getContext('2d');
-  new Chart(ctxReg, {
-    type: 'bar',
-    data: {
-      labels: ['Aprobado (100%)', 'Tránsito Óptimo (70%-99%)', 'Proceso Medio (31%-69%)', 'Inicio Crítico (1%-30%)', 'Avance 0% (Inactivo)', 'Sin Registro'],
-      datasets: [{
-        data: [tAprob, tOptimo, tMedio, tCritico, t0, tSinReg],
-        backgroundColor: ['#10b981', '#2563eb', '#8b5cf6', '#f97316', '#ef4444', '#94a3b8'],
-        borderRadius: 6, barThickness: 22
-      }]
-    },
-    options: {
-      indexAxis: 'y', responsive: true, maintainAspectRatio: false,
-      plugins: {
-        legend: { display: false },
-        datalabels: {
-          anchor: 'end', align: 'right', color: '#0f172a', font: { weight: '800', size: 11 },
-          formatter: (value) => value > 0 ? `${value} docentes (${((value * 100) / tDenom).toFixed(1)}%)` : '0 (0%)'
-        }
-      },
-      scales: {
-        x: { beginAtZero: true, grace: '15%', grid: { color: '#f1f5f9' } },
-        y: { grid: { display: false }, ticks: { font: { size: 11, weight: '600' }, color: '#334155' } }
-      }
-    }
-  });
+          // Estructuración limpia del objeto según las especificaciones de tu matriz
+          const filaObjeto = {
+            ugel: nombreFila.replace("UGEL ", ""),
+            denom: purificarNum(columnas[1]),
+            sin_reg: purificarNum(columnas[2]),
+            avance_0: purificarNum(columnas[3]),
+            proceso: purificarNum(columnas[4]),
+            aprob: purificarNum(columnas[5]),
+            avance_real: purificarNum(columnas[6])
+          };
 
-  actualizarBarrasHorizontales();
-};
-
-// GRÁFICO DINÁMICO POR PROVINCIA MICRO-SEGMENTADO
-function actualizarBarrasHorizontales() {
-  const ugelSeleccionada = document.getElementById('ugelSelect').value;
-  const ugelData = dataEib.find(d => d.ugel === ugelSeleccionada);
-  
-  document.getElementById('kpiDenom').textContent = ugelData.denom;
-  document.getElementById('kpiRescate').textContent = ugelData.r_critico + ugelData.avance_0;
-
-  const ctxBar = document.getElementById('chartHorizontalUgel').getContext('2d');
-  if (chartHorizontal) { chartHorizontal.destroy(); }
-
-  chartHorizontal = new Chart(ctxBar, {
-    type: 'bar',
-    data: {
-      labels: ['Aprobado (100%)', 'Tránsito Óptimo (70%-99%)', 'Proceso Medio (31%-69%)', 'Inicio Crítico (1%-30%)', 'Avance 0% (Inactivo)'],
-      datasets: [{
-        data: [ugelData.aprob, ugelData.alto_50, ugelData.r_medio, ugelData.r_critico, ugelData.avance_0],
-        backgroundColor: ['#10b981', '#2563eb', '#8b5cf6', '#f97316', '#ef4444'],
-        borderRadius: 5, barThickness: 18
-      }]
-    },
-    options: {
-      indexAxis: 'y', responsive: true, maintainAspectRatio: false,
-      plugins: {
-        legend: { display: false },
-        datalabels: {
-          anchor: 'end', align: 'right', color: '#0f172a', font: { weight: '800', size: 11 },
-          formatter: (value, ctx) => {
-            let sum = ctx.chart.data.datasets[0].data.reduce((a, b) => a + b, 0);
-            return value > 0 ? `${value} agentes (${((value * 100) / sum).toFixed(1)}%)` : '0 agentes (0%)';
+          if (nombreFila.toUpperCase().includes("TOTAL REGIONAL")) {
+            registroTotalRegional = filaObjeto;
+          } else {
+            baseDatosGlobal.push(filaObjeto);
           }
         }
-      },
-      scales: {
-        x: { beginAtZero: true, grace: '15%', grid: { color: '#f1f5f9' } },
-        y: { grid: { display: false }, ticks: { font: { size: 11, weight: '600' }, color: '#334155' } }
+
+        if (!registroTotalRegional) {
+          console.error("🚨 Error crítico: No se encontró la fila del TOTAL REGIONAL en el CSV.");
+          return;
+        }
+
+        // Poblar dinámicamente el selector provincial
+        const selector = document.getElementById("selectorUgel");
+        selector.innerHTML = "";
+        baseDatosGlobal.forEach((item, index) => {
+          let option = document.createElement("option");
+          option.value = index;
+          option.text = "UGEL " + item.ugel;
+          if(item.ugel.toUpperCase() === "HUANCAVELICA") option.selected = true;
+          selector.appendChild(option);
+        });
+
+        // Configurar Alerta de Riesgo Predictiva Regional
+        const alertaBox = document.getElementById("alerta-regional-box");
+        alertaBox.innerText = "🚨 Región en Riesgo Contractual";
+        alertaBox.className = "mt-4 p-3 rounded-lg text-center font-bold text-xs uppercase tracking-wide bg-red-100 text-red-800 border border-red-300";
+
+        // Renderizar los dos gráficos
+        construirGraficoRegional(registroTotalRegional);
+        
+        // Renderizar por defecto la UGEL Huancavelica
+        const idxDefecto = baseDatosGlobal.findIndex(u => u.ugel.toUpperCase() === "HUANCAVELICA");
+        actualizarGraficoUgel(idxDefecto !== -1 ? idxDefecto : 0);
+
+        // Escuchar los cambios del selector desplegable
+        selector.addEventListener("change", (e) => {
+          actualizarGraficoUgel(e.target.value);
+        });
+
+      } catch (err) {
+        console.error("🚨 Error general en la inicialización de la API FED:", err);
       }
     }
-  });
-}
-</script>
+
+    // 3. CONSTRUCCIÓN DEL GRÁFICO REGIONAL MACRO (BARRAS HORIZONTALES)
+    function construirGraficoRegional(totales) {
+      document.getElementById("txt-total-regional").innerText = "AVANCE: " + totales.avance_real.toFixed(2) + "%";
+      
+      const ctx = document.getElementById("chartRegional").getContext("2d");
+      
+      chartRegionalRef = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: ['Aprobado (100%)', 'En Proceso', 'Avance 0% (Inactivo)', 'Sin Registro'],
+          datasets: [{
+            data: [totales.aprob, totales.proceso, totales.avance_0, totales.sin_reg],
+            backgroundColor: ['#10b981', '#a855f7', '#ef4444', '#64748b'],
+            borderWidth: 0,
+            borderRadius: 6
+          }]
+        },
+        options: {
+          indexAxis: 'y',
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: { display: false },
+            datalabels: {
+              anchor: 'end',
+              align: 'right',
+              color: '#0f172a',
+              font: { weight: 'bold', size: 11 },
+              formatter: function(value) {
+                // Cálculo estricto respecto al denominador regional rígido (517)
+                const pct = ((value / totales.denom) * 100).toFixed(1);
+                return value + " docentes (" + pct + "%)";
+              }
+            }
+          },
+          scales: {
+            x: { grid: { display: false }, grace: '15%' },
+            y: { grid: { display: false } }
+          }
+        }
+      });
+    }
+
+    // 4. FUNCIÓN QUIRÚRGICA PARA EL GRÁFICO MICRO POR UGEL (ELIMINA EL NaN% Y AGENTES)
+    function actualizarGraficoUgel(index) {
+      const dataUgel = baseDatosGlobal[index];
+      
+      // Actualizar tarjetas KPI de soporte de la izquierda
+      document.getElementById("kpi-denom-ugel").innerText = dataUgel.denom;
+      document.getElementById("kpi-inactivos-ugel").innerText = dataUgel.avance_0;
+
+      const datosGrafico = [dataUgel.aprob, dataUgel.proceso, dataUgel.avance_0, dataUgel.sin_reg];
+
+      if (chartUgelRef) {
+        // Corrección del denominador de la UGEL inyectado dinámicamente en el dataset
+        chartUgelRef.data.datasets[0].totalUgelDenom = dataUgel.denom;
+        chartUgelRef.data.datasets[0].data = datosGrafico;
+        chartUgelRef.update();
+      } else {
+        const ctx = document.getElementById("chartUgel").getContext("2d");
+        chartUgelRef = new Chart(ctx, {
+          type: 'bar',
+          data: {
+            labels: ['Aprobado (100%)', 'En Proceso', 'Avance 0% (Inactivo)', 'Sin Registro'],
+            datasets: [{
+              data: datosGrafico,
+              backgroundColor: ['#10b981', '#a855f7', '#ef4444', '#64748b'],
+              borderWidth: 0,
+              borderRadius: 6,
+              totalUgelDenom: dataUgel.denom // Inyección inicial del denominador provincial
+            }]
+          },
+          options: {
+            indexAxis: 'y',
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+              legend: { display: false },
+              datalabels: {
+                anchor: 'end',
+                align: 'right',
+                color: '#1e293b',
+                font: { weight: 'bold', size: 11 },
+                formatter: function(value, context) {
+                  // Recuperamos el denominador específico de la UGEL para el cálculo porcentual individual
+                  const denLocal = context.chart.data.datasets[0].totalUgelDenom || 0;
+                  
+                  let txtPorcentaje = "0.0%";
+                  if (denLocal > 0) {
+                    const calculo = (value / denLocal) * 100;
+                    txtPorcentaje = calculo.toFixed(1) + "%";
+                  }
+
+                  // Control de seguridad absoluto anti-NaN%
+                  if (txtPorcentaje.includes("NaN")) {
+                    txtPorcentaje = "0.0%";
+                  }
+
+                  // CORRECCIÓN SOBERANA: Reemplazamos definitivamente 'agentes' por 'docentes'
+                  return value + " docentes (" + txtPorcentaje + ")";
+                }
+              }
+            },
+            scales: {
+              x: { grid: { display: false }, grace: '15%' }, // Techo flexible para que flote afuera sin cortarse
+              y: { grid: { display: false } }
+            }
+          }
+        });
+      }
+    }
+
+    // Ejecutar el motor de carga al levantar la página
+    window.addEventListener("DOMContentLoaded", inicializarDashboardFED);
+  </script>
 </body>
 </html>
